@@ -2,7 +2,7 @@
 
 const Joi = require("joi");
 
-const applicationSchema = Joi.object({
+const requestSchema = Joi.object({
 
     user: Joi.string().required().messages({
         "string.empty":"El usuario no puede quedar vacia",
@@ -14,7 +14,7 @@ const applicationSchema = Joi.object({
     }),
 });
 
-const applicationIdSchema = Joi.object({
+const requestIdSchema = Joi.object({
     id: Joi.string().guid().required().messages({
         "string.empty":"El id no puede quedar vacio",
         "any.required":"El id es requerido"
@@ -22,5 +22,5 @@ const applicationIdSchema = Joi.object({
 });
 
 module.exports = {
-    applicationSchema, applicationIdSchema
+    requestSchema, requestIdSchema
 };

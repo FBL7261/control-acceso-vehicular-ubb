@@ -1,5 +1,4 @@
 const moongoose = require('mongoose');
-
 const document = require('../constants/document.constants.js');
 
 const documentsSchema = new moongoose.Schema(
