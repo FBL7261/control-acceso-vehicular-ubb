@@ -1,5 +1,5 @@
-const moongoose = require('mongoose');
-const document = require('../constants/document.constants.js');
+import moongoose from 'mongoose';
+import document from '../constants/document.constants.js';
 
 const documentsSchema = new moongoose.Schema(
     {
@@ -11,4 +11,5 @@ const documentsSchema = new moongoose.Schema(
 );
 
 const Document = moongoose.model("Document", documentsSchema);
-module.exports = Document;
+
+export default Document;

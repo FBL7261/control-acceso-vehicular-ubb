@@ -1,6 +1,7 @@
-const { respondSucess, respondError } = require('../utils/response.util');
-const { handleError } = require('../utils/error.util');
-const requestService = require('../services/request.service');
+import { respondSuccess, respondError } from "../utils/resHandler.js";
+import  {handleError}  from "../utils/errorHandler.js";
+
+import requestService from '../services/request.service.js';
 
 // CREATE
 async function createRequest(req,res) {
@@ -14,13 +15,14 @@ async function createRequest(req,res) {
 
         if (!newRequest) return respondError(req, res, 404, 'No se pudo crear la solicitud');
 
-        respondSucess(req, res, newRequest, 200, 'Solicitud creada con éxito')
+        respondSuccess(req, res, newRequest, 200, 'Solicitud creada con éxito')
 
     }catch(error){
         handleError(error, 'request.controller -> createRequest');
         return respondError(req, res, 500, 'Error al crear la solicitud');
     }
 };
+
 // DELETE
 async function deleteRequest(req,res) {
     try {
@@ -31,7 +33,7 @@ async function deleteRequest(req,res) {
 
         if (!requestDeleted) return respondError(req, res, 404, 'No se pudo eliminar la solicitud');
 
-        requestSucess(req, res, requestDeleted, 200, 'Solicitud eliminada con éxito');
+        respondSuccess(req, res, requestDeleted, 200, 'Solicitud eliminada con éxito');
         
     }catch (error){
         handleError(error, 'request.controller -> deleteRequest');
@@ -52,7 +54,7 @@ async function updateRequest(req,res) {
         if (requestError) return respondError(req, res, 400, requestError);
         if (!requestUpdated) return respondError(req, res, 404, 'No se pudo actualizar la solicitud');
         
-        respondSucess(req, res, requestUpdated, 200, 'Solicitud actualizada con éxito');
+        respondSuccess(req, res, requestUpdated, 200, 'Solicitud actualizada con éxito');
 
     }catch(error){
         handleError(error, 'request.controller -> updateRequest');
@@ -70,7 +72,7 @@ async function getRequests(req,res) {
 
         if (!requests) return respondError(req, res, 404, 'No se encontraron solicitudes');
 
-        respondSucess(req, res, requests, 200, 'Solicitudes encontradas con éxito');       
+        respondSuccess(req, res, requests, 200, 'Solicitudes encontradas con éxito');       
 
     }catch(error){
         handleError(error, 'request.controller -> getRequests');
@@ -90,7 +92,7 @@ async function getRequestById(req,res) {
 
         if (!requestFound) return respondError(req, res, 404, 'No se encontró la solicitud');
 
-        respondSucess(req, res, requestFound, 200, 'Solicitud encontrada con éxito');
+        respondSuccess(req, res, requestFound, 200, 'Solicitud encontrada con éxito');
 
     }catch(error){
         handleError(error, 'request.controller -> getRequestById');
@@ -101,7 +103,7 @@ async function getRequestById(req,res) {
 }
 // GET BY STATUS
 
-module.exports = {
+export default {
     createRequest,
     deleteRequest,
     updateRequest,

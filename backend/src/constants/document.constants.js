@@ -3,4 +3,4 @@ const document = [
     "Certificado de trabajo",
 ];
 
-module.exports = document;
+export default document;

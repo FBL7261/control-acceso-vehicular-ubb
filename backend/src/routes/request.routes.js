@@ -1,18 +1,16 @@
-const express = require('express');
+import { Router } from "express";
+const router = Router();
 
-const requestController = require('../controllers/request.controller');
+import authenticationMiddleware from "../middlewares/authentication.middleware.js";
 
-const authenticationMiddleware = require('../middlewares/authentication.middleware');
-const authorizationMiddleware = require('../middlewares/authorization.middleware');
-
-const router = express.Router();
+import requestController from '../controllers/request.controller.js';
 
 router.use(authenticationMiddleware);
 
-router.post('/', requestController.createRequest);
-router.delete('/:id', authorizationMiddleware, requestController.deleteRequest);
-router.put('/:id', authorizationMiddleware, requestController.updateRequest);
-router.get('/', authorizationMiddleware, requestController.getRequests);
-router.get('/:id', authorizationMiddleware, requestController.getRequestById);
+router.post('/',requestController.createRequest);
+router.delete('/:id',requestController.deleteRequest);
+router.put('/:id',requestController.updateRequest);
+router.get('/', requestController.getRequests);
+router.get('/:id',requestController.getRequestById);
 
-module.exports = router;
+export default router;

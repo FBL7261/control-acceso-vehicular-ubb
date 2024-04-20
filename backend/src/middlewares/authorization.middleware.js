@@ -3,7 +3,7 @@
 import User from "../models/user.model.js";
 import Role from "../models/role.model.js";
 import { respondError } from "../utils/resHandler.js";
-import { handleError } from "../utils/errorHandler.js";
+import  {handleError}  from "../utils/errorHandler.js";
 
 /**
  * Comprueba si el usuario es administrador

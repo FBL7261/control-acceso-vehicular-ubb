@@ -1,8 +1,8 @@
 "use strict";
 
-const Joi = require("joi");
+import Joi from "joi";
 
-const requestSchema = Joi.object({
+const requestBodySchema = Joi.object({
 
     user: Joi.string().required().messages({
         "string.empty":"El usuario no puede quedar vacia",
@@ -21,6 +21,4 @@ const requestIdSchema = Joi.object({
     })
 });
 
-module.exports = {
-    requestSchema, requestIdSchema
-};
+export {requestBodySchema, requestIdSchema};

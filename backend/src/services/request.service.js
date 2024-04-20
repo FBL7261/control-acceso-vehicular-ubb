@@ -1,26 +1,26 @@
-const user = require("../models/user.model");
-const request = require("../models/request.model");
-const document = require("../models/document.model");
-const { handleError } = require("../utils/errorHandler.js");
+import user from '../models/user.model.js';
+import request from  '../models/request.model.js';
+import Document from '../models/document.model.js';
+import {handleError}  from '../utils/errorHandler.js';
 
 // CREATE
 async function createRequest(email, requestData) {
     try {
-        const userFound = await user.findOne({email});
+        const User = await user.findOne( { email } );
 
-        if (!userFound) {
+        if (!User) {
             return [null, "Usuario no encontrado"];
         }
 
-        if (user.username !== requestData.user) {
+        if (User.username !== requestData.User.username) {
             return [null, "El usuario no coincide"];
         }
 
-        if (user.rut !== requestData.user) {
+        if (User.rut !== requestData.User.rut) {
             return [null, "El rut no coincide"];
         }
 
-        if (user.email !== requestData.user) {
+        if (User.email !== requestData.User.email) {
             return [null, "El email no coincide"];
         }
 
@@ -29,19 +29,19 @@ async function createRequest(email, requestData) {
             return [null, "Ya existe una solicitud"];
         }
         
-        const documentFound = await document.findOne({name: requestData.document});
+        const documentFound = await Document.findOne({name: requestData.Document.name});
         if (!documentFound) {
             return [null, "Documento no encontrado"];
         }
 
         const newRequest = new request({
-            user:{
-                username: requestData.user.username,
-                rut: requestData.user.rut,
-                email: requestData.user.email,
+            user: {
+                username: requestData.User.username,
+                rut : requestData.User.rut,
+                email: requestData.User.email,
             },
-            document: documentFound,
-            
+            Document: documentFound,
+            status: requestData.status,
         });
 
         await newRequest.save();
@@ -111,7 +111,7 @@ async function getRequestById(request) {
     }
 }
 
-module.exports ={
+export default {
     createRequest,
     deleteRequest,
     getRequests,
