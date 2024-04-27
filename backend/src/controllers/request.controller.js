@@ -4,42 +4,48 @@ import  {handleError}  from "../utils/errorHandler.js";
 import requestService from '../services/request.service.js';
 
 // CREATE
-async function createRequest(req,res) {
 
+// CREATE
+async function createRequest(req, res) {
     try {
+
         const {email} = req;
+
         const requestData = req.body;
+
         const [newRequest, requestError] = await requestService.createRequest(email, requestData);
 
         if (requestError) return respondError(req, res, 400, requestError);
 
-        if (!newRequest) return respondError(req, res, 404, 'No se pudo crear la solicitud');
+        if (!newRequest) return respondError(req, res, 400, 'No se pudo crear la solicitud');
 
-        respondSuccess(req, res, newRequest, 200, 'Solicitud creada con éxito')
+        respondSuccess(req, res, 200, newRequest);
 
-    }catch(error){
+    } catch (error) {
         handleError(error, 'request.controller -> createRequest');
-        return respondError(req, res, 500, 'Error al crear la solicitud');
+        return respondError(req, res, 400, 'Error al crear la solicitud controller');
     }
 };
 
+
 // DELETE
-async function deleteRequest(req,res) {
+
+async function deleteRequest(req, res) {
     try {
-        const {body} = req;
-        const [requestDeleted, requestError] = await requestService.deleteRequest(body.id);
+        const requestId = req.params.id; // Obtiene el ID de la solicitud de los parámetros de la URL
+        const result = await requestService.deleteRequest(requestId);
+        if (!result) {
+            return res.status(404).json({ message: 'Solicitud no encontrada' });
+        }
+        res.status(200).json({ 
+            message: 'Solicitud eliminada con éxito',
+            data: result,
+        });
+    } catch (error) {
+        res.status(400).json({ message: 'No se pudo eliminar la solicitud', error: error.message });
+    }
+}
 
-        if (requestError) return respondError(req, res, 400, requestError);
-
-        if (!requestDeleted) return respondError(req, res, 404, 'No se pudo eliminar la solicitud');
-
-        respondSuccess(req, res, requestDeleted, 200, 'Solicitud eliminada con éxito');
-        
-    }catch (error){
-        handleError(error, 'request.controller -> deleteRequest');
-        return respondError(req, res, 500, 'Error al eliminar la solicitud');  
-    } 
-};
 
 // UPDATE
 async function updateRequest(req,res) {
@@ -49,37 +55,35 @@ async function updateRequest(req,res) {
         const {id} = req.params;
         const updateRequest = req.body;
 
-        const [requestUpdated, requestError] = await requestService.updateRequest(id, updateRequest);
+        const [modifyRequest, requestError] = await requestService.updateRequest(id, updateRequest);
 
         if (requestError) return respondError(req, res, 400, requestError);
-        if (!requestUpdated) return respondError(req, res, 404, 'No se pudo actualizar la solicitud');
+        if (!modifyRequest) return respondError(req, res, 404, 'No se pudo actualizar la solicitud');
         
-        respondSuccess(req, res, requestUpdated, 200, 'Solicitud actualizada con éxito');
+        respondSuccess(req, res, 200, 'Solicitud actualizada con éxito');
 
-    }catch(error){
-        handleError(error, 'request.controller -> updateRequest');
-        return respondError(req, res, 500, 'Error al actualizar la solicitud');
-    }
+    }catch (error) {
+        console.error(error);
+        res.status(400).json({ message: 'Error al actualizar la solicitud controller' });
+      }
+      
 }
+
 // GET ALL
-async function getRequests(req,res) {
-
+async function getRequests(req, res) {
     try {
+        const requests = await requestService.getRequests();
+        if (!requests) {
+            return res.status(404).json({ message: 'No se encontraron solicitudes' });
+        }
+        res.status(200).json(requests);
+    } catch (error) {
 
-        const [requests, requestError] = await requestService.getRequests();
-
-        if (requestError) return respondError(req, res, 400, requestError);
-
-        if (!requests) return respondError(req, res, 404, 'No se encontraron solicitudes');
-
-        respondSuccess(req, res, requests, 200, 'Solicitudes encontradas con éxito');       
-
-    }catch(error){
         handleError(error, 'request.controller -> getRequests');
-        return respondError(req, res, 500, 'Error al obtener las solicitudes');
-
+        res.status(500).json({ message: 'Error al obtener las solicitudes controller' });
     }
 }
+
 // GET BY ID
 async function getRequestById(req,res) {
 
@@ -90,13 +94,16 @@ async function getRequestById(req,res) {
 
         if (requestError) return respondError(req, res, 400, requestError);
 
-        if (!requestFound) return respondError(req, res, 404, 'No se encontró la solicitud');
+        if (!requestFound) return respondError(req, res, 400, 'No se encontró la solicitud');
 
-        respondSuccess(req, res, requestFound, 200, 'Solicitud encontrada con éxito');
+        respondSuccess(req, res, 201, {
+            message: 'Solicitud encontrada con éxito',
+            data: requestFound,
+        });
 
     }catch(error){
         handleError(error, 'request.controller -> getRequestById');
-        return respondError(req, res, 500, 'Error al obtener la solicitud');
+        return respondError(req, res, 400, 'Error al obtener la solicitud por id controller');
     }
 
 
