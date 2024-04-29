@@ -16,7 +16,7 @@ const CredentialSchema = new mongoose.Schema({
   },
   expiresAt: {
     type: Date,
-    default: () => Date.now() + 365 * 24 * 60 * 60 * 1000 // 1 year
+    default: () => Date.now() + 365 * 24 * 60 * 60 * 1000 // 1 año
   },
   createdAt: {
     type: Date,
