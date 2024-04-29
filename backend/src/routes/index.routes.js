@@ -1,29 +1,30 @@
 "use strict";
-// Importa el modulo 'express' para crear las rutas
+// Importa el módulo 'express' para crear las rutas
 import { Router } from "express";
 
-/** Enrutador de usuarios  */
-import userRoutes from "./user.routes.js";
-
-/** Enrutador de autenticación */
-import authRoutes from "./auth.routes.js";
-
-//Enrutador de Felipe
-import requestRoutes from "./request.routes.js";
+// Importa todos los enrutadores necesarios
+import userRoutes from "./user.routes.js"; // Rutas para usuarios
+import authRoutes from "./auth.routes.js"; // Rutas para autenticación
+import requestRoutes from "./request.routes.js"; // Rutas para requests
+import vehicleRoutes from "./vehicle.routes.js"; // Rutas para vehículos
 
 /** Middleware de autenticación */
-import authenticationMiddleware from "../middlewares/authentication.middleware.js";
+import authenticationMiddleware from "../middlewares/authentication.middleware.js"; // Middleware para autenticación
 
 /** Instancia del enrutador */
-const router = Router();
+const router = Router(); // Crea una instancia del enrutador de Express
 
-// Define las rutas para los usuarios /api/usuarios
-router.use("/users", authenticationMiddleware, userRoutes);
-// Define las rutas para la autenticación /api/auth
-router.use("/auth", authRoutes);
+// Define las rutas para los usuarios
+router.use("/users", authenticationMiddleware, userRoutes); // Autenticación requerida para usuarios
 
-//Rutas de Felipe
-router.use("/requests", authenticationMiddleware, requestRoutes);
+// Define las rutas para la autenticación
+router.use("/auth", authRoutes); // Rutas para autenticación no requieren autenticación previa
 
-// Exporta el enrutador
-export default router;
+// Define las rutas para requests
+router.use("/requests", authenticationMiddleware, requestRoutes); // Autenticación requerida para requests
+
+// Define las rutas para vehículos
+router.use("/vehicles", authenticationMiddleware, vehicleRoutes); // Autenticación requerida para vehículos
+
+// Exporta el enrutador para su uso en la aplicación principal
+export default router; // Exporta el enrutador
