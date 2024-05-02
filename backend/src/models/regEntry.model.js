@@ -16,10 +16,11 @@ const regEntrySchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    //estado de la entrada (true = activa, false = inactivo)
     state: {
-        type: String,
-        enum: stateEntry,
-        required: true
+        type: Boolean,
+        required: true,
+        default: true
     },
     date: {
         type: Date,
@@ -27,7 +28,7 @@ const regEntrySchema = new mongoose.Schema({
     },
     reason: {
         type: String,
-        required: true
+        required: false
     },
 });
 
