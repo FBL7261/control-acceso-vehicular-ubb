@@ -9,7 +9,7 @@ import requestRoutes from "./request.routes.js"; // Rutas para requests
 import vehicleRoutes from "./vehicle.routes.js"; // Rutas para vehículos
 
 /** Middleware de autenticación */
-import authenticationMiddleware from "../middlewares/authentication.middleware.js"; // Middleware para autenticación
+import authenticationMiddleware from "../middlewares/authentication.middleware.js"; 
 
 /** Instancia del enrutador */
 const router = Router(); // Crea una instancia del enrutador de Express
@@ -21,10 +21,12 @@ router.use("/users", authenticationMiddleware, userRoutes); // Autenticación re
 router.use("/auth", authRoutes); // Rutas para autenticación no requieren autenticación previa
 
 // Define las rutas para requests
-router.use("/requests", authenticationMiddleware, requestRoutes); // Autenticación requerida para requests
+// Autenticación requerida para requests
+router.use("/requests", authenticationMiddleware, requestRoutes);
 
 // Define las rutas para vehículos
-router.use("/vehicles", authenticationMiddleware, vehicleRoutes); // Autenticación requerida para vehículos
+// Autenticación requerida para vehículos
+router.use("/vehicles", authenticationMiddleware, vehicleRoutes);
 
 // Exporta el enrutador para su uso en la aplicación principal
-export default router; // Exporta el enrutador
+export default router;

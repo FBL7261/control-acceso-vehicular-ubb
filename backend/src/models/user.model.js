@@ -1,9 +1,9 @@
 "use strict";
-// Import the 'mongoose' module to create the database connection
+// Importar el modulo 'mongoose' para crear una conexion de base de datos
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-// Create the 'users' collection schema
+// Crear el esquema de colección de 'Users'
 const userSchema = new mongoose.Schema(
   {
     username: {
@@ -36,13 +36,13 @@ const userSchema = new mongoose.Schema(
   },
 );
 
-/** Encrypts the user's password */
+/** Encriptar contraseña de usuario/s */
 userSchema.statics.encryptPassword = async (password) => {
   const salt = await bcrypt.genSalt(10);
   return await bcrypt.hash(password, salt);
 };
 
-/** Compares the user's password */
+/** Comparar contraseña de usuario/s */
 userSchema.statics.comparePassword = async (password, receivedPassword) => {
   return await bcrypt.compare(password, receivedPassword);
 };
@@ -50,5 +50,5 @@ userSchema.statics.comparePassword = async (password, receivedPassword) => {
 /** 'User' data model */
 const User = mongoose.model("User", userSchema);
 
-// Export the 'User' data model
+// Exportar el modelo de data de 'User'
 export default User;

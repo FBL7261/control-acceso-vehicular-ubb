@@ -1,7 +1,7 @@
-import user from '../models/user.model.js';
-import request from  '../models/request.model.js';
-import Document from '../models/document.model.js';
-import {handleError}  from '../utils/errorHandler.js';
+import user from "../models/user.model.js";
+import request from "../models/request.model.js";
+import Document from "../models/document.model.js";
+import { handleError } from "../utils/errorHandler.js";
 
 // CREATE
 async function createRequest(email, requestData) {
@@ -24,12 +24,12 @@ async function createRequest(email, requestData) {
             return [null, "El email no coincide"];
         }
 
-        const requestFound = await request.findOne({"user.email": requestData.user.email});
+        const requestFound = await request.findOne({ "user.email": requestData.user.email });
         if (requestFound) {
             return [null, "Ya existe una solicitud"];
         }
         
-        const documentFound = await Document.findOne({name: requestData.Document.name});
+        const documentFound = await Document.findOne({ name: requestData.Document.name });
         if (!documentFound) {
             return [null, "Documento no encontrado"];
         }
@@ -37,7 +37,7 @@ async function createRequest(email, requestData) {
         const newRequest = new request({
             user: {
                 username: requestData.User.username,
-                rut : requestData.User.rut,
+                rut: requestData.User.rut,
                 email: requestData.User.email,
             },
             Document: documentFound,
@@ -46,11 +46,9 @@ async function createRequest(email, requestData) {
 
         await newRequest.save();
         return [newRequest, null];
-
-    }catch(error){
+    } catch (error) {
         handleError(error, "request.service -> createRequest");
     }
-
 }
 
 // DELETE
@@ -91,14 +89,11 @@ async function updateRequest(id, requestUpdateData) {
 // GET ALL
 async function getRequests() {
     try {    
-
-        const requests = await request.find().populate('user', '-password, -roles, -_id');
+        const requests = await request.find().populate("user", "-password, -roles, -_id");
         return [requests, null];
-
-    }catch(error){
+    } catch (error) {
         handleError(error, "request.service -> getRequests");
     }
-
 }
 
 // GET BY ID
@@ -106,7 +101,7 @@ async function getRequestById(request) {
     try {
         const requestFound = await request.findById(request).populate('user', '-password, -roles, -_id');
         return [requestFound, null];
-    }catch(error){
+    } catch (error) {
         handleError(error, "request.service -> getRequestById");
     }
 }

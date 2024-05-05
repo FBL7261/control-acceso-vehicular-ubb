@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+import mongoose from "mongoose";
 
 // Define el esquema del vehículo
 const vehicleSchema = new mongoose.Schema({
@@ -31,12 +31,12 @@ const vehicleSchema = new mongoose.Schema({
   // Referencia al usuario propietario del vehículo
   owner: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: "User",
     required: true,
   },
 });
 
 // Crea el modelo del vehículo con el esquema definido
-const Vehicle = mongoose.model('Vehicle', vehicleSchema);
+const Vehicle = mongoose.model("Vehicle", vehicleSchema);
 
 export default Vehicle;

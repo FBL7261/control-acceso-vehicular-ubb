@@ -1,9 +1,12 @@
 "use strict"; // Modo estricto para evitar errores comunes
-
-import { respondSuccess, respondError } from "../utils/resHandler.js"; // Manejo de respuestas
-import VehicleService from "../services/vehicle.service.js"; // Servicio para operaciones de vehículos
-import vehicleSchema from "../schema/vehicle.schema.js"; // Validación para creación de vehículos
-import { handleError } from "../utils/errorHandler.js"; // Manejo de errores
+ // Manejo de respuestas
+import { respondSuccess, respondError } from "../utils/resHandler.js";
+// Servicio para operaciones de vehículos
+import VehicleService from "../services/vehicle.service.js";
+// Validación para creación de vehículos
+import vehicleSchema from "../schema/vehicle.schema.js";
+ // Manejo de errores
+import { handleError } from "../utils/errorHandler.js";
 
 // Crear un nuevo vehículo
 async function createVehicle(req, res) {
@@ -11,10 +14,11 @@ async function createVehicle(req, res) {
     const { body } = req; // Obtener datos del cuerpo de la solicitud
     const { error: bodyError } = vehicleSchema.validate(body); // Validar los datos
     if (bodyError) {
-      return respondError(req, res, 400, bodyError.message); // Respuesta de error si la validación falla
+      // Respuesta de error si la validación falla
+      return respondError(req, res, 400, bodyError.message);
     }
-
-    const newVehicle = await VehicleService.createVehicle(body); // Crear el vehículo con el servicio
+// Crear el vehículo con el servicio
+    const newVehicle = await VehicleService.createVehicle(body);
     respondSuccess(req, res, 201, newVehicle); // Respuesta exitosa con código 201 (Creado)
   } catch (error) {
     handleError(error, "vehicle.controller -> createVehicle"); // Manejo de errores
@@ -25,8 +29,10 @@ async function createVehicle(req, res) {
 // Obtener todos los vehículos de un usuario
 async function getVehiclesByUser(req, res) {
   try {
-    const { userId } = req.params; // Obtener el ID del usuario desde los parámetros de la ruta
-    const vehicles = await VehicleService.getVehiclesByUser(userId); // Obtener vehículos por usuario
+     // Obtener el ID del usuario desde los parámetros de la ruta
+    const { userId } = req.params;
+     // Obtener vehículos por usuario
+    const vehicles = await VehicleService.getVehiclesByUser(userId);
     respondSuccess(req, res, 200, vehicles); // Respuesta exitosa con código 200 (OK)
   } catch (error) {
     handleError(error, "vehicle.controller -> getVehiclesByUser");
@@ -45,7 +51,7 @@ async function deleteVehicle(req, res) {
         res,
         404,
         "Vehículo no encontrado",
-        "Verifique el ID ingresado" // Error si no se encuentra el vehículo
+        "Verifique el ID ingresado", // Error si no se encuentra el vehículo
       );
     }
 

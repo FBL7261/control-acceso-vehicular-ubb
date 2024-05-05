@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
-import STATES from '../constants/request.state.constants.js';
+import STATES from "../constants/request.state.constants.js";
 
 const requestSchema = new mongoose.Schema({
-    user:{
+    user: {
         type: {
             username: String,
             rut: String,
@@ -12,18 +12,18 @@ const requestSchema = new mongoose.Schema({
     },
     document: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Document',
+        ref: "Document",
         required: true,
     },
     status: {
         type: String,
         enum: STATES,
-        default: 'Pendiente',
+        default: "Pendiente",
     },
 
 });
 
 
-const Request = mongoose.model('Request', requestSchema);
+const Request = mongoose.model("Request", requestSchema);
 
 export default Request;
