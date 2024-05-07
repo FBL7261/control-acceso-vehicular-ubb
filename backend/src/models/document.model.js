@@ -1,4 +1,4 @@
-import moongoose from 'mongoose';
+import mongoose from 'mongoose';
 import document from '../constants/document.constants.js';
 
 const documentsSchema = new moongoose.Schema(
@@ -10,6 +10,6 @@ const documentsSchema = new moongoose.Schema(
     },
 );
 
-const Document = moongoose.model("Document", documentsSchema);
+const Document = mongoose.model("Document", documentsSchema);
 
 export default Document;

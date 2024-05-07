@@ -1,7 +1,7 @@
 import User from '../models/user.model.js';
 import Request from  '../models/request.model.js';
 import {handleError}  from '../utils/errorHandler.js';
-import { populate } from 'dotenv';
+
 
 // CREATE
 async function createRequest(email, requestData) {
