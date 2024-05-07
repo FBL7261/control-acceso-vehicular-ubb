@@ -1,13 +1,13 @@
-import Joi from "joi";
+import Joi from "joi"; // Framework para validación
 
-// Define el esquema para el vehículo
+// Esquema para validar vehículos
 const vehicleSchema = Joi.object({
-  plate: Joi.string().required().alphanum().length(6),
-  model: Joi.string().required(),
-  brand: Joi.string().required(),
-  color: Joi.string().required(),
-  photo: Joi.string().uri().optional(), // Campo opcional
-  owner: Joi.string().required(),
+  plate: Joi.string().required().alphanum().length(6), // Verificación para placas
+  model: Joi.string().required(), // Modelo requerido
+  brand: Joi.string().required(), // Marca requerida
+  color: Joi.string().required(), // Color requerido
+  photo: Joi.string().uri().optional(), // Foto opcional
+  owner: Joi.string().optional(), // Propietario opcional para permitir asignación automática
 });
 
-export default vehicleSchema; // Exporta solo el esquema de vehículo
+export default vehicleSchema; // Exporta el esquema de vehículos

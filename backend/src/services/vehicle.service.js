@@ -1,86 +1,73 @@
 "use strict";
 
-// Importa el modelo de vehículo y el modelo de usuario
-import Vehicle from "../models/vehicle.model.js";
-import User from "../models/user.model.js";
-import { handleError } from "../utils/errorHandler.js";
+import mongoose from "mongoose"; // Para validar `ObjectId`
+import Vehicle from "../models/vehicle.model.js"; // Modelo de vehículos
+import User from "../models/user.model.js"; // Modelo de usuario
+import { handleError } from "../utils/errorHandler.js"; // Para manejar errores
 
-/**
- * Crea un nuevo vehículo y lo asocia con un usuario
- * @param {string} userId - ID del usuario propietario del vehículo
- * @param {Object} vehicleData - Datos del vehículo a crear
- * @returns {Promise} - Promesa con el objeto del vehículo creado
- */
-async function createVehicle(userId, vehicleData) {
+// Crear un nuevo vehículo
+async function createVehicle(vehicleData, currentUserEmail, isAdmin) {
   try {
-    // Verifica que el usuario exista
-    const userFound = await User.findById(userId);
-    if (!userFound) {
-      return [null, "El usuario no existe"];
+    if (!isAdmin) {
+      // Si no es administrador, asignar automáticamente al usuario autenticado
+      const currentUser = await User.findOne({ email: currentUserEmail });
+      if (!currentUser) {
+        return [null, "El usuario autenticado no existe"];
+      }
+      vehicleData.owner = currentUser._id; // Asignar al usuario autenticado
     }
 
-    // Crea el nuevo vehículo
-    const newVehicle = new Vehicle({
-      ...vehicleData,
-      owner: userId,
-    });
+    const newVehicle = new Vehicle(vehicleData); // Crear el vehículo
+    await newVehicle.save(); // Guardar en la base de datos
 
-    await newVehicle.save(); // Guarda el vehículo en la base de datos
-
-    // Agrega el vehículo al usuario
-    userFound.vehicles.push(newVehicle._id);
-    await userFound.save(); // Actualiza el usuario con el vehículo agregado
-
-    return [newVehicle, null];
+    return [newVehicle, null]; // Vehículo creado con éxito
   } catch (error) {
     handleError(error, "vehicle.service -> createVehicle");
+    return [null, "Error al crear el vehículo"];
   }
 }
 
-/**
- * Obtiene todos los vehículos de un usuario
- * @param {string} userId - ID del usuario propietario de los vehículos
- * @returns {Promise} - Promesa con la lista de vehículos
- */
+// Obtener todos los vehículos de un usuario
 async function getVehiclesByUserId(userId) {
   try {
-    const userFound = await User.findById(userId).populate("vehicles");
-    if (!userFound) {
-      return [null, "El usuario no existe"];
+    if (!mongoose.Types.ObjectId.isValid(userId)) {
+      return [null, "El ID del usuario no es válido"];
     }
 
-    const vehicles = userFound.vehicles;
-    return [vehicles, null];
+    // Buscar los vehículos cuyo `owner` coincida con el `ObjectId` del usuario
+    const vehicles = await Vehicle.find({ owner: userId });
+
+    return [vehicles, null]; // Retornar la lista de vehículos
   } catch (error) {
     handleError(error, "vehicle.service -> getVehiclesByUserId");
+    return [null, "Error al obtener vehículos del usuario"];
   }
 }
 
-/**
- * Elimina un vehículo por su ID y lo remueve del usuario
- * @param {string} vehicleId - ID del vehículo a eliminar
- * @param {string} userId - ID del usuario propietario
- * @returns {Promise} - Promesa con el objeto del vehículo eliminado
- */
+
+// Eliminar un vehículo por su ID
 async function deleteVehicle(vehicleId, userId) {
   try {
-    // Elimina el vehículo por su ID
+    if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
+      return [null, "El ID del vehículo no es válido"];
+    }
+
     const vehicleDeleted = await Vehicle.findByIdAndDelete(vehicleId);
 
     if (!vehicleDeleted) {
       return [null, "El vehículo no existe"];
     }
 
-    // Elimina la referencia del vehículo en el usuario
     const userFound = await User.findById(userId);
     if (userFound) {
-      userFound.vehicles.pull(vehicleId);
+      userFound.vehicles.pull(vehicleId); // Eliminar referencia del vehículo
       await userFound.save();
     }
 
-    return [vehicleDeleted, null];
+    return [vehicleDeleted, null]; // Vehículo eliminado con éxito
   } catch (error) {
     handleError(error, "vehicle.service -> deleteVehicle");
+    return [null, "Error al eliminar el vehículo"];
   }
 }
 
