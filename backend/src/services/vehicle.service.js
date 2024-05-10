@@ -45,23 +45,32 @@ async function getVehiclesByUserId(userId) {
 }
 
 
-// Eliminar un vehículo por su ID
-async function deleteVehicle(vehicleId, userId) {
+async function deleteVehicle(vehicleId, currentUserEmail) {
   try {
+    // Validación del ID del vehículo
     if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
       return [null, "El ID del vehículo no es válido"];
     }
 
-    const vehicleDeleted = await Vehicle.findByIdAndDelete(vehicleId);
-
-    if (!vehicleDeleted) {
+    // Buscar el vehículo por su ID
+    const vehicle = await Vehicle.findById(vehicleId);
+    if (!vehicle) {
       return [null, "El vehículo no existe"];
     }
 
-    const userFound = await User.findById(userId);
-    if (userFound) {
-      userFound.vehicles.pull(vehicleId); // Eliminar referencia del vehículo
-      await userFound.save();
+    // Verificar si el usuario actual es el propietario del vehículo
+    const owner = await User.findById(vehicle.owner);
+    if (!owner || owner.email !== currentUserEmail) {
+      return [null, "No tienes permiso para eliminar este vehículo"];
+    }
+
+    // Eliminar el vehículo
+    const vehicleDeleted = await vehicle.remove(); // Eliminar el vehículo de la base de datos
+
+    // Si es necesario, actualizar la lista de vehículos del propietario
+    if (owner) {
+      owner.vehicles.pull(vehicleId); // Quitar el vehículo de la lista del propietario
+      await owner.save(); // Guardar los cambios
     }
 
     return [vehicleDeleted, null]; // Vehículo eliminado con éxito
@@ -70,6 +79,7 @@ async function deleteVehicle(vehicleId, userId) {
     return [null, "Error al eliminar el vehículo"];
   }
 }
+
 
 export default {
   createVehicle,

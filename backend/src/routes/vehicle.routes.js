@@ -1,7 +1,15 @@
+"use strict";
 import { Router } from "express";
+
+// Controlador de vehículos
+import vehicleController from "../controllers/vehicle.controller.js";
+
+/** Middleware de autenticación */
 import authenticationMiddleware from "../middlewares/authentication.middleware.js";
-import vehicleController from "../controllers/vehicle.controller.js"; // Controlador de vehículos
-import { isAdmin } from "../middlewares/authorization.middleware.js"; // Middleware de autorización para roles específicos
+
+// Middleware de autorización para roles específicos
+import { isAdmin } from "../middlewares/authorization.middleware.js"; 
+
 
 const router = Router();
 
@@ -9,8 +17,14 @@ const router = Router();
 router.use(authenticationMiddleware);
 
 // Rutas para vehículos
-router.post("/", vehicleController.createVehicle); // Crear vehículo
-router.get("/user/:userId", vehicleController.getVehiclesByUser); // Obtener vehículos por usuario
-router.delete("/:vehicleId", isAdmin, vehicleController.deleteVehicle); // Eliminar vehículo, solo para administradores
+
+// Crear vehículo
+router.post("/", vehicleController.createVehicle);
+
+// Obtener todos los vehículos por id del usuario en sesion actual
+router.get("/user/:userId", vehicleController.getVehiclesByUser);
+
+// Eliminar vehículo el usuario dueño o un administrador
+router.delete("/:vehicleId", vehicleController.deleteVehicle);
 
 export default router;
