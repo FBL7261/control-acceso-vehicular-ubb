@@ -80,9 +80,39 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
   }
 }
 
+async function updateVehicle(vehicleId, vehicleData, currentUserEmail) {
+  try {
+    // Validar el ID del vehículo
+    if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
+      return [null, "El ID del vehículo no es válido"];
+    }
+
+    // Buscar el vehículo por su ID
+    const vehicle = await Vehicle.findById(vehicleId);
+    if (!vehicle) {
+      return [null, "El vehículo no se encontró"];
+    }
+
+    // Verificar si el usuario actual es el propietario del vehículo
+    const owner = await User.findById(vehicle.owner);
+    if (!owner || owner.email !== currentUserEmail) {
+      return [null, "No tienes permiso para editar este vehículo"];
+    }
+
+    // Actualizar la información del vehículo
+    Object.assign(vehicle, vehicleData); // Asignar los nuevos datos al vehículo
+    await vehicle.save(); // Guardar los cambios
+
+    return [vehicle, null]; // Vehículo actualizado con éxito
+  } catch (error) {
+    handleError(error, "vehicle.service -> updateVehicle");
+    return [null, "Error al actualizar el vehículo"];
+  }
+}
 
 export default {
   createVehicle,
   getVehiclesByUserId,
   deleteVehicle,
+  updateVehicle,
 };

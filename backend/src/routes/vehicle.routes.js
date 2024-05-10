@@ -27,4 +27,7 @@ router.get("/user/:userId", vehicleController.getVehiclesByUser);
 // Eliminar vehículo el usuario dueño o un administrador
 router.delete("/:vehicleId", vehicleController.deleteVehicle);
 
+// Actualizar un vehículo por su ID
+router.put("/:vehicleId", vehicleController.updateVehicle);
+
 export default router;

@@ -119,8 +119,29 @@ async function deleteVehicle(req, res) {
   }
 }
 
+async function updateVehicle(req, res) {
+  try {
+    const { vehicleId } = req.params; // ID del vehículo a actualizar
+    const vehicleData = req.body; // Datos para la actualización
+    const currentUserEmail = req.email; // Correo del usuario autenticado
+
+    const [updatedVehicle, updateError] = await VehicleService.updateVehicle(vehicleId, vehicleData, currentUserEmail);
+
+    if (updateError) {
+      return respondError(req, res, 403, updateError); // Manejo de errores
+    }
+
+    respondSuccess(req, res, 200, updatedVehicle); // Vehículo actualizado con éxito
+  } catch (error) {
+    handleError(error, "vehicle.controller -> updateVehicle");
+    respondError(req, res, 500, "Error al actualizar el vehículo");
+  }
+}
+
+
 export default {
   createVehicle,
   getVehiclesByUser,
   deleteVehicle,
+  updateVehicle,
 };
