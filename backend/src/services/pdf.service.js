@@ -1,6 +1,6 @@
-const PDFModel = require("../models/pdf.model.js");
-const { handleError } = require("../utils/errorHandler");
-const User = require("../models/user.model.js");
+import PDFModel from "../models/pdf.model.js";
+import { handleError } from "../utils/errorHandler";
+import User from "../models/user.model.js";
 
 async function createPDF(file, id) {
   try {
