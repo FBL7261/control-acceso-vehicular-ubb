@@ -14,7 +14,7 @@ async function createVehicle(vehicleData, currentUserEmail, isAdmin) {
       if (!currentUser) {
         return [null, "El usuario autenticado no existe"];
       }
-      vehicleData.owner = currentUser._id; // Asignar al usuario autenticado
+      vehicleData.propietario = currentUser._id; // Asignar al usuario autenticado
     }
 
     const newVehicle = new Vehicle(vehicleData); // Crear el vehículo
@@ -34,8 +34,8 @@ async function getVehiclesByUserId(userId) {
       return [null, "El ID del usuario no es válido"];
     }
 
-    // Buscar los vehículos cuyo `owner` coincida con el `ObjectId` del usuario
-    const vehicles = await Vehicle.find({ owner: userId });
+    // Buscar los vehículos cuyo `propietario` coincida con el `ObjectId` del usuario
+    const vehicles = await Vehicle.find({ propietario: userId });
 
     return [vehicles, null]; // Retornar la lista de vehículos
   } catch (error) {
@@ -59,8 +59,8 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
     }
 
     // Verificar si el usuario actual es el propietario del vehículo
-    const owner = await User.findById(vehicle.owner);
-    if (!owner || owner.email !== currentUserEmail) {
+    const propietario = await User.findById(vehicle.propietario);
+    if (!propietario || propietario.email !== currentUserEmail) {
       return [null, "No tienes permiso para eliminar este vehículo"];
     }
 
@@ -68,9 +68,9 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
     const vehicleDeleted = await vehicle.remove(); // Eliminar el vehículo de la base de datos
 
     // Si es necesario, actualizar la lista de vehículos del propietario
-    if (owner) {
-      owner.vehicles.pull(vehicleId); // Quitar el vehículo de la lista del propietario
-      await owner.save(); // Guardar los cambios
+    if (propietario) {
+      propietario.vehicles.pull(vehicleId); // Quitar el vehículo de la lista del propietario
+      await propietario.save(); // Guardar los cambios
     }
 
     return [vehicleDeleted, null]; // Vehículo eliminado con éxito
@@ -94,8 +94,8 @@ async function updateVehicle(vehicleId, vehicleData, currentUserEmail) {
     }
 
     // Verificar si el usuario actual es el propietario del vehículo
-    const owner = await User.findById(vehicle.owner);
-    if (!owner || owner.email !== currentUserEmail) {
+    const propietario = await User.findById(vehicle.propietario);
+    if (!propietario || propietario.email !== currentUserEmail) {
       return [null, "No tienes permiso para editar este vehículo"];
     }
 

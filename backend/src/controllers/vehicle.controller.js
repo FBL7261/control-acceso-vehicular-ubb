@@ -105,8 +105,8 @@ async function deleteVehicle(req, res) {
     }
 
     // Verificar que el usuario actual sea el propietario
-    const owner = await User.findById(vehicle.owner);
-    if (!owner || owner.email !== currentUserEmail) {
+    const propietario = await User.findById(vehicle.propietario);
+    if (!propietario || propietario.email !== currentUserEmail) {
       return respondError(req, res, 403, "No tienes permiso para eliminar este vehículo");
     }
 
