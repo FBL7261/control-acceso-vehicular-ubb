@@ -1,5 +1,5 @@
 import joi from "joi";
-import stateEntry from "../constants/stateEntry.constants";
+//import stateEntry from "../constants/stateEntry.constants";
 
 const regEntryBodySchema = joi.object({
     rut: joi.string().required().min(9).max(10)
@@ -21,12 +21,12 @@ const regEntryBodySchema = joi.object({
         "any.required": "El nombre es obligatorio.",
         "string.base": "El nombre debe ser de tipo string.",
     }),
-    state: joi.array().items(joi.string().valid(...stateEntry)).required().messages({
-        "string.empty": "El estado no puede estar vacío.",
-        "any.required": "El estado es obligatorio.",
-        "string.base": "El estado debe ser de tipo string.",
-        "any.only": "El estado proporcionado no es válido.",
-    }),
+    // state: joi.array().items(joi.string().valid(...stateEntry)).required().messages({
+    //     "string.empty": "El estado no puede estar vacío.",
+    //     "any.required": "El estado es obligatorio.",
+    //     "string.base": "El estado debe ser de tipo string.",
+    //     "any.only": "El estado proporcionado no es válido.",
+    // }),
     reason: joi.string().required().messages({
         "string.empty": "La razón no puede estar vacía.",
         "any.required": "La razón es obligatoria.",
