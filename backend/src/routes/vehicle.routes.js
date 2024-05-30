@@ -21,6 +21,9 @@ router.use(authenticationMiddleware);
 // Crear vehículo
 router.post("/", vehicleController.createVehicle);
 
+// Crear vehículo con foto
+router.post("/", vehicleController.createVehicleWhPhoto);
+
 // Obtener todos los vehículos por id del usuario en sesion actual
 router.get("/user/:userId", vehicleController.getVehiclesByUser);
 

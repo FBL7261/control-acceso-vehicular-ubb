@@ -51,6 +51,31 @@ async function createVehicle(req, res) {
   }
 }
 
+// Crear un nuevo vehículo, automaticamente se le asigna al usuario actual
+async function createVehicleWhPhoto(req, res) {
+  try {
+    const { body } = req; // Datos del cuerpo de la solicitud
+    const currentUserEmail = req.email; // Correo del usuario autenticado
+    const isAdmin = req.roles.includes("admin"); // Verificar si es administrador
+
+    const { error: bodyError } = vehicleSchema.validate(body); // Validar con el esquema
+    if (bodyError) {
+      return respondError(req, res, 400, bodyError.message); // Manejar errores de validación
+    }
+
+    const [newVehicle, vehicleError] = await VehicleService.createVehicle(body, currentUserEmail, isAdmin);
+
+    if (vehicleError) {
+      return respondError(req, res, 400, vehicleError); // Manejo de errores
+    }
+
+    respondSuccess(req, res, 201, newVehicle); // Vehículo creado con éxito
+  } catch (error) {
+    handleError(error, "vehicle.controller -> createVehicle");
+    respondError(req, res, 500, "No se pudo crear el vehículo");
+  }
+}
+
 // Obtener vehículos del usuario actual mediante su propio ID
 async function getVehiclesByUser(req, res) {
   try {
@@ -141,6 +166,7 @@ async function updateVehicle(req, res) {
 
 export default {
   createVehicle,
+  createVehicleWhPhoto,
   getVehiclesByUser,
   deleteVehicle,
   updateVehicle,

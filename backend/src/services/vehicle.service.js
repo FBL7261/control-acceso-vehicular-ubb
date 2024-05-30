@@ -27,6 +27,28 @@ async function createVehicle(vehicleData, currentUserEmail, isAdmin) {
   }
 }
 
+// Crear un nuevo vehículo
+async function createVehicleWhPhoto(vehicleData, currentUserEmail, isAdmin) {
+  try {
+    if (!isAdmin) {
+      // Si no es administrador, asignar automáticamente al usuario autenticado
+      const currentUser = await User.findOne({ email: currentUserEmail });
+      if (!currentUser) {
+        return [null, "El usuario autenticado no existe"];
+      }
+      vehicleData.propietario = currentUser._id; // Asignar al usuario autenticado
+    }
+
+    const newVehicle = new Vehicle(vehicleData); // Crear el vehículo
+    await newVehicle.save(); // Guardar en la base de datos
+
+    return [newVehicle, null]; // Vehículo creado con éxito
+  } catch (error) {
+    handleError(error, "vehicle.service -> createVehicle");
+    return [null, "Error al crear el vehículo"];
+  }
+}
+
 // Obtener todos los vehículos de un usuario
 async function getVehiclesByUserId(userId) {
   try {
@@ -112,6 +134,7 @@ async function updateVehicle(vehicleId, vehicleData, currentUserEmail) {
 
 export default {
   createVehicle,
+  createVehicleWhPhoto,
   getVehiclesByUserId,
   deleteVehicle,
   updateVehicle,
