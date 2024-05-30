@@ -4,6 +4,35 @@ const {respondSuccess, respondError} = require('../utils/responsesHandler');
 const {regEntryBodySchema} = require('../schemas/regEntry.schema');
 const regEntryService = require('../services/regEntry.service');
 
+
+// registro de entrada que valida si el usuario ya se encuentra registrado en el sistema, si es asi, se actualiza la fecha de entrada y se guarda en la base de datos
+
+async function createRegEntryUser(req, res) {
+    try {
+        // se obtienen los datos del body
+        const { body } = req;
+        // se valida el body
+        const { error:bodyError } = regEntryBodySchema.validate(body);
+        // si hay un error en el body se responde con un error 400
+        if (bodyError) {
+            return respondError(req, res, 400, bodyError.message);
+        }
+        // se crea el nuevo registro
+        const [newRegEntry, regEntryError] = await regEntryService.createRegEntryUser(body);
+        if (regEntryError) {
+            return respondError(req, res, 400, regEntryError.message);
+        }
+        if (!newRegEntry) {
+            return respondError(req, res, 500, 'No se pudo registrar la entrada');
+        }
+        respondSuccess(req, res, 201, {message: 'Entrada registrada con exito', data: newRegEntry});
+    } catch (error) {
+        handleErrors(error, "regEntry.controller -> createRegEntryUser");
+        respondError(req, res, 400, error.message);
+    }
+}
+
+
 /**
  * 
  * @name createRegEntry
@@ -99,6 +128,7 @@ async function getRegEntry(req, res) {
 }
 
 module.exports = {
+    createRegEntryUser,
     createRegEntry,
     getRegEntryByRut,
     getEntryByDate,

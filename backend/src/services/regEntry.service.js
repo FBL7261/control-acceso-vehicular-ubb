@@ -1,6 +1,27 @@
+import { getEntryByDate } from '../controllers/regEntry.controller';
+
 const RegEntry = require('../models/regEntry.model');
 
 const { handleErrors } = require('../utils/errorHandler');
+
+/**
+ * @name getRegEntryByDate
+ * @description busca una entrada registrada por su fecha
+ * 
+ */
+async function getEntryByDate(req, res) {
+    try {
+        const { date } = req.params;
+        const regEntries = await RegEntry.find({ date });
+        if (regEntries.length === 0) {
+            return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
+        }
+        res.status(200).json(regEntries);
+    } catch (error) {
+        handleErrors(error, "regEntry.service -> activateRegEntry");
+    }
+}
+
 
 /**
  * @name getRegEntry
@@ -40,7 +61,30 @@ async function getRegEntryByRut(req, res) {
         handleErrors(error, "regEntry.service -> activateRegEntry");
     }
 }
+/**
+ * @name createRegEntryUser
+ * @description registra validando si el usuario ya se encuentra registrado en el sistema
+ * 
+ */
 
+// registra una nueva entrada
+async function createRegEntryUser(req, res) {
+    try {
+        // se obtienen los datos del body
+        const { rut, plate, name, date, reason } = req.body;
+        // se busca si el usuario ya se encuentra registrado
+        const regEntryFound = await RegEntry.findOne({ rut });
+        if (regEntryFound) {
+            return res.status(400).json({ message: 'El usuario ya se encuentra registrado' });
+        }
+        // se crea el nuevo registro
+        const newRegEntry = new RegEntry({ rut, plate, name, date, reason });
+        await newRegEntry.save();
+        res.status(201).json({ message: 'Entrada registrada correctamente' });
+    } catch (error) {
+        handleErrors(error, "regEntry.service -> activateRegEntry");
+    }
+}
 
 /**
  * 
@@ -105,9 +149,12 @@ async function createRegEntry(req, res) {
 // }
 
 export default { 
-    getRegEntry, 
+    getRegEntry,
+    getEntryByDate, 
     getRegEntryByRut, 
     createRegEntry, 
+    createRegEntryUser,
+
     // activateRegEntryByRut, 
     // deactivateRegEntry 
 };
