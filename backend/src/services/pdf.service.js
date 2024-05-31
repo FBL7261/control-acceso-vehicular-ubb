@@ -1,5 +1,5 @@
 import PDFModel from "../models/pdf.model.js";
-import { handleError } from "../utils/errorHandler";
+import { handleError } from "../utils/errorHandler.js";
 import User from "../models/user.model.js";
 
 async function createPDF(file, id) {
@@ -13,7 +13,7 @@ async function createPDF(file, id) {
       name: file.originalname,
       filePath: file.path,
       user: id,
-      nombre: user.name,
+      nombre: user.username,
     });
 
     const PDFSaved = await newPDF.save();
@@ -43,11 +43,11 @@ async function getPDF() {
 
 }
 
-async function getPDFsForPerson(personId) {
+async function getPDFsForPerson(userId) {
 
   try {
 
-    const pdfs = await PDFModel.find({ user: personId });
+    const pdfs = await PDFModel.find({ user: userId });
 
     if (!pdfs) {
       return [null, "No hay pdfs para esta persona"];

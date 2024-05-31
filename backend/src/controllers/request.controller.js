@@ -1,9 +1,6 @@
 import { respondSuccess, respondError } from "../utils/resHandler.js";
 import  {handleError}  from "../utils/errorHandler.js";
-
 import requestService from '../services/request.service.js';
-
-// CREATE
 
 // CREATE
 async function createRequest(req, res) {
@@ -108,7 +105,6 @@ async function getRequestById(req,res) {
 
 
 }
-// GET BY STATUS
 
 export default {
     createRequest,

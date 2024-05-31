@@ -2,7 +2,7 @@ import { Router } from "express";
 const router = Router();
 
 import upload from "../middlewares/handleMulter.middlewares.js";
-import pdfController from "../controller/pdf.controller.js";
+import pdfController from "../controllers/pdf.controller.js";
 
 router.post("/:id", upload.single('pdf'), pdfController.createPDF);
 router.get("/", pdfController.getPDF);

@@ -1,5 +1,5 @@
 import multer from "multer";
-import fs from "fs";
+import fs from "fs/promises";
 import user from "../models/user.model.js";
 
 const storage = multer.diskStorage({
@@ -10,7 +10,7 @@ const storage = multer.diskStorage({
       if (!userFound) {
         return Promise.reject(new Error("No se encontro la persona"));
       }
-      const dir = "./src/uploads/" + userFound.name.toString().replace(" ", "_");
+      const dir = "./src/uploads/" + userFound.username.toString().replace(" ", "_");
       try{
         await fs.access(dir);
       }catch(err){
