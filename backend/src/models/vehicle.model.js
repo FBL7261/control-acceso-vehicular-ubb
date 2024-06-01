@@ -37,9 +37,9 @@ const vehicleSchema = new mongoose.Schema({
 });
 
 // Middleware para formatear la matrícula antes de guardar
-vehicleSchema.pre('save', function(next) {
+vehicleSchema.pre("save", function(next) {
   const vehicle = this;
-  if (vehicle.isModified('matricula')) {
+  if (vehicle.isModified("matricula")) {
     vehicle.matricula = formatMatricula(vehicle.matricula);
   }
   next();
@@ -48,7 +48,7 @@ vehicleSchema.pre('save', function(next) {
 // Función para formatear la matrícula
 function formatMatricula(matricula) {
   // Formato: XX.XX.XX
-  return matricula.slice(0, 2) + '.' + matricula.slice(2, 4) + '.' + matricula.slice(4);
+  return matricula.slice(0, 2) + "." + matricula.slice(2, 4) + "." + matricula.slice(4);
 }
 
 // Crea el modelo del vehículo con el esquema definido
