@@ -106,6 +106,29 @@ async function createRegEntry(req, res) {
 }
 
 // /**
+//  * @name updateRegEntryByRut
+//  * @description actualiza una entrada registrada por su rut
+//  */
+
+/**
+ * @name deleteRegEntryByRut
+ * @description elimina una entrada a la universidad registrada por su rut
+ * 
+ */
+async function deleteRegEntryByRut(req, res) {
+    try {
+        const { rut } = req.params;
+        const regEntry = await RegEntry.findOneAndDelete({ rut });
+        if (!regEntry) {
+            return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
+        }
+        res.status(200).json({ message: 'Entrada eliminada correctamente' });
+    }
+    catch (error) {
+        handleErrors(error, "regEntry.service -> activateRegEntry");
+    }
+}
+// /**
 //  * @name activateRegEntry
 //  * @description activa manualmente la entrada de un usuario a la universidad
 //  * @param {String} rut rut del usuario
@@ -154,6 +177,7 @@ export default {
     getRegEntryByRut, 
     createRegEntry, 
     createRegEntryUser,
+    deleteRegEntryByRut,
 
     // activateRegEntryByRut, 
     // deactivateRegEntry 

@@ -127,10 +127,35 @@ async function getRegEntry(req, res) {
     }
 }
 
+/**
+ * @name deleteRegEntryByRut
+ * @description elimina una entrada registrada por su rut
+ 
+ */
+async function deleteRegEntryByRut(req, res) {
+    try {
+        const { rut } = req.params;
+        const [regEntry, regEntryError] = await regEntryService.deleteRegEntryByRut(rut);
+        if (regEntryError) {
+            return respondError(req, res, 400, regEntryError.message);
+        }
+        if (!regEntry) {
+            return respondError(req, res, 404, 'No se ha encontrado registro de entrada');
+        }
+        respondSuccess(req, res, 200, {message: 'Entrada eliminada con exito'});
+    } catch (error) {
+        handleErrors(error, "regEntry.controller -> deleteRegEntryByRut");
+        respondError(req, res, 400, error.message);
+    }
+}
+
+
+// Exportar todas las funciones
 module.exports = {
     createRegEntryUser,
     createRegEntry,
     getRegEntryByRut,
     getEntryByDate,
-    getRegEntry
+    getRegEntry,
+    deleteRegEntryByRut
 }
