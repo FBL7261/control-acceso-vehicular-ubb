@@ -144,19 +144,24 @@ async function deleteVehicle(req, res) {
   }
 }
 
+ // Actualizar un vehículo por su ID
 async function updateVehicle(req, res) {
   try {
-    const { vehicleId } = req.params; // ID del vehículo a actualizar
-    const vehicleData = req.body; // Datos para la actualización
-    const currentUserEmail = req.email; // Correo del usuario autenticado
+    const { vehicleId } = req.params;
+    const vehicleData = req.body;
+    const currentUserEmail = req.email;
 
-    const [updatedVehicle, updateError] = await VehicleService.updateVehicle(vehicleId, vehicleData, currentUserEmail);
-
-    if (updateError) {
-      return respondError(req, res, 403, updateError); // Manejo de errores
+    const { error: bodyError } = vehicleSchema.validate(vehicleData);
+    if (bodyError) {
+      return respondError(req, res, 400, bodyError.message);
     }
 
-    respondSuccess(req, res, 200, updatedVehicle); // Vehículo actualizado con éxito
+    const [updatedVehicle, updateError] = await VehicleService.updateVehicle(vehicleId, vehicleData, currentUserEmail);
+    if (updateError) {
+      return respondError(req, res, 403, updateError);
+    }
+
+    respondSuccess(req, res, 200, updatedVehicle);
   } catch (error) {
     handleError(error, "vehicle.controller -> updateVehicle");
     respondError(req, res, 500, "Error al actualizar el vehículo");
