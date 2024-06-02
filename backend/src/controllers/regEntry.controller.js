@@ -106,6 +106,27 @@ async function getEntryByDate (req, res) {
 }
 
 /**
+ * @name getRegEntryByPlate
+ * @description busca una entrada registrada por su placa
+ */
+async function getRegEntryByPlate(req, res) {
+    try {
+        const { plate } = req.params;
+        const [regEntry, regEntryError] = await regEntryService.getRegEntryByPlate(plate);
+        if (regEntryError) {
+            return respondError(req, res, 400, regEntryError.message);
+        }
+        if (!regEntry) {
+            return respondError(req, res, 404, 'No se ha encontrado registro de entrada');
+        }
+        respondSuccess(req, res, 200, {data: regEntry});
+    } catch (error) {
+        handleErrors(error, "regEntry.controller -> getRegEntryByPlate");
+        respondError(req, res, 400, error.message);
+    }
+}
+
+/**
  * 
  * @name getRegEntry
  * @description busca todas las entradas registradas
@@ -156,6 +177,7 @@ module.exports = {
     createRegEntry,
     getRegEntryByRut,
     getEntryByDate,
+    getRegEntryByPlate,
     getRegEntry,
     deleteRegEntryByRut
 }

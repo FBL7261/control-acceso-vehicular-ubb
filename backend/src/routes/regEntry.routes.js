@@ -21,6 +21,8 @@ router.get("/", isGuard, regEntryController.getRegEntry);
 router.get("/:rut", isGuard, regEntryController.getRegEntryByRut);
 //ruta para obtener todas las entradas en cierta fecha
 router.get("/:date", isGuard, regEntryController.getEntryByDate);
+//ruta para obtener una entrada por placa
+router.get("/:plate", isGuard, regEntryController.getRegEntryByPlate);
 //ruta para crear una entrada que no sea de un usuario del sistema
 router.post("/", isGuard, regEntryController.createRegEntry);
 //ruta para crear una entrada de un usuario del sistema

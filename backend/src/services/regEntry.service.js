@@ -61,6 +61,29 @@ async function getRegEntryByRut(req, res) {
         handleErrors(error, "regEntry.service -> activateRegEntry");
     }
 }
+
+
+/**
+ * @name getRegEntryByPlate
+ * @description busca una entrada registrada por su platente
+ */
+
+// busca una entrada registrada solo por su placa.
+async function getRegEntryByPlate(req, res) {
+    try {
+        const { plate } = req.params;
+        const regEntry = await RegEntry.findOne({ plate });
+        if (!regEntry) {
+            return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
+        }
+        res.status(200).json(regEntry);
+    }
+    catch (error) {
+        handleErrors(error, "regEntry.service -> activateRegEntry");
+    }
+}
+
+
 /**
  * @name createRegEntryUser
  * @description registra validando si el usuario ya se encuentra registrado en el sistema
@@ -174,7 +197,8 @@ async function deleteRegEntryByRut(req, res) {
 export default { 
     getRegEntry,
     getEntryByDate, 
-    getRegEntryByRut, 
+    getRegEntryByRut,
+    getRegEntryByPlate, 
     createRegEntry, 
     createRegEntryUser,
     deleteRegEntryByRut,
