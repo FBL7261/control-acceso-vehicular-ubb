@@ -1,9 +1,7 @@
-const regEntry = require('../models/regEntry.model');
-const { handleErrors } = require('../utils/errorHandler');
-const {respondSuccess, respondError} = require('../utils/responsesHandler');
-const {regEntryBodySchema} = require('../schemas/regEntry.schema');
-const regEntryService = require('../services/regEntry.service');
-
+import { handleError } from '../utils/errorHandler.js';
+import {respondSuccess, respondError} from '../utils/resHandler.js';
+import regEntryBodySchema from '../schema/regEntry.schema.js';
+import regEntryService from '../services/regEntry.service.js';
 
 /**
  * 
@@ -14,11 +12,15 @@ const regEntryService = require('../services/regEntry.service');
 
 async function createRegEntry(req, res) {
    try{
+        // se obtienen los datos del body
         const { body } = req;
-        const { error:bodyError } = regEntryBodySchema.validate(body);
+        // se valida el body
+        const { error: bodyError } = regEntryBodySchema.validate(body);
+        // si hay un error en el body se responde con un error 400
         if (bodyError) {
             return respondError(req, res, 400, bodyError.message);
         }
+        // servicio para crear el registro de entrada
         const [newRegEntry, regEntryError] = await regEntryService.createRegEntry(body);
         if (regEntryError) {
             return respondError(req, res, 400, regEntryError.message);
@@ -28,7 +30,7 @@ async function createRegEntry(req, res) {
         }
         respondSuccess(req, res, 201, {message: 'Entrada registrada con exito', data: newRegEntry});
     } catch (error) {
-        handleErrors(error, "regEntry.controller -> createRegEntry");
+        handleError(error, "regEntry.controller -> createRegEntry");
         respondError(req, res, 400, error.message);
     }
 };
@@ -36,25 +38,21 @@ async function createRegEntry(req, res) {
 // registro de entrada que valida si el usuario ya se encuentra registrado en el sistema
 async function createRegEntryUser(req, res) {
     try {
-        // se obtienen los datos del body
-        const { body } = req;
-        // se valida el body
-        const { error:bodyError } = regEntryBodySchema.validate(body);
-        // si hay un error en el body se responde con un error 400
-        if (bodyError) {
-            return respondError(req, res, 400, bodyError.message);
+        const { userID, reason } = req.body;
+
+        // servicio para crear el registro de entrada
+        const [newRegEntry, error] = await regEntryService.createRegEntryUser({ userID, reason });
+        if (error) {
+            return respondError(req, res, 400, error);
         }
-        // se crea el nuevo registro
-        const [newRegEntry, regEntryError] = await regEntryService.createRegEntryUser(body);
-        if (regEntryError) {
-            return respondError(req, res, 400, regEntryError.message);
-        }
+
         if (!newRegEntry) {
             return respondError(req, res, 500, 'No se pudo registrar la entrada');
         }
-        respondSuccess(req, res, 201, {message: 'Entrada registrada con exito', data: newRegEntry});
+
+        respondSuccess(req, res, 201, { message: 'Entrada registrada con éxito', data: newRegEntry });
     } catch (error) {
-        handleErrors(error, "regEntry.controller -> createRegEntryUser");
+        handleError(error, "regEntry.controller -> createRegEntry");
         respondError(req, res, 400, error.message);
     }
 }
@@ -74,9 +72,12 @@ async function getRegEntry(req, res) {
         if (regEntry.length === 0) {
             return respondError(req, res, 404, 'No se ha encontrado registro de entrada');
         }
-        respondSuccess(req, res, 200, {data: regEntry});
+        respondSuccess(req, res, 200, {
+            message: 'Entradas encontradas con exito', 
+            data: regEntry
+        });
     } catch (error) {
-        handleErrors(error, "regEntry.controller -> getRegEntry");
+        handleError(error, "regEntry.controller -> getRegEntry");
         respondError(req, res, 400, error.message);
     }
 }
@@ -89,7 +90,10 @@ async function getRegEntry(req, res) {
  */
 async function getEntryByDate (req, res) {
     try {
-        const { date } = req.params;
+        // se obtiene la fecha de la entrada
+        const { params } = req;
+        const { date } = params;
+        // se busca la entrada por la fecha
         const [regEntry, regEntryError] = await regEntryService.getEntryByDate(date);
         if (regEntryError) {
             return respondError(req, res, 400, regEntryError.message);
@@ -97,9 +101,14 @@ async function getEntryByDate (req, res) {
         if (!regEntry) {
             return respondError(req, res, 404, 'No se ha encontrado registro de entrada');
         }
-        respondSuccess(req, res, 200, {data: regEntry});
+        respondSuccess(req, res, 201, {
+            message: 'Entrada encontrada con exito',
+            //muestra las entradas encontradas
+            data: regEntry
+        });
+
     } catch (error) {
-        handleErrors(error, "regEntry.controller -> getEntryByDate");
+        handleError(error, "regEntry.controller -> getEntryByDate");
         respondError(req, res, 400, error.message);
     }
 }
@@ -120,7 +129,7 @@ async function getRegEntryByPlate(req, res) {
         }
         respondSuccess(req, res, 200, {data: regEntry});
     } catch (error) {
-        handleErrors(error, "regEntry.controller -> getRegEntryByPlate");
+        handleError(error, "regEntry.controller -> getRegEntryByPlate");
         respondError(req, res, 400, error.message);
     }
 }
@@ -143,7 +152,7 @@ async function getRegEntryByRut(req, res) {
         }
         respondSuccess(req, res, 200, {data: regEntry});
     } catch (error) {
-        handleErrors(error, "regEntry.controller -> getRegEntryByRut");
+        handleError(error, "regEntry.controller -> getRegEntryByRut");
         respondError(req, res, 400, error.message);
     }
 }
@@ -166,7 +175,7 @@ async function updateRegEntryByRut(req, res) {
         }
         respondSuccess(req, res, 200, {data: regEntry});
     } catch (error) {
-        handleErrors(error, "regEntry.controller -> updateRegEntryByRut");
+        handleError(error, "regEntry.controller -> updateRegEntryByRut");
         respondError(req, res, 400, error.message);
     }
 }
@@ -189,14 +198,14 @@ async function deleteRegEntryByRut(req, res) {
         }
         respondSuccess(req, res, 200, {message: 'Entrada eliminada con exito'});
     } catch (error) {
-        handleErrors(error, "regEntry.controller -> deleteRegEntryByRut");
+        handleError(error, "regEntry.controller -> deleteRegEntryByRut");
         respondError(req, res, 400, error.message);
     }
 }
 
 
 // Exportar todas las funciones
-module.exports = {
+export default {
     createRegEntryUser,
     createRegEntry,
     getRegEntry,

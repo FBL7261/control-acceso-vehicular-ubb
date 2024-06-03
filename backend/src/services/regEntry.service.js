@@ -1,9 +1,8 @@
-import { getEntryByDate } from '../controllers/regEntry.controller';
-
-const RegEntry = require('../models/regEntry.model');
-
-const { handleErrors } = require('../utils/errorHandler');
-
+import RegEntry from '../models/regEntry.model.js';
+import User from '../models/user.model.js';
+import Vehicle from '../models/vehicle.model.js';
+import regEntryBodySchema from '../schema/regEntry.schema.js';
+import { handleError } from '../utils/errorHandler.js'
 
 /**
  * @name createRegEntry
@@ -12,39 +11,59 @@ const { handleErrors } = require('../utils/errorHandler');
  * @returns {Promise} Promesa con el mensaje de la entrada registrada correctamente
  */
 // registra una nueva entrada
-async function createRegEntry(req, res) {
+async function createRegEntry(regEntry) {
     try {
-        const { rut, plate, name, date, reason } = req.body;
-        const newRegEntry = new RegEntry({ rut, plate, name, date, reason });
+        const { rut, plate, name, date, reason } = regEntry;
+        const newRegEntry = new RegEntry({ 
+            rut, 
+            plate, 
+            name, 
+            date, 
+            reason });
         await newRegEntry.save();
-        res.status(201).json({ message: 'Entrada registrada correctamente' });
+        return [newRegEntry, null];
     } catch (error) {
-        handleErrors(error, "regEntry.service -> activateRegEntry");
+        handleError(error, "regEntry.service -> activateRegEntry");
+        return [null, "Error al registrar la entrada"]
     }
 }
 
 /**
  * @name createRegEntryUser
- * @description registra validando si el usuario ya se encuentra registrado en el sistema
+ * @description registra a usuario que ya se encuentra registrado en el sistema
  * 
  */
 
-// registra una nueva entrada
-async function createRegEntryUser(req, res) {
+// registra una nueva entrada para un usuario que ya se encuentra registrado en el sistema
+async function createRegEntryUser({ userID, reason }) {
     try {
-        // se obtienen los datos del body
-        const { rut, plate, name, date, reason } = req.body;
-        // se busca si el usuario ya se encuentra registrado
-        const regEntryFound = await RegEntry.findOne({ rut });
-        if (regEntryFound) {
-            return res.status(400).json({ message: 'El usuario ya se encuentra registrado' });
+        // Buscar el usuario por su id 
+        const user = await User.findById(userID);
+        // Si no se encuentra el usuario, se responde con un error
+        if (!user) {
+            return [null, 'No se ha encontrado registro de usuario en el sistema'];
         }
-        // se crea el nuevo registro
-        const newRegEntry = new RegEntry({ rut, plate, name, date, reason });
+
+        // busca el vehículo del usuario
+        const vehicle = await Vehicle.findOne({propietario: userID});
+        // Si no se encuentra el vehículo, se responde con un error
+        if (!vehicle) {
+            return [null, 'No se ha encontrado registro de vohiculo en el sistema'];
+        }
+        // Crear una nueva entrada
+        const newRegEntry = new RegEntry({
+            rut: user.rut,
+            plate: vehicle.matricula,
+            name: user.username,
+            date: new Date(), // La fecha actual
+            reason,
+        });
+
         await newRegEntry.save();
-        res.status(201).json({ message: 'Entrada registrada correctamente' });
+        return [newRegEntry, null];
     } catch (error) {
-        handleErrors(error, "regEntry.service -> activateRegEntry");
+        handleError(error, "regEntry.service -> createRegEntryUser");
+        return [null, 'Error al registrar la entrada'];
     }
 }
 
@@ -55,16 +74,14 @@ async function createRegEntryUser(req, res) {
  * @return {Promise} Promesa con el objeto de las entradas registradas en la base de datos      
 */
 // busca todas las entradas registradas durante el dia
-async function getRegEntry(req, res) {
+async function getRegEntry() {
     try {
-        const regEntries = await RegEntry.find();
-        if (regEntries.length === 0) {
-            return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
-        }
-        res.status(200).json(regEntries);
+        const regEntrys = await RegEntry.find();
+        return [regEntrys, null];
 
     } catch (error) {
-        handleErrors(error, "regEntry.service -> activateRegEntry");
+        handleError(error, "regEntry.service -> activateRegEntry");
+        return [null, "Error al registrar la entrada"]
     }
 }
 
@@ -74,16 +91,18 @@ async function getRegEntry(req, res) {
  * @description busca una entrada registrada por su fecha
  * 
  */
-async function getEntryByDate(req, res) {
+async function getEntryByDate(date) {
     try {
-        const { date } = req.params;
-        const regEntries = await RegEntry.find({ date });
-        if (regEntries.length === 0) {
+        // se obtiene la fecha de la entrada
+        const regEntryFound = await RegEntry.find({ date });
+        // si no se encuentra la entrada se responde con un error
+        if (!regEntryFound) {
             return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
         }
-        res.status(200).json(regEntries);
+        // se retorna las entradas encontradas
+        return [regEntryFound, null];
     } catch (error) {
-        handleErrors(error, "regEntry.service -> activateRegEntry");
+        handleError(error, "regEntry.service -> activateRegEntry");
     }
 }
 
@@ -94,17 +113,16 @@ async function getEntryByDate(req, res) {
  */
 
 // busca una entrada registrada solo por su placa.
-async function getRegEntryByPlate(req, res) {
+async function getRegEntryByPlate(plate) {
     try {
-        const { plate } = req.params;
         const regEntry = await RegEntry.findOne({ plate });
         if (!regEntry) {
             return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
         }
-        res.status(200).json(regEntry);
+        return [regEntry, null];
     }
     catch (error) {
-        handleErrors(error, "regEntry.service -> activateRegEntry");
+        handleError(error, "regEntry.service -> activateRegEntry");
     }
 }
 
@@ -125,7 +143,7 @@ async function getRegEntryByRut(req, res) {
         }
         res.status(200).json(regEntry);
     } catch (error) {
-        handleErrors(error, "regEntry.service -> activateRegEntry");
+        handleError(error, "regEntry.service -> activateRegEntry");
     }
 }
 
@@ -148,7 +166,7 @@ async function updateRegEntryByRut(req, res) {
         res.status(200).json(regEntry);
     }
     catch (error) {
-        handleErrors(error, "regEntry.service -> activateRegEntry");
+        handleError(error, "regEntry.service -> activateRegEntry");
     }
 }
 
@@ -167,51 +185,9 @@ async function deleteRegEntryByRut(req, res) {
         res.status(200).json({ message: 'Entrada eliminada correctamente' });
     }
     catch (error) {
-        handleErrors(error, "regEntry.service -> activateRegEntry");
+        handleError(error, "regEntry.service -> activateRegEntry");
     }
 }
-// /**
-//  * @name activateRegEntry
-//  * @description activa manualmente la entrada de un usuario a la universidad
-//  * @param {String} rut rut del usuario
-//  * @returns 
-//  */
-
-// // activa manualmente la entrada de un usuario por rut
-
-// async function activateRegEntryByRut(req, res){
-//     try {
-//         const regEntryFound = await RegEntry.findOne({ rut: req.params.rut });
-//         if (!regEntryFound) {
-//             return res.status(404).json({ message: 'No se ha encontrado registro en el sistema' });
-//         }
-//         const regEntryActivated = await RegEntry.findOneAndUpdate({ rut: req.params.rut }, { state: true, date: Date.now() });
-//         return [regEntryActivated, null];
-//     }
-//     catch (error) {
-//         handleErrors(error, "regEntry.service -> activateRegEntry");
-//     }
-// }
-
-// /**
-//  * @name deactivateRegEntry
-//  * @description desactiva manualmente la entrada de un usuario a la universidad
-//  * @param {String} rut rut del usuario
-//  * @returns 
-//  */
-// // desactiva automaticamente la entrada de todos los que ingresaron a las 00:00
-// async function deactivateRegEntry(req, res) {
-//     try {
-//         const regEntries = await RegEntry.find();
-//         if (regEntries.length === 0) {
-//             return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
-//         }
-//         const regEntriesDeactivated = await RegEntry.updateMany({ date: { $lt: new Date().setHours(0, 0, 0, 0) } }, { state: false });
-//         return [regEntriesDeactivated, null];
-//     } catch (error) {
-//         handleErrors(error, "regEntry.service -> activateRegEntry");
-//     }
-// }
 
 export default { 
     createRegEntry, 
@@ -222,8 +198,5 @@ export default {
     getRegEntryByRut, 
     updateRegEntryByRut,
     deleteRegEntryByRut,
-
-    // activateRegEntryByRut, 
-    // deactivateRegEntry 
 };
  

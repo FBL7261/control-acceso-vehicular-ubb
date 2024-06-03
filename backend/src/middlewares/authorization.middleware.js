@@ -31,21 +31,27 @@ async function isAdmin(req, res, next) {
     handleError(error, "authorization.middleware -> isAdmin");
   }
 }
+// Comprueba si el usuario es guardia
 async function isGuard(req, res, next) {
   try {
+    // Busca el usuario por el email
     const user = await User.findOne({ email: req.email });
+    // Busca los roles del usuario
     const roles = await Role.find({ _id: { $in: user.roles } });
+    // Comprueba si el usuario es guardia
     for (let i = 0; i < roles.length; i++) {
-      if (roles[i].name === "guard") {
+      // Si el usuario es guardia, continua con la siguiente función
+      if (roles[i].name === "guardia") {
         next();
         return;
       }
     }
+    // Si el usuario no es guardia, responde con un error 401
     return respondError(
       req,
       res,
       401,
-      "Se requiere un rol de administrador para realizar esta acción",
+      "Se requiere un rol de guardia para realizar esta acción",
     );
   } catch (error) {
     handleError(error, "authorization.middleware -> isGuard");

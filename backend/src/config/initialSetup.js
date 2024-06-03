@@ -19,7 +19,7 @@ async function createRoles() {
     await Promise.all([
       new Role({ name: "user" }).save(),
       new Role({ name: "admin" }).save(),
-      new Role({ name: "guard" }).save(),
+      new Role({ name: "guardia" }).save(),
     ]);
     console.log("* => Roles creados exitosamente");
   } catch (error) {
@@ -40,7 +40,7 @@ async function createUsers() {
 
     const admin = await Role.findOne({ name: "admin" });
     const user = await Role.findOne({ name: "user" });
-    const guard = await Role.findOne({ name: "guard" });
+    const guard = await Role.findOne({ name: "guardia" });
 
     await Promise.all([
       new User({
@@ -58,10 +58,10 @@ async function createUsers() {
         roles: admin._id,
       }).save(),
       new User({
-        username: "guard",
-        email: "guard@email.com",
+        username: "guardia",
+        email: "guardia@email.com",
         rut: "12345678-k",
-        password: await User.encryptPassword("guard123"),
+        password: await User.encryptPassword("guardia123"),
         roles: guard._id,
       }).save(),
     ]);

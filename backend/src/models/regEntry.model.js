@@ -1,27 +1,18 @@
-const mongoose = require('mongoose');
-const { default: stateEntry } = require('../constants/stateEntry.constants');
+import mongoose from 'mongoose';
 
 const regEntrySchema = new mongoose.Schema({    
     rut: {
         type: String,
         required: true,
-        unique: true
     },
     plate: {
         type: String,
         required: true,
-        unique: true
     },
     name: {
         type: String,
         required: true
     },
-    // //estado de la entrada (true = activa, false = inactivo)
-    // state: {
-    //     type: Boolean,
-    //     required: true,
-    //     default: true
-    // },
     date: {
         type: Date,
         default: Date.now     
@@ -32,5 +23,19 @@ const regEntrySchema = new mongoose.Schema({
     },
 });
 
+// Middleware para formatear la matrícula antes de guardar
+regEntrySchema.pre("save", function(next) {
+    const vehicle = this;
+    if (vehicle.isModified("plate")) {
+      vehicle.matricula = formatPlate(vehicle.matricula);
+    }
+    next();
+  });
+  // Función para formatear la matrícula
+    function formatPlate(plate) {
+        // Formato: XX.XX.XX
+        return plate.slice(0, 2) + "." + plate.slice(2, 4) + "." + plate.slice(4);
+    }
+
 const RegEntry = mongoose.model('RegEntry', regEntrySchema);
-module.exports = RegEntry;
+export default RegEntry;
