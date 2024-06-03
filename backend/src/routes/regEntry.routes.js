@@ -23,16 +23,14 @@ router.post("/regEntryUser", isGuard, regEntryController.createRegEntryUser);
 router.get("/", isGuard, regEntryController.getRegEntry);
 //ruta para obtener todas las entradas en cierta fecha
 router.get("/date/:date", isGuard, regEntryController.getEntryByDate);
-//router.get("/:date", isGuard, regEntryController.getEntryByDate);
 //ruta para obtener una entrada por placa
 router.get("/plate/:plate", isGuard, regEntryController.getRegEntryByPlate);
 //ruta para obtener una entrada por rut
 router.get("/:rut", isGuard, regEntryController.getRegEntryByRut);
 //ruta para actualizar una entrada
-router.patch("/:rut", isGuard, regEntryController.updateRegEntryByRut);
+router.patch("/:id", isGuard, regEntryController.updateRegEntryById);
 //ruta para elimitar una entrada
-router.delete("/:rut", isGuard, regEntryController.deleteRegEntryByRut);
-//router.put("/:rut", isGuard, regEntryController.updateRegEntry);
+router.delete("/delete/:id", isGuard, regEntryController.deleteRegEntryById);
 
 
 // Exporta el enrutador

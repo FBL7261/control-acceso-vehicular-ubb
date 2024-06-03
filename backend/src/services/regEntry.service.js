@@ -1,7 +1,7 @@
 import RegEntry from '../models/regEntry.model.js';
 import User from '../models/user.model.js';
 import Vehicle from '../models/vehicle.model.js';
-import regEntryBodySchema from '../schema/regEntry.schema.js';
+//import regEntryBodySchema from '../schema/regEntry.schema.js';
 import { handleError } from '../utils/errorHandler.js'
 
 /**
@@ -77,6 +77,9 @@ async function createRegEntryUser({ userID, reason }) {
 async function getRegEntry() {
     try {
         const regEntrys = await RegEntry.find();
+        if (!regEntrys) {
+            return [null, 'No se han encontrado registros'];
+        }
         return [regEntrys, null];
 
     } catch (error) {
@@ -93,16 +96,28 @@ async function getRegEntry() {
  */
 async function getEntryByDate(date) {
     try {
-        // se obtiene la fecha de la entrada
-        const regEntryFound = await RegEntry.find({ date });
-        // si no se encuentra la entrada se responde con un error
-        if (!regEntryFound) {
-            return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
+        // Convertir la fecha a un rango de tiempo para buscar entradas en ese día
+        const searchDate = new Date(date);
+        const startOfDay = new Date(searchDate.setUTCHours(0, 0, 0, 0));
+        const endOfDay = new Date(searchDate.setUTCHours(23, 59, 59, 999));
+
+        // Buscar todas las entradas registradas por fecha 
+        const regEntries = await RegEntry.find({
+            date: {
+                $gte: startOfDay,
+                $lte: endOfDay
+            }
+        });
+
+        // si no se encuentra la fecha, se responde con un error
+        if (regEntries.length === 0) {
+            return [null, 'No se han encontrado registros'];
         }
-        // se retorna las entradas encontradas
-        return [regEntryFound, null];
+
+        return [regEntries, null];
     } catch (error) {
-        handleError(error, "regEntry.service -> activateRegEntry");
+        handleError(error, "regEntry.service -> getEntryByDate");
+        return [null, 'Error al buscar registros de entrada'];
     }
 }
 
@@ -151,14 +166,14 @@ async function getRegEntryByRut(req, res) {
 
 
 /**
- * @name updateRegEntryByRut
+ * @name updateRegEntryById
  * @description actualiza una entrada registrada por su rut
  */
 // actualiza una entrada registrada por rut.
-async function updateRegEntryByRut(req, res) {
+async function updateRegEntryById(req, res) {
     try {
-        const { rut } = req.params;
-        const regEntry = await RegEntry.findOneAndUpdate({ rut }, req
+        const { id } = req.params;
+        const regEntry = await RegEntry.findOneAndUpdate({ id }, req
             .body, { new: true });
         if (!regEntry) {
             return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
@@ -171,21 +186,20 @@ async function updateRegEntryByRut(req, res) {
 }
 
 /**
- * @name deleteRegEntryByRut
+ * @name deleteRegEntryById
  * @description elimina una entrada a la universidad registrada por su rut
  * 
  */
-async function deleteRegEntryByRut(req, res) {
+async function deleteRegEntryById(id) {
     try {
-        const { rut } = req.params;
-        const regEntry = await RegEntry.findOneAndDelete({ rut });
+        const regEntry = await RegEntry.findByIdAndDelete(id);
         if (!regEntry) {
-            return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
+            return [null, 'No se ha encontrado registro de entrada'];
         }
-        res.status(200).json({ message: 'Entrada eliminada correctamente' });
-    }
-    catch (error) {
-        handleError(error, "regEntry.service -> activateRegEntry");
+        return [regEntry, null];
+    } catch (error) {
+        handleError(error, "regEntry.service -> deleteRegEntryById");
+        return [null, 'Error al eliminar el registro de entrada'];
     }
 }
 
@@ -196,7 +210,7 @@ export default {
     getEntryByDate, 
     getRegEntryByPlate,
     getRegEntryByRut, 
-    updateRegEntryByRut,
-    deleteRegEntryByRut,
+    updateRegEntryById,
+    deleteRegEntryById,
 };
  
