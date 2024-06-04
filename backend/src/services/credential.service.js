@@ -1,6 +1,4 @@
 import Credential from '../models/credential.model.js';
-import { handleError }  from '../utils/errorHandler.js';
-import mongoose from "mongoose"; 
 
 async function createCredential(data) {
     const { userId, barcode } = data;
@@ -27,11 +25,11 @@ async function getOneCredential(id) {
     return credential;
   }
 
-async function deleteCredential(credential) {
-    const credentialdeteled = await Credential.findByIdAndDelete(credential);
-    if (!credentialdeteled) throw new NotFoundError('Credencial no encontrada');
-    return credentialdeteled;
-  }
+  async function deleteCredential(id) {
+    const credentialDeleted = await Credential.findByIdAndDelete(id);
+    if (!credentialDeleted) throw new NotFoundError('Credencial no encontrada');
+    return credentialDeleted;
+}
 
 
 export default {
