@@ -3,7 +3,7 @@
 import User from "../models/user.model.js";
 import Role from "../models/role.model.js";
 import { respondError } from "../utils/resHandler.js";
-import { handleError } from "../utils/errorHandler.js";
+import  {handleError}  from "../utils/errorHandler.js";
 
 /**
  * Comprueba si el usuario es administrador
@@ -31,5 +31,25 @@ async function isAdmin(req, res, next) {
     handleError(error, "authorization.middleware -> isAdmin");
   }
 }
+async function isGuard(req, res, next) {
+  try {
+    const user = await User.findOne({ email: req.email });
+    const roles = await Role.find({ _id: { $in: user.roles } });
+    for (let i = 0; i < roles.length; i++) {
+      if (roles[i].name === "guardia") {
+        next();
+        return;
+      }
+    }
+    return respondError(
+      req,
+      res,
+      401,
+      "Se requiere un rol de guardia para realizar esta acción",
+    );
+  } catch (error) {
+    handleError(error, "authorization.middleware -> isGuard");
+  }
+}
 
-export { isAdmin };
+export { isAdmin, isGuard };

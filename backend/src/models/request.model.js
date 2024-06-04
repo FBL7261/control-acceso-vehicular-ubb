@@ -1,18 +1,13 @@
-const mongoose = require('mongoose');
-const STATES = require('../constants/state.constant');
+import mongoose from "mongoose";
+import STATES from '../constants/request.state.constants.js';
 
 const requestSchema = new mongoose.Schema({
     user:{
         type: {
             username: String,
-            phone: String,
+            rut: String,
             email: String,
         },
-    },
-    document: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Document',
-        required: true,
     },
     status: {
         type: String,
@@ -24,4 +19,5 @@ const requestSchema = new mongoose.Schema({
 
 
 const Request = mongoose.model('Request', requestSchema);
-module.export = Request;
+
+export default Request;
