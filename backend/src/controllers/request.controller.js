@@ -26,17 +26,16 @@ async function createRequest(req, res) {
 
 
 // DELETE
-
 async function deleteRequest(req, res) {
     try {
         const requestId = req.params.id; // Obtiene el ID de la solicitud de los parámetros de la URL
-        const result = await requestService.deleteRequest(requestId);
-        if (!result) {
+        const deletedRequest = await requestService.deleteRequest(requestId);
+        if (!deletedRequest) {
             return res.status(404).json({ message: 'Solicitud no encontrada' });
         }
         res.status(200).json({ 
             message: 'Solicitud eliminada con éxito',
-            data: result,
+            data: deletedRequest,
         });
     } catch (error) {
         res.status(400).json({ message: 'No se pudo eliminar la solicitud', error: error.message });

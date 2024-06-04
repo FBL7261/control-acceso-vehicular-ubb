@@ -36,7 +36,7 @@ async function isGuard(req, res, next) {
     const user = await User.findOne({ email: req.email });
     const roles = await Role.find({ _id: { $in: user.roles } });
     for (let i = 0; i < roles.length; i++) {
-      if (roles[i].name === "guard") {
+      if (roles[i].name === "guardia") {
         next();
         return;
       }

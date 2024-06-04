@@ -18,20 +18,19 @@ router.use(authenticationMiddleware);
 //ruta para crear una entrada que no sea de un usuario del sistema
 router.post("/", isGuard, regEntryController.createRegEntry);
 //ruta para crear una entrada de un usuario del sistema
-router.post("/", isGuard, regEntryController.createRegEntryUser);
+router.post("/regEntryUser", isGuard, regEntryController.createRegEntryUser);
 // obtiene todas las entradas registradas
 router.get("/", isGuard, regEntryController.getRegEntry);
 //ruta para obtener todas las entradas en cierta fecha
-router.get("/:date", isGuard, regEntryController.getEntryByDate);
+router.get("/date/:date", isGuard, regEntryController.getEntryByDate);
 //ruta para obtener una entrada por placa
-router.get("/:plate", isGuard, regEntryController.getRegEntryByPlate);
+router.get("/plate/:plate", isGuard, regEntryController.getRegEntryByPlate);
 //ruta para obtener una entrada por rut
-router.get("/:rut", isGuard, regEntryController.getRegEntryByRut);
+router.get("/:id", isGuard, regEntryController.getRegEntryById);
 //ruta para actualizar una entrada
-router.patch("/:rut", isGuard, regEntryController.updateRegEntryByRut);
+//router.patch("/update/:id", isGuard, regEntryController.updateRegEntryById);
 //ruta para elimitar una entrada
-router.delete("/:rut", isGuard, regEntryController.deleteRegEntryByRut);
-//router.put("/:rut", isGuard, regEntryController.updateRegEntry);
+router.delete("/delete/:id", isGuard, regEntryController.deleteRegEntryById);
 
 
 // Exporta el enrutador
