@@ -2,6 +2,7 @@ import { handleError } from '../utils/errorHandler.js';
 import {respondSuccess, respondError} from '../utils/resHandler.js';
 import regEntryBodySchema from '../schema/regEntry.schema.js';
 import regEntryService from '../services/regEntry.service.js';
+import mongoose from 'mongoose';
 
 /**
  * 
@@ -120,12 +121,12 @@ async function getRegEntryByPlate(req, res) {
         const { plate } = req.params;
         const [regEntry, regEntryError] = await regEntryService.getRegEntryByPlate(plate);
         if (regEntryError) {
-            return respondError(req, res, 400, regEntryError.message);
+            return respondError(req, res, 400, regEntryError);
         }
         if (!regEntry) {
             return respondError(req, res, 404, 'No se ha encontrado registro de entrada');
         }
-        respondSuccess(req, res, 200, {data: regEntry});
+        respondSuccess(req, res, 200, { data: regEntry });
     } catch (error) {
         handleError(error, "regEntry.controller -> getRegEntryByPlate");
         respondError(req, res, 400, error.message);
@@ -134,54 +135,43 @@ async function getRegEntryByPlate(req, res) {
 
 /**
  * 
- * @name getRegEntryByRut
- * @description busca una entrada registrada por su rut
+ * @name getRegEntryById
+ * @description busca una entrada registrada por su Id
  */
 
-async function getRegEntryByRut(req, res) {
+async function getRegEntryById(req, res) {
     try {
-        const { rut } = req.params;
-        const [regEntry, regEntryError] = await regEntryService.getRegEntryByRut(rut);
-        if (regEntryError) {
-            return respondError(req, res, 400, regEntryError.message);
+        const { id } = req.params;
+
+        // Validar formato del ID
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return respondError(req, res, 400, 'ID inválido');
         }
+
+        const [regEntry, regEntryError] = await regEntryService.getRegEntryById(id);
+
+        if (regEntryError) {
+            return respondError(req, res, 400, regEntryError);
+        }
+
         if (!regEntry) {
             return respondError(req, res, 404, 'No se ha encontrado registro de entrada');
         }
-        respondSuccess(req, res, 200, {data: regEntry});
-    } catch (error) {
-        handleError(error, "regEntry.controller -> getRegEntryByRut");
-        respondError(req, res, 400, error.message);
-    }
-}
 
-
-/**
- * @name updateRegEntryById
- * @description actualiza una entrada registrada por su rut
- */
-async function updateRegEntryById(req, res) {
-    try {
-        const { rut } = req.params;
-        const { body } = req;
-        const [regEntry, regEntryError] = await regEntryService.updateRegEntryById(rut, body);
-        if (regEntryError) {
-            return respondError(req, res, 400, regEntryError.message);
-        }
-        if (!regEntry) {
-            return respondError(req, res, 404, 'No se ha encontrado registro de entrada');
-        }
-        respondSuccess(req, res, 200, {data: regEntry});
+        return respondSuccess(req, res, 200, {
+            message: 'Entrada encontrada con éxito',
+            data: regEntry
+        });
     } catch (error) {
-        handleError(error, "regEntry.controller -> updateRegEntryById");
-        respondError(req, res, 400, error.message);
+        handleError(error, "regEntry.controller -> getRegEntryById");
+        return respondError(req, res, 500, error.message);
     }
 }
 
 
 /**
  * @name deleteRegEntryById
- * @description elimina una entrada registrada por su rut
+ * @description elimina una entrada registrada por su Id
  
  */
 async function deleteRegEntryById(req, res) {
@@ -201,6 +191,31 @@ async function deleteRegEntryById(req, res) {
     }
 }
 
+// /**
+//  * @name updateRegEntryById
+//  * @description actualiza una entrada registrada por su rut
+//  */
+// async function updateRegEntryById(req, res) {
+//     try {
+//         const { rut } = req.params;
+//         const { body } = req;
+//         const [regEntry, regEntryError] = await regEntryService.updateRegEntryById(rut, body);
+//         if (regEntryError) {
+//             return respondError(req, res, 400, regEntryError.message);
+//         }
+//         if (!regEntry) {
+//             return respondError(req, res, 404, 'No se ha encontrado registro de entrada');
+//         }
+//         respondSuccess(req, res, 200, {data: regEntry});
+//     } catch (error) {
+//         handleError(error, "regEntry.controller -> updateRegEntryById");
+//         respondError(req, res, 400, error.message);
+//     }
+//}
+
+
+
+
 
 // Exportar todas las funciones
 export default {
@@ -209,7 +224,7 @@ export default {
     getRegEntry,
     getEntryByDate,
     getRegEntryByPlate,
-    getRegEntryByRut,
-    updateRegEntryById,
-    deleteRegEntryById
+    getRegEntryById,
+    deleteRegEntryById,
+    //updateRegEntryById
 }

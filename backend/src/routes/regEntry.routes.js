@@ -26,9 +26,9 @@ router.get("/date/:date", isGuard, regEntryController.getEntryByDate);
 //ruta para obtener una entrada por placa
 router.get("/plate/:plate", isGuard, regEntryController.getRegEntryByPlate);
 //ruta para obtener una entrada por rut
-router.get("/:rut", isGuard, regEntryController.getRegEntryByRut);
+router.get("/:id", isGuard, regEntryController.getRegEntryById);
 //ruta para actualizar una entrada
-router.patch("/:id", isGuard, regEntryController.updateRegEntryById);
+//router.patch("/update/:id", isGuard, regEntryController.updateRegEntryById);
 //ruta para elimitar una entrada
 router.delete("/delete/:id", isGuard, regEntryController.deleteRegEntryById);
 

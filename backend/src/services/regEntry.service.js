@@ -1,7 +1,6 @@
 import RegEntry from '../models/regEntry.model.js';
 import User from '../models/user.model.js';
 import Vehicle from '../models/vehicle.model.js';
-//import regEntryBodySchema from '../schema/regEntry.schema.js';
 import { handleError } from '../utils/errorHandler.js'
 
 /**
@@ -132,58 +131,39 @@ async function getRegEntryByPlate(plate) {
     try {
         const regEntry = await RegEntry.findOne({ plate });
         if (!regEntry) {
-            return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
+            return [null, 'No se ha encontrado registro de entrada'];
         }
         return [regEntry, null];
-    }
-    catch (error) {
-        handleError(error, "regEntry.service -> activateRegEntry");
+    } catch (error) {
+        handleError(error, "regEntry.service -> getRegEntryByPlate");
+        return [null, 'Error al buscar registro de entrada'];
     }
 }
 
 /**
  * 
- * @name getRegEntryByRut
- * @description busca una entrada registrada por su rut
- * @param {String} rut rut del usuario
+ * @name getRegEntryById
+ * @description busca una entrada registrada por su Id
+ * @param {String} Id Id del usuario
  * @returns {Promise} Promesa con el objeto de la entrada registrada en la base de datos
  */
-// busca una entrada registrada solo por su rut.
-async function getRegEntryByRut(req, res) { 
+// busca una entrada registrada solo por su Id.
+
+async function getRegEntryById(id) {
     try {
-        const { rut } = req.params;
-        const regEntry = await RegEntry.findOne({ rut });
+        const regEntry = await RegEntry.findById(id).exec();
         if (!regEntry) {
-            return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
+            return [null, 'No se ha encontrado registro de entrada'];
         }
-        res.status(200).json(regEntry);
+        return [regEntry, null];
     } catch (error) {
-        handleError(error, "regEntry.service -> activateRegEntry");
+        handleError(error, "regEntry.service -> getRegEntryById");
+        return [null, 'Error al buscar registro de entrada por ID'];
     }
 }
 
 
 
-
-/**
- * @name updateRegEntryById
- * @description actualiza una entrada registrada por su rut
- */
-// actualiza una entrada registrada por rut.
-async function updateRegEntryById(req, res) {
-    try {
-        const { id } = req.params;
-        const regEntry = await RegEntry.findOneAndUpdate({ id }, req
-            .body, { new: true });
-        if (!regEntry) {
-            return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
-        }
-        res.status(200).json(regEntry);
-    }
-    catch (error) {
-        handleError(error, "regEntry.service -> activateRegEntry");
-    }
-}
 
 /**
  * @name deleteRegEntryById
@@ -203,14 +183,35 @@ async function deleteRegEntryById(id) {
     }
 }
 
+
+// /**
+//  * @name updateRegEntryById
+//  * @description actualiza una entrada registrada por su Id
+//  */
+// // actualiza una entrada registrada por Id.
+// async function updateRegEntryById(Id) {
+//     try {
+//         const { id } = req.params;
+//         const regEntry = await RegEntry.findOneAndUpdate({ id }, req
+//             .body, { new: true });
+//         if (!regEntry) {
+//             return res.status(404).json({ message: 'No se ha encontrado registro de entrada' });
+//         }
+//         res.status(200).json(regEntry);
+//     }
+//     catch (error) {
+//         handleError(error, "regEntry.service -> activateRegEntry");
+//     }
+// }
+
 export default { 
     createRegEntry, 
     createRegEntryUser,
     getRegEntry,
     getEntryByDate, 
     getRegEntryByPlate,
-    getRegEntryByRut, 
-    updateRegEntryById,
+    getRegEntryById, 
     deleteRegEntryById,
+    //updateRegEntryById
 };
  
