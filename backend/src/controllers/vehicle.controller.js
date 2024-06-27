@@ -5,7 +5,10 @@
 // Para validar `ObjectId`
 import mongoose from "mongoose";
 
-// Para manejar respuestas
+// Para permitir que modelo siga siendo requerido al crear un vehiculo
+// pero que no sea aceptado al actualizar, en tal caso se recomienda crear un vehiculo nuevo.
+import Joi from "joi";
+
 
 // Importar usuario
 import User from "../models/user.model.js";
@@ -144,18 +147,40 @@ async function deleteVehicle(req, res) {
   }
 }
 
- // Actualizar un vehículo por su ID
 async function updateVehicle(req, res) {
   try {
     const { vehicleId } = req.params;
     const vehicleData = req.body;
     const currentUserEmail = req.email;
 
-    const { error: bodyError } = vehicleSchema.validate(vehicleData);
+    // Validar los datos de actualización permitidos
+    const { error: bodyError } = Joi.object({
+      matricula: Joi.string().required(),
+      marca: Joi.string().required(),
+      color: Joi.string().required(),
+      modelo: Joi.string().optional(), // Permitir que el modelo sea opcional en la actualización
+    }).validate(vehicleData);
+
     if (bodyError) {
       return respondError(req, res, 400, bodyError.message);
     }
 
+    // Verificar si el usuario tiene permiso para editar el vehículo
+    const vehicle = await Vehicle.findById(vehicleId);
+    if (!vehicle) {
+      return respondError(req, res, 404, "Vehículo no encontrado");
+    }
+
+    if (vehicle.propietario.toString() !== currentUserEmail) {
+      return respondError(req, res, 403, "No tienes permiso para editar este vehículo");
+    }
+
+    // Verificar si se intenta actualizar el modelo directamente
+    if (vehicleData.modelo !== undefined) {
+      return respondError(req, res, 400, "El modelo no puede ser actualizado directamente.");
+    }
+
+    // Actualizar el vehículo
     const [updatedVehicle, updateError] = await VehicleService.updateVehicle(vehicleId, vehicleData, currentUserEmail);
     if (updateError) {
       return respondError(req, res, 403, updateError);
@@ -167,6 +192,10 @@ async function updateVehicle(req, res) {
     respondError(req, res, 500, "Error al actualizar el vehículo");
   }
 }
+
+
+
+
 
 
 export default {

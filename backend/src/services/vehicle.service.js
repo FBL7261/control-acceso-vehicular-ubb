@@ -18,14 +18,21 @@ async function createVehicle(vehicleData, currentUserEmail, isAdmin) {
     }
 
     const newVehicle = new Vehicle(vehicleData); // Crear el vehículo
-    await newVehicle.save(); // Guardar en la base de datos
 
-    return [newVehicle, null]; // Vehículo creado con éxito
+    // Guardar el vehículo en la base de datos
+    const savedVehicle = await newVehicle.save();
+
+    return [savedVehicle, null]; // Vehículo creado con éxito
   } catch (error) {
+    // Manejar el error específico de clave duplicada (matrícula)
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.matricula) {
+      return [null, "Esta matrícula no está disponible"];
+    }
     handleError(error, "vehicle.service -> createVehicle");
     return [null, "Error al crear el vehículo"];
   }
 }
+
 
 // Crear un nuevo vehículo
 async function createVehicleWhPhoto(vehicleData, currentUserEmail, isAdmin) {
@@ -105,29 +112,37 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
 // Actualizar un vehículo
 async function updateVehicle(vehicleId, vehicleData, currentUserEmail) {
   try {
+    // Validar el ID del vehículo
     if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
       return [null, "El ID del vehículo no es válido"];
     }
 
+    // Buscar el vehículo por su ID
     const vehicle = await Vehicle.findById(vehicleId);
     if (!vehicle) {
       return [null, "El vehículo no se encontró"];
     }
 
+    // Verificar si el usuario actual es el propietario del vehículo
     const propietario = await User.findById(vehicle.propietario);
     if (!propietario || propietario.email !== currentUserEmail) {
       return [null, "No tienes permiso para editar este vehículo"];
     }
 
-    Object.assign(vehicle, vehicleData);
-    await vehicle.save();
+    // Excluir el campo 'modelo' de los datos de actualización
+    const { modelo, ...updateData } = vehicleData;
 
-    return [vehicle, null];
+    // Asignar los datos de actualización al vehículo
+    Object.assign(vehicle, updateData);
+    await vehicle.save(); // Guardar los cambios en la base de datos
+
+    return [vehicle, null]; // Retornar el vehículo actualizado
   } catch (error) {
     handleError(error, "vehicle.service -> updateVehicle");
     return [null, "Error al actualizar el vehículo"];
   }
 }
+
 export default {
   createVehicle,
   createVehicleWhPhoto,
