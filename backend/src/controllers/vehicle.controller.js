@@ -26,49 +26,34 @@ import VehicleService from "../services/vehicle.service.js";
 // Esquema para validación de vehículos
 import vehicleSchema from "../schema/vehicle.schema.js";
 
- // Para manejo de errores
+// Para manejo de errores
 import { handleError } from "../utils/errorHandler.js";
 
-// Crear un nuevo vehículo, automaticamente se le asigna al usuario actual
+// Crear un nuevo vehículo, automáticamente se le asigna al usuario actual
 async function createVehicle(req, res) {
   try {
     const { body } = req; // Datos del cuerpo de la solicitud
     const currentUserEmail = req.email; // Correo del usuario autenticado
     const isAdmin = req.roles.includes("admin"); // Verificar si es administrador
 
-    const { error: bodyError } = vehicleSchema.validate(body); // Validar con el esquema
+    // Validar los datos del vehículo con el esquema
+    const { error: bodyError } = vehicleSchema.validate(body);
     if (bodyError) {
       return respondError(req, res, 400, bodyError.message); // Manejar errores de validación
     }
 
-    const [newVehicle, vehicleError] = await VehicleService.createVehicle(body, currentUserEmail, isAdmin);
-
-    if (vehicleError) {
-      return respondError(req, res, 400, vehicleError); // Manejo de errores
-    }
-
-    respondSuccess(req, res, 201, newVehicle); // Vehículo creado con éxito
-  } catch (error) {
-    handleError(error, "vehicle.controller -> createVehicle");
-    respondError(req, res, 500, "No se pudo crear el vehículo");
-  }
-}
-
-// Crear un nuevo vehículo, automaticamente se le asigna al usuario actual
-async function createVehicleWhPhoto(req, res) {
-  try {
-    const { body } = req; // Datos del cuerpo de la solicitud
-    const currentUserEmail = req.email; // Correo del usuario autenticado
-    const isAdmin = req.roles.includes("admin"); // Verificar si es administrador
-
-    const { error: bodyError } = vehicleSchema.validate(body); // Validar con el esquema
-    if (bodyError) {
-      return respondError(req, res, 400, bodyError.message); // Manejar errores de validación
+    // Verificar si se ha subido una foto
+    if (req.files && req.files.foto) {
+      body.foto = req.files.foto[0].path; // Ajustar según la forma en que guardes las fotos
     }
 
     const [newVehicle, vehicleError] = await VehicleService.createVehicle(body, currentUserEmail, isAdmin);
+    console.log("newVehicle:", newVehicle);
 
+    console.log("vehicleError", vehicleError);
+    
     if (vehicleError) {
+      console.log("newVehicle:", newVehicle);
       return respondError(req, res, 400, vehicleError); // Manejo de errores
     }
 
@@ -94,12 +79,7 @@ async function getVehiclesByUser(req, res) {
 
     // Asegurarse de que el usuario autenticado solo pueda acceder a sus propios vehículos
     if (currentUser._id.toString() !== userId) {
-      return respondError(
-        req,
-        res,
-        403,
-        "No tienes permiso para ver vehículos de otros usuarios",
-      );
+      return respondError(req, res, 403, "No tienes permiso para ver vehículos de otros usuarios");
     }
 
     const [vehicles, vehicleError] = await VehicleService.getVehiclesByUserId(userId);
@@ -180,6 +160,11 @@ async function updateVehicle(req, res) {
       return respondError(req, res, 400, "El modelo no puede ser actualizado directamente.");
     }
 
+    // Verificar si se ha subido una foto nueva
+    if (req.files && req.files.foto) {
+      vehicleData.foto = req.files.foto[0].path; // Ajustar según la forma en que guardes las fotos
+    }
+
     // Actualizar el vehículo
     const [updatedVehicle, updateError] = await VehicleService.updateVehicle(vehicleId, vehicleData, currentUserEmail);
     if (updateError) {
@@ -193,14 +178,8 @@ async function updateVehicle(req, res) {
   }
 }
 
-
-
-
-
-
 export default {
   createVehicle,
-  createVehicleWhPhoto,
   getVehiclesByUser,
   deleteVehicle,
   updateVehicle,
