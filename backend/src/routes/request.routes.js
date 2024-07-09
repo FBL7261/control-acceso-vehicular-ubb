@@ -12,5 +12,6 @@ router.delete('/:id',requestController.deleteRequest);
 router.put('/:id',requestController.updateRequest);
 router.get('/', requestController.getRequests);
 router.get('/:id',requestController.getRequestById);
+router.put('/newstate/:id', requestController.updateRequestStatus);	
 
 export default router;

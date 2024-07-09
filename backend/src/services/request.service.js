@@ -32,6 +32,8 @@ async function createRequest(email, requestData) {
                 email : requestData.user.email
             },
             state : requestData.state,
+            description : requestData.description,
+            createdAt: new Date().toISOString()
          });
 
          await newRequest.save();
@@ -100,10 +102,26 @@ async function getRequestById(request) {
     }
 }
 
+//Update Status Request
+async function updateRequestStatus(requestId, newStatus) {
+    try {
+        const request = await Request.findByIdAndUpdate(requestId, { status: newStatus }, { new: true });
+
+        if (!request) {
+            throw new Error("Solicitud no encontrada");
+        }
+
+        return request;
+    } catch (error) {
+        throw new Error("Error al actualizar el estado de la solicitud");
+    }
+}
+
 export default {
     createRequest,
     deleteRequest,
     getRequests,
     getRequestById,
     updateRequest,
+    updateRequestStatus,
 };
