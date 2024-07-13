@@ -12,7 +12,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     }
 
     if (!isAuthorized) {
-        return <Navigate to="/home"/>;
+        return <Navigate to="/home" />;
     }
 
     return children;

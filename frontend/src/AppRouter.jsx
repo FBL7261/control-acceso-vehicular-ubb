@@ -7,6 +7,7 @@ import Error404 from './pages/Error404';
 import EditUser from './pages/EditUser';
 import ProtectedRoute from './components/ProtectedRoute';
 import Users from './pages/Users';
+import VehiclesPage from './pages/VehiclesPage';
 
 const AppRouter = () => {
   return (
@@ -44,6 +45,14 @@ const AppRouter = () => {
         element={
           <ProtectedRoute>
             <EditUser />
+          </ProtectedRoute>
+        } 
+      />
+      <Route 
+        path="/vehicles" 
+        element={
+          <ProtectedRoute>
+            <VehiclesPage />
           </ProtectedRoute>
         } 
       />
