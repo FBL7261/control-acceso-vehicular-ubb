@@ -1,82 +1,68 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { getVehiclesByUser } from '../services/vehicle.service';
+// vehicles/VehiclesPage.jsx
 
-const VehiclesPage = () => {
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { getVehiclesByUser, deleteVehicle } from '../services/vehicle.service';
+import VehicleCard from '../components/VehicleCard';
+
+
+const VehiclesPage = ({ user }) => {
   const [vehicles, setVehicles] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchVehicles = async () => {
-      try {
-        const storedUser = JSON.parse(sessionStorage.getItem('usuario'));
-        const userId = storedUser?.data?.userId;
-
-        if (userId) {
-          const response = await getVehiclesByUser(userId);
-          setVehicles(response);
-        } else {
-          console.error('Usuario no autenticado');
-        }
-      } catch (error) {
-        console.error('Error al obtener los vehículos:', error);
-      }
-    };
-
     fetchVehicles();
   }, []);
 
-  const handleCreateVehicle = () => {
-    navigate('/create-vehicle');
+  const fetchVehicles = async () => {
+    try {
+      const data = await getVehiclesByUser(user.id);
+      setVehicles(data);
+    } catch (error) {
+      console.error('Error fetching vehicles:', error);
+    }
   };
 
-  const handleEditVehicle = () => {
-    navigate('/update-vehicle'); // Asegúrate de que la ruta exista
-  };
-
-  const handleDeleteVehicle = () => {
-    navigate('/delete-vehicle'); // Asegúrate de que la ruta exista
-  };
-
-  const handleViewVehicles = () => {
-    navigate('/vehicles'); // Asegúrate de que la ruta exista
+  const handleDeleteVehicle = async (id) => {
+    try {
+      await deleteVehicle(id);
+      // Update state after deletion
+      const updatedVehicles = vehicles.filter((vehicle) => vehicle._id !== id);
+      setVehicles(updatedVehicles);
+    } catch (error) {
+      console.error('Error deleting vehicle:', error);
+    }
   };
 
   return (
-    <div>
-      <h1>Vehículos</h1>
-      {vehicles.length > 0 ? (
-        <ul>
-          {vehicles.map((vehicle) => (
-            <li key={vehicle.id}>
-              {vehicle.make} {vehicle.model} - {vehicle.plate}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No hay vehículos registrados.</p>
-      )}
-      <div style={buttonContainerStyle}>
-        <button onClick={handleCreateVehicle} style={buttonStyle}>Crear vehículo</button>
-        <button onClick={handleEditVehicle} style={buttonStyle}>Editar información de vehículo</button>
-        <button onClick={handleDeleteVehicle} style={buttonStyle}>Eliminar vehículo</button>
-        <button onClick={handleViewVehicles} style={buttonStyle}>Ver vehículos</button>
+    <div className="main-container">
+      <div className="table-container">
+        <h1>Mis Vehículos</h1>
+        {vehicles.length > 0 ? (
+          <table id="users">
+            <thead>
+              <tr>
+                <th>Patente</th>
+                <th>Foto</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              {vehicles.map((vehicle) => (
+                <VehicleCard
+                  key={vehicle._id}
+                  vehicle={vehicle}
+                  onDelete={() => handleDeleteVehicle(vehicle._id)}
+                />
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p className="no-data">No hay vehículos registrados.</p>
+        )}
+        <Link to="/vehicles/add">Agregar Vehículo</Link>
       </div>
     </div>
   );
-};
-
-const buttonContainerStyle = {
-  display: 'flex',
-  flexDirection: 'column',
-  gap: '10px',
-  marginTop: '20px'
-};
-
-const buttonStyle = {
-  padding: '10px',
-  fontSize: '16px',
-  cursor: 'pointer'
 };
 
 export default VehiclesPage;
