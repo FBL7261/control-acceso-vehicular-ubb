@@ -1,4 +1,4 @@
 //Estado solicitud registro 
-const STATES = ['Pendiente', 'Aprobado', 'Rechazado',];
+const STATES = ['Pendiente', 'Aprobado', 'Rechazado'];
 
-module.exports = STATES;
+export default STATES;

@@ -3,7 +3,7 @@
 import User from "../models/user.model.js";
 import Role from "../models/role.model.js";
 import { respondError } from "../utils/resHandler.js";
-import { handleError } from "../utils/errorHandler.js";
+import  {handleError}  from "../utils/errorHandler.js";
 
 /**
  * Comprueba si el usuario es administrador
@@ -31,22 +31,16 @@ async function isAdmin(req, res, next) {
     handleError(error, "authorization.middleware -> isAdmin");
   }
 }
-// Comprueba si el usuario es guardia
 async function isGuard(req, res, next) {
   try {
-    // Busca el usuario por el email
     const user = await User.findOne({ email: req.email });
-    // Busca los roles del usuario
     const roles = await Role.find({ _id: { $in: user.roles } });
-    // Comprueba si el usuario es guardia
     for (let i = 0; i < roles.length; i++) {
-      // Si el usuario es guardia, continua con la siguiente función
       if (roles[i].name === "guardia") {
         next();
         return;
       }
     }
-    // Si el usuario no es guardia, responde con un error 401
     return respondError(
       req,
       res,
