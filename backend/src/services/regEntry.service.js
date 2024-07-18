@@ -34,7 +34,7 @@ async function createRegEntry(regEntry) {
  */
 
 // registra una nueva entrada para un usuario que ya se encuentra registrado en el sistema
-async function createRegEntryUser({ userID, reason }) {
+async function createRegEntryUser({ userID, plate }) {
     try {
         // Buscar el usuario por su id 
         const user = await User.findById(userID);
@@ -44,7 +44,7 @@ async function createRegEntryUser({ userID, reason }) {
         }
 
         // busca el vehículo del usuario
-        const vehicle = await Vehicle.findOne({propietario: userID});
+        const vehicle = await Vehicle.findOne({propietario: userID, matricula: plate});
         // Si no se encuentra el vehículo, se responde con un error
         if (!vehicle) {
             return [null, 'No se ha encontrado registro de vohiculo en el sistema'];
@@ -55,7 +55,7 @@ async function createRegEntryUser({ userID, reason }) {
             plate: vehicle.matricula,
             name: user.username,
             date: new Date(), // La fecha actual
-            reason,
+            //reason,
         });
 
         await newRegEntry.save();

@@ -39,10 +39,10 @@ async function createRegEntry(req, res) {
 // registro de entrada que valida si el usuario ya se encuentra registrado en el sistema
 async function createRegEntryUser(req, res) {
     try {
-        const { userID, reason } = req.body;
+        const { userID, plate } = req.body;
 
         // servicio para crear el registro de entrada
-        const [newRegEntry, error] = await regEntryService.createRegEntryUser({ userID, reason });
+        const [newRegEntry, error] = await regEntryService.createRegEntryUser({ userID, plate });
         if (error) {
             return respondError(req, res, 400, error);
         }
