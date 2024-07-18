@@ -98,8 +98,10 @@ const Profile = () => {
         </div>
         <div className="vehicles-section">
           <h2>Gestión de Vehículos</h2>
-          <button onClick={() => setShowVehicleForm(!showVehicleForm)}>Crear Vehículo</button>
-          <button onClick={() => setShowVehicleList(!showVehicleList)}>Ver Lista de Vehículos</button>
+          <button onClick={() => setShowVehicleForm(true)}>Crear Vehículo</button>
+          <button onClick={() => { setShowVehicleList(true); fetchVehicles(); }}>Ver Lista de Vehículos</button>
+          <button onClick={() => setShowUpdateForm(true)}>Actualizar Vehículo</button>
+          <button onClick={() => setShowVehicleList(true)}>Eliminar Vehículo</button>
           {showVehicleForm && <VehicleForm userId={userProfile.id} onVehicleCreated={handleVehicleCreated} />}
           {showVehicleList && <VehicleList vehicles={vehicles} onDelete={handleDeleteVehicle} onUpdate={(vehicle) => { setSelectedVehicle(vehicle); setShowUpdateForm(true); }} />}
           {showUpdateForm && selectedVehicle && <VehicleUpdateForm vehicle={selectedVehicle} onUpdate={handleUpdateVehicle} />}

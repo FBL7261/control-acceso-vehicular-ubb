@@ -1,21 +1,16 @@
 import React, { useState } from 'react';
-import { createVehicle } from '../services/vehicle.service';
 
-function VehicleForm({ userId, onVehicleCreated }) {
-  const [marca, setMarca] = useState('');
-  const [matricula, setMatricula] = useState('');
-  const [color, setColor] = useState('');
+function VehicleUpdateForm({ vehicle, onUpdate }) {
+  const [marca, setMarca] = useState(vehicle.marca);
+  const [matricula, setMatricula] = useState(vehicle.matricula);
+  const [color, setColor] = useState(vehicle.color);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const newVehicle = await createVehicle({ marca, matricula, color, propietario: userId });
-      onVehicleCreated(newVehicle);
-      setMarca('');
-      setMatricula('');
-      setColor('');
+      await onUpdate({ marca, matricula, color });
     } catch (error) {
-      console.error('Error creating vehicle:', error);
+      console.error('Error updating vehicle:', error);
     }
   };
 
@@ -33,9 +28,9 @@ function VehicleForm({ userId, onVehicleCreated }) {
         <label>Color:</label>
         <input type="text" value={color} onChange={(e) => setColor(e.target.value)} />
       </div>
-      <button type="submit">Crear Vehículo</button>
+      <button type="submit">Actualizar Vehículo</button>
     </form>
   );
 }
 
-export default VehicleForm;
+export default VehicleUpdateForm;
