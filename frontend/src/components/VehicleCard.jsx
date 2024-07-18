@@ -1,14 +1,16 @@
-// VehicleCard.jsx
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-const VehicleCard = ({ vehicle, onDelete }) => {
+const VehicleCard = ({ vehicle, onDelete, onUpdate }) => {
   const { _id, licensePlate, imageUrl } = vehicle;
 
   const handleDelete = () => {
     onDelete(_id);
+  };
+
+  const handleUpdate = () => {
+    onUpdate(vehicle);
   };
 
   return (
@@ -17,7 +19,7 @@ const VehicleCard = ({ vehicle, onDelete }) => {
       <div className="vehicle-info">
         <h3>{licensePlate}</h3>
         <div className="actions">
-          <Link to={`/vehicles/${_id}/edit`}>Editar</Link>
+          <button onClick={handleUpdate}>Editar</button>
           <button onClick={handleDelete}>Eliminar</button>
         </div>
       </div>
@@ -28,6 +30,7 @@ const VehicleCard = ({ vehicle, onDelete }) => {
 VehicleCard.propTypes = {
   vehicle: PropTypes.object.isRequired,
   onDelete: PropTypes.func.isRequired,
+  onUpdate: PropTypes.func.isRequired,
 };
 
 export default VehicleCard;
