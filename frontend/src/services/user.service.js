@@ -14,6 +14,15 @@ export async function getUsers() {
     }
 }
 
+export async function getUserById(id) {
+    try {
+        const { data } = await axios.get(`/user/${id}`);
+        return data;
+    } catch (error) {
+        throw error.response?.data || error.message;
+    }
+}
+
 export async function updateUser(data, rut) {
     try {
         const response = await axios.put(`/user/?rut=${rut}`, data);

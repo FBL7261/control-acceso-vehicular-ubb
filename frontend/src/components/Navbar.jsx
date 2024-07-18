@@ -1,3 +1,4 @@
+// src/components/Navbar.jsx
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logout } from '../services/auth.service.js';
 
@@ -26,20 +27,24 @@ const Navbar = () => {
                         alt="Logo metodología de desarrollo"
                     />
                 </li>
-                <li className={location.pathname === "/inicio" ? "active" : ""}>
+                <li className={location.pathname === "/home" ? "active" : ""}>
                     <NavLink to="/home">Inicio</NavLink>
                 </li>
                 {userRole === 'administrador' && (
-                    <li className={location.pathname === "/usuarios" ? "active" : ""}>
+                    <li className={location.pathname === "/users" ? "active" : ""}>
                         <NavLink to="/users">Usuarios</NavLink>
                     </li>
                 )}
-                <li className={location.pathname === "/perfil" ? "active" : ""}>
+                <li className={location.pathname === "/profile" ? "active" : ""}>
                     <NavLink to="/profile">Perfil</NavLink>
+                </li>
+                <li className={location.pathname === "/create-request" ? "active" : ""}>
+                    <NavLink to="/create-request">Crear Solicitud</NavLink>
                 </li>
                 <li className={location.pathname === "/" ? "active" : ""}>
                     <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
                 </li>
+                
             </ul>
         </nav>
     );

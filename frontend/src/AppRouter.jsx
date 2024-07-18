@@ -7,6 +7,7 @@ import Error404 from './pages/Error404';
 import EditUser from './pages/EditUser';
 import ProtectedRoute from './components/ProtectedRoute';
 import Users from './pages/Users';
+import CreateRequestWithPDF from './components/CreateRequest';
 
 const AppRouter = () => {
   return (
@@ -47,7 +48,17 @@ const AppRouter = () => {
           </ProtectedRoute>
         } 
       />
-      
+
+      {/* Nueva ruta para crear solicitud con PDF */}
+      <Route 
+        path="/create-request" 
+        element={
+          <ProtectedRoute>
+            <CreateRequestWithPDF />
+          </ProtectedRoute>
+        } 
+      />
+
       <Route path="*" element={<Error404 />} />
     </Routes>
   );

@@ -31,7 +31,7 @@ async function createRequest(email, requestData) {
                 rut : requestData.user.rut,
                 email : requestData.user.email
             },
-            state : requestData.state,
+            status : requestData.status,
             description : requestData.description,
             createdAt: new Date().toISOString()
          });
