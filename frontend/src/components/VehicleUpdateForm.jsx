@@ -1,3 +1,4 @@
+// frontend/src/components/VehicleUpdateForm.jsx
 import React, { useState } from 'react';
 
 function VehicleUpdateForm({ vehicle, onUpdate }) {

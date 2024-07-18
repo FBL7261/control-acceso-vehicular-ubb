@@ -1,3 +1,4 @@
+// frontend/src/AppRouter.jsx
 import { Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -8,7 +9,6 @@ import EditUser from './pages/EditUser';
 import ProtectedRoute from './components/ProtectedRoute';
 import Users from './pages/Users';
 import VehiclesPage from './pages/VehiclesPage';
-import AddVehiclePage from './pages/AddVehiclePage'; // Asegúrate de importar AddVehiclePage
 
 const AppRouter = () => {
   return (
@@ -54,16 +54,6 @@ const AppRouter = () => {
         element={
           <ProtectedRoute>
             <VehiclesPage />
-          </ProtectedRoute>
-        } 
-      />
-      
-      {/* Nueva ruta para agregar vehículo */}
-      <Route 
-        path="/vehicles/add" 
-        element={
-          <ProtectedRoute>
-            <AddVehiclePage />
           </ProtectedRoute>
         } 
       />

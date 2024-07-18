@@ -1,6 +1,5 @@
-// import './App.css'
+// frontend/src/App.jsx
 import AppRouter from "./AppRouter";
-
 
 function App() {
   return (

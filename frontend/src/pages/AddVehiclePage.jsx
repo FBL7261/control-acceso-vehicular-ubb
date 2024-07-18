@@ -1,3 +1,4 @@
+// frontend/src/pages/AddVehiclePage.jsx
 import React from 'react';
 import VehicleForm from '../components/VehicleForm';
 import { createVehicle } from '../services/vehicle.service';

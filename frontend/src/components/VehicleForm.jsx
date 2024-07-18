@@ -1,16 +1,39 @@
+// frontend/src/components/VehicleForm.jsx
 import React, { useState } from 'react';
+import axios from 'axios';
 
-function VehicleUpdateForm({ vehicle, onUpdate }) {
-  const [marca, setMarca] = useState(vehicle.marca);
-  const [matricula, setMatricula] = useState(vehicle.matricula);
-  const [color, setColor] = useState(vehicle.color);
+function VehicleForm({ userId, onVehicleCreated }) {
+  const [marca, setMarca] = useState('');
+  const [matricula, setMatricula] = useState('');
+  const [color, setColor] = useState('');
+  const [modelo, setModelo] = useState('');
+  const [foto, setFoto] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append('marca', marca);
+    formData.append('matricula', matricula);
+    formData.append('color', color);
+    formData.append('modelo', modelo);
+    formData.append('userId', userId);
+    if (foto) {
+      formData.append('foto', foto);
+    }
+
     try {
-      await onUpdate({ marca, matricula, color });
+      const { data } = await axios.post('/api/vehicles', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      alert('Vehículo creado con éxito');
+      if (onVehicleCreated) {
+        onVehicleCreated(data);
+      }
     } catch (error) {
-      console.error('Error updating vehicle:', error);
+      console.error('Error creando el vehículo', error);
+      alert('Error creando el vehículo');
     }
   };
 
@@ -28,9 +51,17 @@ function VehicleUpdateForm({ vehicle, onUpdate }) {
         <label>Color:</label>
         <input type="text" value={color} onChange={(e) => setColor(e.target.value)} />
       </div>
-      <button type="submit">Actualizar Vehículo</button>
+      <div>
+        <label>Modelo:</label>
+        <input type="text" value={modelo} onChange={(e) => setModelo(e.target.value)} />
+      </div>
+      <div>
+        <label>Foto:</label>
+        <input type="file" onChange={(e) => setFoto(e.target.files[0])} />
+      </div>
+      <button type="submit">Crear Vehículo</button>
     </form>
   );
 }
 
-export default VehicleUpdateForm;
+export default VehicleForm;

@@ -1,3 +1,4 @@
+// frontend/src/pages/Profile.jsx
 import React, { useState, useEffect } from 'react';
 import Form from "../components/Form";
 import Navbar from "../components/Navbar";
