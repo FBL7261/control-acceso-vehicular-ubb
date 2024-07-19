@@ -1,5 +1,7 @@
+// src/pages/login.jsx
+
 import { useNavigate } from 'react-router-dom';
-import { login } from '../services/auth.service.js';
+import authService from '../services/auth.service'; // Importa el objeto por defecto
 import Form from '../components/Form';
 import ImgLogo from '../components/ImgLogo';
 
@@ -7,10 +9,12 @@ const Login = () => {
     const navigate = useNavigate();
 
     const loginSubmit = (data) => {
-        login(data).then(() => {
-            navigate('/home')
-        })
-    }
+        authService.login(data).then(() => {
+            navigate('/home');
+        }).catch((error) => {
+            console.error('Error al iniciar sesión:', error);
+        });
+    };
 
     return (
         <main className="container">
@@ -32,7 +36,6 @@ const Login = () => {
                         type: "password",
                         required: true,
                     },
-                    
                 ]}
                 buttonText="Iniciar sesión"
                 onSubmit={loginSubmit}

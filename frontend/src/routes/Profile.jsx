@@ -1,7 +1,9 @@
+// src/pages/Profile.jsx
+
+import React, { useState, useEffect } from "react";
 import Form from "../components/Form";
 import Navbar from "../components/Navbar";
-import { profile } from "../services/auth.service";
-import { useState, useEffect } from "react";
+import authService from "../services/auth.service";
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState({
@@ -14,7 +16,7 @@ const Profile = () => {
   useEffect(() => {
     async function dataProfile(){  
       try {
-        const { data } = await profile();
+        const data = await authService.profile();
         setUserProfile(data);
       } catch (error) {
         console.error("Error fetching profile:", error);

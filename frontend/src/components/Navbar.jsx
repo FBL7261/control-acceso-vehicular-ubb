@@ -1,6 +1,7 @@
 // src/components/Navbar.jsx
+
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { logout } from '../services/auth.service.js';
+import authService from '../services/auth.service.js'; // Importa el objeto por defecto
 
 const Navbar = () => {
     const location = useLocation();
@@ -9,9 +10,9 @@ const Navbar = () => {
     const storedUser = JSON.parse(sessionStorage.getItem('usuario'));
     const userRole = storedUser?.data?.rolName;
 
-    const logoutSubmit = () => {
+    const logoutSubmit = async () => {
         try {
-            logout();
+            await authService.logout(); // Accede a la función logout desde authService
             navigate('/'); 
         } catch (error) {
             console.error('Error al cerrar sesión:', error);
@@ -38,13 +39,12 @@ const Navbar = () => {
                 <li className={location.pathname === "/profile" ? "active" : ""}>
                     <NavLink to="/profile">Perfil</NavLink>
                 </li>
-                <li className={location.pathname === "/create-request" ? "active" : ""}>
-                    <NavLink to="/create-request">Crear Solicitud</NavLink>
+                <li className={location.pathname === "/crear-solicitud" ? "active" : ""}>
+                    <NavLink to="/crear-solicitud">Crear Solicitud</NavLink>
                 </li>
                 <li className={location.pathname === "/" ? "active" : ""}>
                     <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
                 </li>
-                
             </ul>
         </nav>
     );

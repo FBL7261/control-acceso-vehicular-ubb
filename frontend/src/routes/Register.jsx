@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import { register } from '../services/auth.service.js';
+import  register  from '../services/auth.service.js';
 import Form from "../components/Form";
 import ImgLogo from "../components/ImgLogo";
 

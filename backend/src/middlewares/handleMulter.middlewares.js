@@ -1,16 +1,16 @@
-const multer = require("multer");
-const fs = require("fs").promises;
-const person = require("../models/person.model.js");
+import multer from "multer";
+import fs from "fs/promises";
+import user from "../models/user.model.js";
 
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
     try{
     const { id } = req.params;
-    const foundPerson = await person.findById(id).exec();
-      if (!foundPerson) {
+    const userFound = await user.findById(id).exec();
+      if (!userFound) {
         return Promise.reject(new Error("No se encontro la persona"));
       }
-      const dir = "./src/uploads/" + foundPerson.name.toString().replace(" ", "_");
+      const dir = "./src/uploads/" + userFound.username.toString().replace(" ", "_");
       try{
         await fs.access(dir);
       }catch(err){
@@ -41,4 +41,4 @@ const upload = multer({
   }
 });
 
-module.exports = upload;
+export default upload;
