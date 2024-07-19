@@ -1,17 +1,15 @@
 // frontend/src/routes/Profile.jsx
-
 import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Form from "../components/Form";
 import Navbar from "../components/Navbar";
-import { profile as fetchProfile } from "../services/auth.service"; // Asegúrate de importar correctamente
+import { profile as fetchProfile } from "../services/auth.service";
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState({
     username: '',
     email: '',
-    rut: '',
-    rolName: ''
+    rut: ''
   });
 
   useEffect(() => {
@@ -56,14 +54,8 @@ const Profile = () => {
                 type: "text",
                 value: userProfile.rut,
                 disabled: true,
-              },
-              {
-                label: "Rol",
-                name: "role",
-                type: "text",
-                value: userProfile.rolName,
-                disabled: true,
-              },
+              }
+              // Eliminado el campo rol
             ]}
           />
         </div>
