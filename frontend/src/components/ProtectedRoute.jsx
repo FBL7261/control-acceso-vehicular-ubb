@@ -1,3 +1,4 @@
+// frontend/src/components/ProtectedRoute.jsx
 import React from 'react';
 import { Navigate } from 'react-router-dom';
 
@@ -13,7 +14,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (!isAuthorized) {
-    return <Navigate to="/home" />;
+    return <Navigate to="/home" />; // Podrías querer cambiar esto a una página de acceso denegado
   }
 
   return children;
