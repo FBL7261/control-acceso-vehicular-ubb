@@ -1,3 +1,4 @@
+// frontend/src/services/auth.service.js
 import axios from './root.service';
 import cookies from 'js-cookie';
 import jwtDecode from 'jwt-decode';
@@ -12,7 +13,7 @@ export const login = async ({ email, password }) => {
     console.log('Respuesta del servidor:', response); // Log de la respuesta
     const { status, data } = response;
     if (status === 200) {
-      const decodedToken = await jwtDecode(data.data.accessToken);
+      const decodedToken = jwtDecode(data.data.accessToken);
       localStorage.setItem('user', JSON.stringify(decodedToken)); // Almacena el usuario en localStorage
       axios.defaults.headers.common[
         'Authorization'
@@ -30,6 +31,16 @@ export const logout = () => {
   delete axios.defaults.headers.common['Authorization'];
   cookies.remove('jwt');
   sessionStorage.removeItem('usuario'); // Elimina el usuario de sessionStorage
+};
+
+export const profile = async () => {
+  try {
+    const response = await axios.get('/api/profile'); // Ajusta la ruta a la del backend si es necesario
+    return response.data; // Devuelve los datos del perfil
+  } catch (error) {
+    console.error('Error al obtener perfil:', error); // Log de errores
+    throw new Error(error);
+  }
 };
 
 export const test = async () => {
