@@ -1,17 +1,6 @@
 import React from 'react';
 
-const Form = ({ backgroundColor, title, fields, onSubmit }) => {
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files) {
-      // Handle file input
-      setFormData(prev => ({ ...prev, [name]: files[0] }));
-    } else {
-      // Handle text input
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-  };
-
+const Form = ({ backgroundColor, title, fields, onSubmit, onChange }) => {
   return (
     <div style={{ backgroundColor }}>
       <h1>{title}</h1>
@@ -23,14 +12,14 @@ const Form = ({ backgroundColor, title, fields, onSubmit }) => {
               <input
                 type="file"
                 name={field.name}
-                onChange={handleChange}
+                onChange={onChange}
               />
             ) : (
               <input
                 type={field.type}
                 name={field.name}
                 value={field.value}
-                onChange={handleChange}
+                onChange={onChange}
                 disabled={field.disabled}
               />
             )}
