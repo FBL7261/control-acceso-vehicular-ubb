@@ -4,8 +4,9 @@ import vehicleService from '../services/vehicle.service'; // Asegúrate de tener
 const ViewVehicles = ({ userId }) => {
   const [vehicles, setVehicles] = useState([]);
   const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-   uuseEffect(() => {
+   useEffect(() => {
     const fetchVehicles = async () => {
       const [data, error] = await vehicleService.getVehiclesByUserId(userId);
       if (error) {
@@ -14,26 +15,44 @@ const ViewVehicles = ({ userId }) => {
       } else {
         setVehicles(data);
       }
+      setLoading(false);
     };
 
     fetchVehicles();
   }, [userId]);
 
+  if (loading) return <div>Loading...</div>;
   if (error) return <div>{error}</div>;
 
   return (
+
     <div>
+
       <h1>Mis Vehículos</h1>
-      <ul>
-        {vehicles.map(vehicle => (
-          <li key={vehicle._id}>
-            <p>Placa: {vehicle.licensePlate}</p>
-            <p>Modelo: {vehicle.model}</p>
-            <p>Marca: {vehicle.brand}</p>
-            <p>Color: {vehicle.color}</p>
-          </li>
-        ))}
-      </ul>
+
+      {vehicles.length === 0 ? (
+
+        <p>No vehicles found.</p>
+
+      ) : (
+
+        <ul>
+
+          {vehicles.map(vehicle => (
+
+            <li key={vehicle._id}>
+
+              <p>Placa: {vehicle.licensePlate}</p>
+
+              <p>Modelo: {vehicle.model}</p>
+
+              <p>Marca: {vehicle.brand}</p>
+
+              <p>Color: {vehicle.color}</p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 };
