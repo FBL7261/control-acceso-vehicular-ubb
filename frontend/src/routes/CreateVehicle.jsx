@@ -1,7 +1,6 @@
-// frontend/src/routes/CreateVehicle.jsx
-
 import React, { useState } from 'react';
-import vehicleService from '../services/vehicle.service'; // Asegúrate de tener un servicio para manejar los vehículos
+import vehicleService from '../services/vehicle.service';
+import Form from '../components/Form';
 
 const CreateVehicle = () => {
   const [formData, setFormData] = useState({
@@ -11,15 +10,6 @@ const CreateVehicle = () => {
     color: '',
     photo: null,
   });
-
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (name === 'photo') {
-      setFormData({ ...formData, [name]: files[0] });
-    } else {
-      setFormData({ ...formData, [name]: value });
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -35,33 +25,21 @@ const CreateVehicle = () => {
     }
   };
 
+  const fields = [
+    { label: 'Placa', name: 'licensePlate', type: 'text', value: formData.licensePlate },
+    { label: 'Modelo', name: 'model', type: 'text', value: formData.model },
+    { label: 'Marca', name: 'brand', type: 'text', value: formData.brand },
+    { label: 'Color', name: 'color', type: 'text', value: formData.color },
+    { label: 'Foto', name: 'photo', type: 'file' },
+  ];
+
   return (
-    <div>
-      <h1>Crear Vehículo</h1>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Placa:
-          <input type="text" name="licensePlate" value={formData.licensePlate} onChange={handleChange} required />
-        </label>
-        <label>
-          Modelo:
-          <input type="text" name="model" value={formData.model} onChange={handleChange} required />
-        </label>
-        <label>
-          Marca:
-          <input type="text" name="brand" value={formData.brand} onChange={handleChange} required />
-        </label>
-        <label>
-          Color:
-          <input type="text" name="color" value={formData.color} onChange={handleChange} required />
-        </label>
-        <label>
-          Foto:
-          <input type="file" name="photo" onChange={handleChange} />
-        </label>
-        <button type="submit">Crear Vehículo</button>
-      </form>
-    </div>
+    <Form
+      backgroundColor="#f0f0f0"
+      title="Crear Vehículo"
+      fields={fields}
+      onSubmit={handleSubmit}
+    />
   );
 };
 

@@ -65,7 +65,7 @@ const Profile = () => {
             <li><Link to="/create-vehicle">Crear Vehículo</Link></li>
             <li><Link to="/update-vehicle">Actualizar Vehículo</Link></li>
             <li><Link to="/delete-vehicle">Eliminar Vehículo</Link></li>
-            <li><Link to="/view-vehicles">Ver Vehículos</Link></li>
+            <li><Link to="/view-vehicles">Mis Vehículos</Link></li>
           </ul>
         </div>
       </div>
