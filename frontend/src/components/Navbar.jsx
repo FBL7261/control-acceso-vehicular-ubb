@@ -1,7 +1,7 @@
-// src/components/Navbar.jsx
-
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import authService from '../services/auth.service.js'; // Importa el objeto por defecto
+// frontend/src/components/Navbar.jsx
+import React from 'react';
+import { NavLink, useLocation, useNavigate } from 'react-router-dom';
+import { logout } from '../services/auth.service.js'; // Importa la función logout
 
 const Navbar = () => {
     const location = useLocation();
@@ -12,7 +12,7 @@ const Navbar = () => {
 
     const logoutSubmit = async () => {
         try {
-            await authService.logout(); // Accede a la función logout desde authService
+            await logout(); // Llama a la función logout
             navigate('/'); 
         } catch (error) {
             console.error('Error al cerrar sesión:', error);
@@ -22,12 +22,6 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <ul>
-                <li>
-                    <img
-                        src="/cohete.png"
-                        alt="Logo metodología de desarrollo"
-                    />
-                </li>
                 <li className={location.pathname === "/home" ? "active" : ""}>
                     <NavLink to="/home">Inicio</NavLink>
                 </li>
