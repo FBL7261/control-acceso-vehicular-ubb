@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import vehicleService from '../services/vehicle.service'; // Asegúrate de tener el servicio adecuado
 
-const ViewVehicles = () => {
+const ViewVehicles = ({ userId }) => {
   const [vehicles, setVehicles] = useState([]);
+  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    // Aquí podrías cargar los vehículos del usuario actual
-    // setVehicles(response.data);
-  }, []);
+   uuseEffect(() => {
+    const fetchVehicles = async () => {
+      const [data, error] = await vehicleService.getVehiclesByUserId(userId);
+      if (error) {
+        setError('Error fetching vehicles');
+        console.error('Error fetching vehicles:', error);
+      } else {
+        setVehicles(data);
+      }
+    };
+
+    fetchVehicles();
+  }, [userId]);
+
+  if (error) return <div>{error}</div>;
 
   return (
     <div>
