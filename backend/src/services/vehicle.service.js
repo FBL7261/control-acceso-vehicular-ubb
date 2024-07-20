@@ -18,32 +18,16 @@ async function createVehicle(vehicleData, currentUserEmail, isAdmin) {
     }
 
     const newVehicle = new Vehicle(vehicleData); // Crear el vehículo
-    await newVehicle.save(); // Guardar en la base de datos
 
-    return [newVehicle, null]; // Vehículo creado con éxito
+    // Guardar el vehículo en la base de datos
+    const savedVehicle = await newVehicle.save();
+
+    return [savedVehicle, null]; // Vehículo creado con éxito
   } catch (error) {
-    handleError(error, "vehicle.service -> createVehicle");
-    return [null, "Error al crear el vehículo"];
-  }
-}
-
-// Crear un nuevo vehículo
-async function createVehicleWhPhoto(vehicleData, currentUserEmail, isAdmin) {
-  try {
-    if (!isAdmin) {
-      // Si no es administrador, asignar automáticamente al usuario autenticado
-      const currentUser = await User.findOne({ email: currentUserEmail });
-      if (!currentUser) {
-        return [null, "El usuario autenticado no existe"];
-      }
-      vehicleData.propietario = currentUser._id; // Asignar al usuario autenticado
+    // Manejar el error específico de clave duplicada (matrícula)
+    if (error.code === 11000 && error.keyPattern && error.keyPattern.matricula) {
+      return [null, "Esta matrícula no está disponible"];
     }
-
-    const newVehicle = new Vehicle(vehicleData); // Crear el vehículo
-    await newVehicle.save(); // Guardar en la base de datos
-
-    return [newVehicle, null]; // Vehículo creado con éxito
-  } catch (error) {
     handleError(error, "vehicle.service -> createVehicle");
     return [null, "Error al crear el vehículo"];
   }
@@ -65,7 +49,6 @@ async function getVehiclesByUserId(userId) {
     return [null, "Error al obtener vehículos del usuario"];
   }
 }
-
 
 async function deleteVehicle(vehicleId, currentUserEmail) {
   try {
@@ -105,32 +88,39 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
 // Actualizar un vehículo
 async function updateVehicle(vehicleId, vehicleData, currentUserEmail) {
   try {
+    // Validar el ID del vehículo
     if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
       return [null, "El ID del vehículo no es válido"];
     }
 
+    // Buscar el vehículo por su ID
     const vehicle = await Vehicle.findById(vehicleId);
     if (!vehicle) {
       return [null, "El vehículo no se encontró"];
     }
 
+    // Verificar si el usuario actual es el propietario del vehículo
     const propietario = await User.findById(vehicle.propietario);
     if (!propietario || propietario.email !== currentUserEmail) {
       return [null, "No tienes permiso para editar este vehículo"];
     }
 
-    Object.assign(vehicle, vehicleData);
-    await vehicle.save();
+    // Excluir el campo 'modelo' de los datos de actualización
+    const { modelo, ...updateData } = vehicleData;
 
-    return [vehicle, null];
+    // Asignar los datos de actualización al vehículo
+    Object.assign(vehicle, updateData);
+    await vehicle.save(); // Guardar los cambios en la base de datos
+
+    return [vehicle, null]; // Retornar el vehículo actualizado
   } catch (error) {
     handleError(error, "vehicle.service -> updateVehicle");
     return [null, "Error al actualizar el vehículo"];
   }
 }
+
 export default {
   createVehicle,
-  createVehicleWhPhoto,
   getVehiclesByUserId,
   deleteVehicle,
   updateVehicle,
