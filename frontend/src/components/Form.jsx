@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const Form = ({ backgroundColor, title, fields, onSubmit, onChange }) => {
   return (

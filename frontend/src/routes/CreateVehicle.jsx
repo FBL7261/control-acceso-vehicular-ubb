@@ -11,22 +11,29 @@ const CreateVehicle = () => {
     photo: null,
   });
 
-const handleChange = (e) => {
-  const { name, value, files } = e.target;
-  
-  if (!name) {
-    throw new Error('Name is required');
-  }
+  const handleChange = (e) => {
+    const { name, value, files } = e.target;
+    
+    if (!name) {
+      throw new Error('Name is required');
+    }
 
-  if (files) {
-    setFormData(prev => ({ ...prev, [name]: files[0] ?? '' }));
-  } else {
-    setFormData(prev => ({ ...prev, [name]: value ?? '' }));
-  }
-};
+    if (files) {
+      setFormData(prev => ({ ...prev, [name]: files[0] ?? '' }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value ?? '' }));
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Basic validation
+    if (!formData.licensePlate || !formData.model || !formData.brand || !formData.color) {
+      alert('Por favor, complete todos los campos requeridos.');
+      return;
+    }
+
     try {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
@@ -34,10 +41,12 @@ const handleChange = (e) => {
           formDataToSend.append(key, value);
         }
       });
+
       await vehicleService.createVehicle(formDataToSend);
       alert('Vehículo creado con éxito');
     } catch (error) {
       console.error('Error creando vehículo:', error.response?.data || error.message);
+      alert('Hubo un problema al crear el vehículo. Por favor, intente de nuevo.');
     }
   };
 
