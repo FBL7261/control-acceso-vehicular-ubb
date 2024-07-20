@@ -1,23 +1,25 @@
 import { createContext, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const AuthContext = createContext();
 
-// eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => useContext(AuthContext);
 
-// eslint-disable-next-line react/prop-types
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
-
-  const user = JSON.parse(localStorage.getItem('user')) || '';
-  const isAuthenticated = user ? true : false;
+  const location = useLocation();
+  const user = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user")) || "" : "";
+  const isAuthenticated = !!user;
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/auth');
+    const allowedRoutes = ['/auth/register', '/', '/auth/login'];
+    if (!isAuthenticated && !allowedRoutes.includes(location.pathname)) {
+      navigate("/");
     }
-  }, [isAuthenticated, navigate]);
+    if (isAuthenticated && allowedRoutes.includes(location.pathname)) {
+      navigate("/dashboard");
+    }
+  }, [isAuthenticated, location, navigate]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, user }}>

@@ -10,7 +10,7 @@ import authRoutes from "./auth.routes.js";
 
 //Enrutador de Felipe
 import requestRoutes from "./request.routes.js";
-import pdfRoutes from "./pdf.routes.js";
+/*import pdfRoutes from "./pdf.routes.js";*/
 
 //Enrutador de Cristopher
 import vehicleRoutes from "./vehicle.routes.js"; // Rutas para vehículos
@@ -37,7 +37,7 @@ router.use("/auth", authRoutes);
 //Ruta de Request
 router.use("/requests", authenticationMiddleware, requestRoutes);
 //Ruta de PDF
-router.use("/pdf", authenticationMiddleware, pdfRoutes);
+/*router.use("/pdf", authenticationMiddleware, pdfRoutes);*/
 
 //Rutas de David
 router.use("/credential", authenticationMiddleware, credentialRoutes);

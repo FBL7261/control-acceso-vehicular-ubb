@@ -1,29 +1,15 @@
-import ReactDOM from 'react-dom/client';
-import App from './routes/App.jsx';
+// frontend/src/main.jsx
+import React from 'react';
+import { createRoot } from 'react-dom/client';
+import App from './routes/App';
 import './index.css';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import Root from './routes/Root.jsx';
-import ErrorPage from './routes/ErrorPage.jsx';
-import Login from './routes/Login.jsx';
 
-const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Root />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        path: '/',
-        element: <App />,
-      },
-    ],
-  },
-  {
-    path: '/auth',
-    element: <Login />,
-  },
-]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
-  <RouterProvider router={router} />
+const container = document.getElementById('root');
+const root = createRoot(container);
+
+root.render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
 );

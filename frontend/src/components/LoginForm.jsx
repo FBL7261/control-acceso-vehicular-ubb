@@ -1,38 +1,49 @@
-import { useNavigate } from 'react-router-dom';
-import { useForm } from 'react-hook-form';
+// frontend/src/components/LoginForm.jsx
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom'; // Importa useNavigate
 import { login } from '../services/auth.service';
 
-function LoginForm() {
-  const navigate = useNavigate();
+const LoginForm = () => {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const navigate = useNavigate(); // Inicializa useNavigate
 
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm();
-
-  const onSubmit = (data) => {
-    login(data).then(() => {
-      navigate('/');
-    });
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await login({ email, password });
+      navigate('/home'); // Redirige a la página de inicio después del login
+    } catch (err) {
+      setError('Failed to login. Please check your credentials.');
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <input
-        name="email"
-        type="email"
-        {...register('email', { required: true })}
-      />
-      <input
-        type="password"
-        name="password"
-        {...register('password', { required: true })}
-      />
-      {errors.exampleRequired && <span>This field is required</span>}
-      <input type="submit" />
+    <form onSubmit={handleSubmit}>
+      <h2>Login</h2>
+      {error && <p>{error}</p>}
+      <div>
+        <label>Email</label>
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+      </div>
+      <div>
+        <label>Password</label>
+        <input
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+      </div>
+      <button type="submit">Login</button>
     </form>
   );
-}
+};
 
 export default LoginForm;

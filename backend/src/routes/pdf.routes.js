@@ -1,4 +1,4 @@
-import { Router } from "express";
+/*import { Router } from "express";
 const router = Router();
 
 import upload from "../middlewares/handleMulter.middlewares.js";
@@ -9,4 +9,4 @@ router.get("/", pdfController.getPDF);
 router.get("/:personId", pdfController.getPDFsForPerson);
 router.delete("/:id", pdfController.deletePDF);
 
-export default router;
+export default router;*/

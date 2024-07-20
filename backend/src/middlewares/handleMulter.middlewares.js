@@ -4,21 +4,21 @@ import user from "../models/user.model.js";
 
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
-    try{
-    const { id } = req.params;
-    const userFound = await user.findById(id).exec();
+    try {
+      const email = req.email;  // Suponiendo que el email del usuario autenticado está en req.email
+      const userFound = await user.findOne({ email }).exec();
       if (!userFound) {
-        return Promise.reject(new Error("No se encontro la persona"));
+        return cb(new Error("No se encontro la persona"), null);
       }
       const dir = "./src/uploads/" + userFound.username.toString().replace(" ", "_");
-      try{
+      try {
         await fs.access(dir);
-      }catch(err){
+      } catch (err) {
         await fs.mkdir(dir, { recursive: true });
       }
       cb(null, dir);
-    }catch(err){
-      return Promise.reject(err);
+    } catch (err) {
+      cb(err, null);
     }
   },
   filename: (req, file, cb) => {
