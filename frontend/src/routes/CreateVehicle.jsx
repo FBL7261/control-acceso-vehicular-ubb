@@ -11,26 +11,33 @@ const CreateVehicle = () => {
     photo: null,
   });
 
-  const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    if (files) {
-      setFormData(prev => ({ ...prev, [name]: files[0] }));
-    } else {
-      setFormData(prev => ({ ...prev, [name]: value }));
-    }
-  };
+const handleChange = (e) => {
+  const { name, value, files } = e.target;
+  
+  if (!name) {
+    throw new Error('Name is required');
+  }
+
+  if (files) {
+    setFormData(prev => ({ ...prev, [name]: files[0] ?? '' }));
+  } else {
+    setFormData(prev => ({ ...prev, [name]: value ?? '' }));
+  }
+};
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const formDataToSend = new FormData();
-      Object.keys(formData).forEach(key => {
-        formDataToSend.append(key, formData[key]);
+      Object.entries(formData).forEach(([key, value]) => {
+        if (value) {
+          formDataToSend.append(key, value);
+        }
       });
       await vehicleService.createVehicle(formDataToSend);
       alert('Vehículo creado con éxito');
     } catch (error) {
-      console.error('Error creando vehículo:', error);
+      console.error('Error creando vehículo:', error.response?.data || error.message);
     }
   };
 
