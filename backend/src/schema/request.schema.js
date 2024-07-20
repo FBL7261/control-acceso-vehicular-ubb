@@ -3,38 +3,11 @@
 import Joi from "joi";
 
 const requestBodySchema = Joi.object({
-    user: Joi.object({
-        
-        username: Joi.string()
-        .required()
-        .regex(/^[a-zA-Z\s]+$/)
-        .messages({
-            "string.empty": "El nombre de usuario no puede quedar vacio",
-            "any.required": "El nombre de usuario es requerido",
-            "string.pattern.base": "El nombre de usuario no puede contener números"
-        }),
-
-        rut: Joi.string()
-        .required()
-        .pattern(/^[0-9]{7,8}-[0-9kK]{1}$/)
-        .messages({
-            "string.empty": "El rut no puede quedar vacio",
-            "any.required": "El rut es requerido",
-            "string.base": "El rut debe ser de tipo string",
-            "string.pattern.base": "El rut debe tener el formato 1234567-8 o 12345678-9"
-        }),
-
-        email: Joi.string().email()
-        .required()
-        .pattern(/^[a-zA-Z0-9._%+-]+@email\.com$/)
-        .messages({
-            "string.empty": "El email no puede quedar vacio",
-            "any.required": "El email es requerido",
-            "string.email": "El email debe ser un correo valido",
-            "string.pattern.base": "El email debe terminar con @email.com"
-        }),
+    user: Joi.string().required().messages({
+        "string.empty": "El usuario no puede quedar vacío",
+        "any.required": "El usuario es requerido",
     }),
-
+    
     description: Joi.string()
     .required()
     .min(1)
