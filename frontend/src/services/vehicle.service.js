@@ -6,18 +6,30 @@ const API_URL = 'http://localhost:3000/api/vehicles';// Ajusta esta URL si es ne
 
 // Crear un nuevo vehículo
 export const createVehicle = async (vehicleData) => {
+
   if (!vehicleData) {
+
     return [null, 'No se proporcionaron datos para crear el vehículo'];
+
   }
 
+
   try {
-    console.log('Enviando solicitud para crear vehículo:', `${API_URL}/create`, vehicleData);
-    const response = await axios.post(`${API_URL}/create`, vehicleData);
+
+    console.log('Enviando solicitud para crear vehículo:', `${API_URL}/`, vehicleData);
+
+    const response = await axios.post(`${API_URL}/`, vehicleData);
+
     console.log('Respuesta al crear vehículo:', response.data);
+
     return [response.data, null];
+
   } catch (error) {
+
     return handleError(error);
+
   }
+
 };
 // Obtener todos los vehículos de un usuario
 const getVehiclesByUserId = async (userId) => {
