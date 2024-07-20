@@ -2,6 +2,8 @@
 .env
 #Node
 node_modules
+#Uploads de Archivos
+uploads
 
 # Logs
 logs

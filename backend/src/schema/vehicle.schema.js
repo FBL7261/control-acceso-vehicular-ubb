@@ -14,12 +14,8 @@ const vehicleSchema = Joi.object({
     }),
 
 // Verificación modelo
-  modelo: Joi.string()
-  .when(Joi.ref("$isUpdate"), {
-    is: true,
-    then: Joi.optional(),
-    otherwise: Joi.required(),
-  })
+    modelo: Joi.string()
+    .required()
     .min(1)
     .max(60)
     .messages({

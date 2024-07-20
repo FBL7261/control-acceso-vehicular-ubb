@@ -1,10 +1,13 @@
 "use strict";
+
+/** Modelo de datos 'User' */
+import User from "../models/user.model.js";
 /** Modulo 'jsonwebtoken' para crear tokens */
 import jwt from "jsonwebtoken";
 
 import { ACCESS_JWT_SECRET, REFRESH_JWT_SECRET } from "../config/configEnv.js";
-import { handleError } from "../utils/errorHandler.js";
-import User from "../models/user.model.js";
+
+import  {handleError}  from "../utils/errorHandler.js";
 
 /**
  * Inicia sesión con un usuario.
@@ -14,30 +17,43 @@ import User from "../models/user.model.js";
  */
 async function login(user) {
   try {
-    const userFound = await User.findOne({ email: user.email }).populate("roles").exec();
+    const { email, password } = user;
+
+    const userFound = await User.findOne({ email: email })
+      .populate("roles")
+      .exec();
     if (!userFound) {
-      throw new Error("Usuario no encontrado");
+      return [null, null, "El usuario y/o contraseña son incorrectos"];
     }
 
-    if (!Array.isArray(userFound.roles)) {
-      throw new Error("Los roles del usuario no son un arreglo");
+    const matchPassword = await User.comparePassword(
+      password,
+      userFound.password,
+    );
+
+    if (!matchPassword) {
+      return [null, null, "El usuario y/o contraseña son incorrectos"];
     }
 
     const accessToken = jwt.sign(
-      {
-        email: userFound.email,
-        roles: userFound.roles.map((role) => role.name),
-      },
+      { email: userFound.email, roles: userFound.roles },
       ACCESS_JWT_SECRET,
-      { expiresIn: "1h" }
+      {
+        expiresIn: "1d",
+      },
     );
 
-    console.log("Token generado:", accessToken); // Añadir log para verificar el token generado
+    const refreshToken = jwt.sign(
+      { email: userFound.email },
+      REFRESH_JWT_SECRET,
+      {
+        expiresIn: "7d", // 7 días
+      },
+    );
 
-    return { accessToken };
+    return [accessToken, refreshToken, null];
   } catch (error) {
-    handleError(error, "auth.service -> login");
-    throw error;
+    handleError(error, "auth.service -> signIn");
   }
 }
 
@@ -84,29 +100,4 @@ async function refresh(cookies) {
   }
 }
 
-/**
- * Obtiene el perfil del usuario.
- * @async
- * @function getProfile
- * @param {string} email - Correo electrónico del usuario
- */
-async function getProfile(email) {
-  try {
-    console.log("Buscando perfil para el email:", email); // Añade este log
-    const userFound = await User.findOne({ email: email })
-      .populate("roles")
-      .exec();
-    if (!userFound) {
-      console.log("Usuario no encontrado para el email:", email); // Añade este log
-      return null;
-    }
-
-    const { username, rut, roles } = userFound;
-    return { username, rut, roles };
-  } catch (error) {
-    handleError(error, "auth.service -> getProfile");
-    return null;
-  }
-}
-
-export default { login, refresh, getProfile };
+export default { login, refresh };

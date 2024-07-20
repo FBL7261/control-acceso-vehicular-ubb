@@ -1,108 +1,102 @@
-import user from "../models/user.model.js";
-import request from "../models/request.model.js";
-import Document from "../models/document.model.js";
-import { handleError } from "../utils/errorHandler.js";
+import User from '../models/user.model.js';
+import Request from  '../models/request.model.js';
+import {handleError}  from '../utils/errorHandler.js';
+
 
 // CREATE
 async function createRequest(email, requestData) {
     try {
-        const User = await user.findOne( { email } );
-
-        if (!User) {
+        const user = await User.findOne({email});
+        if (!user) {
             return [null, "Usuario no encontrado"];
         }
-
-        if (User.username !== requestData.User.username) {
-            return [null, "El usuario no coincide"];
+        if (user.username !== requestData.user.username){
+            return [null, "El usuario no coincide con la persona autenticada"];
         }
-
-        if (User.rut !== requestData.User.rut) {
-            return [null, "El rut no coincide"];
+        if (user.rut !== requestData.user.rut){
+            return [null, "El rut no coincide con la persona autenticada"];
         }
-
-        if (User.email !== requestData.User.email) {
-            return [null, "El email no coincide"];
+        if (user.email !== requestData.user.email){
+            return [null, "El email no coincide con la persona autenticada"];
         }
-
-        const requestFound = await request.findOne({ "user.email": requestData.user.email });
-        if (requestFound) {
-            return [null, "Ya existe una solicitud"];
-        }
-        
-        const documentFound = await Document.findOne({ name: requestData.Document.name });
-        if (!documentFound) {
-            return [null, "Documento no encontrado"];
-        }
-
-        const newRequest = new request({
-            user: {
-                username: requestData.User.username,
-                rut: requestData.User.rut,
-                email: requestData.User.email,
+        const requestExistente = await Request.findOne({
+            "user.email": requestData.user.email,
+          });
+          if (requestExistente) {
+            return [null, "Ya existe una solicitud para esta persona"];
+          }
+         const newRequest = new Request({
+            user : {
+                username : requestData.user.username,
+                rut : requestData.user.rut,
+                email : requestData.user.email
             },
-            Document: documentFound,
-            status: requestData.status,
-        });
+            state : requestData.state,
+         });
 
-        await newRequest.save();
-        return [newRequest, null];
-    } catch (error) {
+         await newRequest.save();
+         return [newRequest, null];
+
+    }catch(error){
         handleError(error, "request.service -> createRequest");
+        return [null, "Error al crear la solicitud en servicio"];
     }
 }
 
 // DELETE
-async function deleteRequest(id) {
+async function deleteRequest(request) {
     try {
-        const deletedRequest = await request.findByIdAndDelete(id);
-
-        if (!deletedRequest) {
-            return [null, "Solicitud no encontrada o ya fue eliminada"];
-        }
+        const deletedRequest = await Request.findByIdAndDelete(request);
 
         return [deletedRequest, null];
     } catch (error) {
         handleError(error, "request.service -> deleteRequest");
-        return [null, "Error al eliminar la solicitud debido a un problema interno"];
+        return [null, "Error al eliminar la solicitud service"];
     }
 }
 
 // UPDATE
-async function updateRequest(id, requestUpdateData) {
+async function updateRequest(id, requestUpdate) {
     try {
-        const existingRequest = await request.findById(id);
+        const request = await Request.findById(id);
 
-        if (!existingRequest) {
+        if (!request) {
             return [null, "Solicitud no encontrada"];
         }
 
-        Object.assign(existingRequest, requestUpdateData);
-        const updatedRequest = await existingRequest.save();
+        Object.assign(request, requestUpdate);
+
+        const modifyRequest = await request.save();
         
-        return [updatedRequest, null];
+        return [modifyRequest, null];
     } catch (error) {
         handleError(error, "request.service -> updateRequest");
-        return [null, "Error al actualizar la solicitud"];
+        return [null, "Error al actualizar la solicitud service"];
     }
 }
 
 // GET ALL
 async function getRequests() {
     try {    
-        const requests = await request.find().populate("user", "-password, -roles, -_id");
+
+        const requests = await Request.find();
         return [requests, null];
-    } catch (error) {
+
+    }catch(error){
         handleError(error, "request.service -> getRequests");
+        return [null, "Error al obtener las solicitudes servicio"];
     }
+
 }
 
 // GET BY ID
 async function getRequestById(request) {
     try {
-        const requestFound = await request.findById(request).populate('user', '-password, -roles, -_id');
+        const requestFound = await Request.findById(request).populate('user');
         return [requestFound, null];
-    } catch (error) {
+    }catch(error){
         handleError(error, "request.service -> getRequestById");
+        return [null, "Error al obtener la solicitud por id servicio"];
     }
 }
 

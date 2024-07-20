@@ -3,6 +3,7 @@
 import jwt from "jsonwebtoken";
 import { ACCESS_JWT_SECRET } from "../config/configEnv.js";
 import { respondError } from "../utils/resHandler.js";
+import  {handleError} from "../utils/errorHandler.js";
 
 /**
  * Verifica el token de acceso
@@ -10,7 +11,6 @@ import { respondError } from "../utils/resHandler.js";
  * @param {Object} res - Objeto de respuesta
  * @param {Function} next - Función para continuar con la siguiente función
  */
-
 const verifyJWT = (req, res, next) => {
   try {
     const authHeader = req.headers.authorization || req.headers.Authorization;
@@ -21,23 +21,19 @@ const verifyJWT = (req, res, next) => {
         res,
         401,
         "No autorizado",
-        "No hay un token o es inválido"
+        "No hay token valido",
       );
     }
 
     const token = authHeader.split(" ")[1];
 
     jwt.verify(token, ACCESS_JWT_SECRET, (err, decoded) => {
-      if (err) {
-        return respondError(req, res, 403, "No autorizado", err.message);
-      }
+      if (err) return respondError(req, res, 403, "No autorizado", err.message);
       req.email = decoded.email;
-      req.role = decoded.role;
+      req.roles = decoded.roles;
       next();
     });
   } catch (error) {
-    console.error(error); // Añade logs para depurar
-    respondError(req, res, 500, "Error interno del servidor");
     handleError(error, "authentication.middleware -> verifyToken");
   }
 };
