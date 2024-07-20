@@ -2,13 +2,8 @@
 
 import jwt from "jsonwebtoken";
 import { ACCESS_JWT_SECRET } from "../config/configEnv.js";
-import { respondError } from "../utils/resHandler.js";
-/**
- * Verifica el token de acceso
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- * @param {Function} next - Función para continuar con la siguiente función
- */
+import { respondError } from '../utils/resHandler.js';
+import { handleError } from '../utils/errorHandler.js';
 
 const verifyJWT = (req, res, next) => {
   try {
@@ -28,6 +23,7 @@ const verifyJWT = (req, res, next) => {
 
     jwt.verify(token, ACCESS_JWT_SECRET, (err, decoded) => {
       if (err) return respondError(req, res, 403, "No autorizado", err.message);
+      req.userId = decoded.id; // Asignar el ID del usuario a req.userId
       req.email = decoded.email;
       req.role = decoded.role;
       next();

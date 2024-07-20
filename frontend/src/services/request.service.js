@@ -8,7 +8,8 @@ export const createRequest = async (data) => {
   try {
     const response = await axios.post(API_URL, data, {
       headers: {
-        'Authorization': `Bearer ${getAuthToken()}`
+        'Authorization': `Bearer ${getAuthToken()}`,
+        'Content-Type': 'multipart/form-data'
       }
     });
     return response.data;
@@ -18,33 +19,32 @@ export const createRequest = async (data) => {
   }
 };
 
-
 export const getRequests = async () => {
   try {
-    const response = await axios.get(`${API_URL}`, {
+    const response = await axios.get(API_URL, {
       headers: {
         'Authorization': `Bearer ${getAuthToken()}`
       }
     });
-    console.log('Fetched requests:', response.data); // Log para verificar la estructura de los datos
-    return response.data;
+    return [response.data, null]; // Devuelve la respuesta como array
   } catch (error) {
-    console.error('Error fetching requests:', error.response ? error.response.data : error.message);
-    throw error;
+    const errorMessage = error.response ? JSON.stringify(error.response.data) : error.message;
+    console.error('Error fetching requests:', errorMessage);
+    return [null, errorMessage]; // Devuelve el error como segundo elemento del array
   }
 };
-
-export const getRequestById = async (id) => {
+export const getRequestsByUserId = async () => {
   try {
-    const response = await axios.get(`${API_URL}/${id}`, {
+    const response = await axios.get(`${API_URL}/user`, {
       headers: {
         'Authorization': `Bearer ${getAuthToken()}`
       }
     });
-    return response.data;
+    return [response.data, null];
   } catch (error) {
-    console.error('Error fetching request:', error);
-    throw error;
+    const errorMessage = error.response ? JSON.stringify(error.response.data) : error.message;
+    console.error('Error fetching requests:', errorMessage);
+    return [null, errorMessage];
   }
 };
 

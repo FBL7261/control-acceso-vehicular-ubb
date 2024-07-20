@@ -1,22 +1,21 @@
 import { respondSuccess, respondError } from "../utils/resHandler.js";
-import  {handleError}  from "../utils/errorHandler.js";
+import { handleError } from "../utils/errorHandler.js";
 import requestService from '../services/request.service.js';
-import {requestBodySchema} from '../schema/request.schema.js';
+import { requestBodySchema } from '../schema/request.schema.js';
 
 // CREATE
 async function createRequest(req, res) {
     try {
-
-        const {email} = req;
-
+        const email = req.email;  // Obteniendo el email del usuario autenticado
         const requestData = req.body;
+        const { file } = req;
 
         const { error: bodyError } = requestBodySchema.validate(requestData);
         if (bodyError) {
             return respondError(req, res, 400, bodyError.message);
         }
 
-        const [newRequest, requestError] = await requestService.createRequest(email, requestData);
+        const [newRequest, requestError] = await requestService.createRequest(email, requestData, file);
 
         if (requestError) return respondError(req, res, 400, requestError);
 
@@ -24,11 +23,11 @@ async function createRequest(req, res) {
 
         respondSuccess(req, res, 200, newRequest);
 
-    }catch (error) {
+    } catch (error) {
         handleError(error, 'request.controller -> createRequest');
         return respondError(req, res, 400, 'Error al crear la solicitud controller');
     }
-};
+}
 
 
 // DELETE
@@ -74,45 +73,31 @@ async function updateRequest(req,res) {
 }
 
 // GET ALL
-async function getRequests(req, res) {
+export async function getRequests(req, res) {
     try {
-        // Obtiene todas las solicitudes
-        const requests = await requestService.getRequests();
-        if (!requests) {
-            return res.status(404).json({ message: 'No se encontraron solicitudes' });
+        const [requests, error] = await requestService.getRequests();
+        if (error) {
+            return res.status(400).json({ error });
         }
-        res.status(200).json(requests);
+        return res.status(200).json(requests);
     } catch (error) {
-
-        handleError(error, 'request.controller -> getRequests');
-        res.status(500).json({ message: 'Error al obtener las solicitudes controller' });
+        handleError(error, "request.controller -> getRequests");
+        return res.status(500).json({ error: 'Error al obtener las solicitudes' });
     }
 }
 
-// GET BY ID
-async function getRequestById(req,res) {
-
+export async function getRequestsByUserId(req, res) {
     try {
-        // Obtiene el ID de la solicitud de los parámetros de la URL
-        const {params} = req;
-        const {id} = params;
-        const [requestFound, requestError] = await requestService.getRequestById(id);
-
-        if (requestError) return respondError(req, res, 400, requestError);
-
-        if (!requestFound) return respondError(req, res, 400, 'No se encontró la solicitud');
-
-        respondSuccess(req, res, 201, {
-            message: 'Solicitud encontrada con éxito',
-            data: requestFound,
-        });
-
-    }catch(error){
-        handleError(error, 'request.controller -> getRequestById');
-        return respondError(req, res, 400, 'Error al obtener la solicitud por id controller');
+        const userId = req.userId;  // Suponiendo que el ID del usuario está en req.userId
+        const [requests, error] = await requestService.getRequestsByUserId(userId);
+        if (error) {
+            return res.status(400).json({ error });
+        }
+        return res.status(200).json(requests);
+    } catch (error) {
+        handleError(error, "request.controller -> getRequestsByUserId");
+        return res.status(500).json({ error: 'Error al obtener las solicitudes' });
     }
-
-
 }
 
 async function updateRequestStatus(req, res) {
@@ -140,6 +125,6 @@ export default {
     deleteRequest,
     updateRequest,
     getRequests,
-    getRequestById,
+    getRequestsByUserId,
     updateRequestStatus,
 };
