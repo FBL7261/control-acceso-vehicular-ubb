@@ -40,7 +40,10 @@ const CreateVehicle = () => {
         }
       });
 
-      await vehicleService.createVehicle(formDataToSend);
+      const [response, error] = await vehicleService.createVehicle(formDataToSend);
+      if (error) {
+        throw new Error(error);
+      }
       alert('Vehículo creado con éxito');
     } catch (error) {
       console.error('Error creando vehículo:', error.response?.data || error.message);
