@@ -33,8 +33,8 @@ const Navbar = () => {
                 <li className={location.pathname === "/profile" ? "active" : ""}>
                     <NavLink to="/profile">Perfil</NavLink>
                 </li>
-                <li className={location.pathname === "/crear-solicitud" ? "active" : ""}>
-                    <NavLink to="/crear-solicitud">Crear Solicitud</NavLink>
+                <li className={location.pathname === "/create-request" ? "active" : ""}>
+                    <NavLink to="/create-request">Crear Solicitud</NavLink>
                 </li>
                 <li className={location.pathname === "/" ? "active" : ""}>
                     <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>

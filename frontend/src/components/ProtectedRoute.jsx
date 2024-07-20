@@ -1,18 +1,15 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const ProtectedRoute = ({ children, allowedRoles }) => {
-  const storedUser = JSON.parse(sessionStorage.getItem('usuario'));
-  const userRole = storedUser?.data?.roles; // Ajusta esto si el rol se almacena de manera diferente
-
-  const isAuthenticated = !!storedUser;
-  const isAuthorized = allowedRoles ? allowedRoles.includes(userRole) : true;
+  const { user, isAuthenticated } = useAuth();
 
   if (!isAuthenticated) {
-    return <Navigate to="/" />;
+    return <Navigate to="/auth" />;
   }
 
-  if (!isAuthorized) {
+  if (allowedRoles && !allowedRoles.includes(user?.data?.roles)) {
     return <Navigate to="/home" />;
   }
 

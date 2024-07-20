@@ -1,59 +1,53 @@
-// src/services/pdf.service.js
-
 import axios from 'axios';
 
 const API_URL = 'http://localhost:3000/api/pdf';
 
-const createPDF = async (file, id) => {
-  const formData = new FormData();
-  formData.append('file', file);
-  
+const getAuthToken = () => sessionStorage.getItem('token');
+
+export const uploadPDF = async (file, userId) => {
   try {
-    const response = await axios.post(`${API_URL}/${id}`, formData, {
+    const formData = new FormData();
+    formData.append('pdf', file);
+    const response = await axios.post(`${API_URL}/${userId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
-      },
+        'Authorization': `Bearer ${getAuthToken()}`
+      }
     });
     return response.data;
   } catch (error) {
-    console.error('Error creating PDF:', error);
+    console.error('Error uploading PDF:', error.response ? error.response.data : error.message);
     throw error;
   }
 };
 
-const getPDF = async () => {
+
+
+
+export const getPDFsForPerson = async (personId) => {
   try {
-    const response = await axios.get(API_URL);
+    const response = await axios.get(`${API_URL}/${personId}`, {
+      headers: {
+        'Authorization': `Bearer ${getAuthToken()}`
+      }
+    });
     return response.data;
   } catch (error) {
-    console.error('Error fetching PDF:', error);
+    console.error('Error fetching PDFs:', error);
     throw error;
   }
 };
 
-const getPDFsForPerson = async (personId) => {
+export const deletePDF = async (id) => {
   try {
-    const response = await axios.get(`${API_URL}/person/${personId}`);
-    return response.data;
-  } catch (error) {
-    console.error('Error fetching PDFs for person:', error);
-    throw error;
-  }
-};
-
-const deletePDF = async (id) => {
-  try {
-    const response = await axios.delete(`${API_URL}/${id}`);
+    const response = await axios.delete(`${API_URL}/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${getAuthToken()}`
+      }
+    });
     return response.data;
   } catch (error) {
     console.error('Error deleting PDF:', error);
     throw error;
   }
-};
-
-export default {
-  createPDF,
-  getPDF,
-  getPDFsForPerson,
-  deletePDF,
 };
