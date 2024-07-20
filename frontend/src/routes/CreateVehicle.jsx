@@ -4,21 +4,20 @@ import Form from '../components/Form';
 
 const CreateVehicle = () => {
   const [formData, setFormData] = useState({
-    licensePlate: '',
-    model: '',
-    brand: '',
+    matricula: '',
+    modelo: '',
+    marca: '',
     color: '',
-    photo: null,
+    foto: null,
+    incluirFoto: false,
   });
 
   const handleChange = (e) => {
-    const { name, value, files } = e.target;
-    
-    if (!name) {
-      throw new Error('Name is required');
-    }
+    const { name, value, files, type, checked } = e.target;
 
-    if (files) {
+    if (type === 'checkbox') {
+      setFormData(prev => ({ ...prev, [name]: checked }));
+    } else if (files) {
       setFormData(prev => ({ ...prev, [name]: files[0] ?? '' }));
     } else {
       setFormData(prev => ({ ...prev, [name]: value ?? '' }));
@@ -28,8 +27,7 @@ const CreateVehicle = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Basic validation
-    if (!formData.licensePlate || !formData.model || !formData.brand || !formData.color) {
+    if (!formData.matricula || !formData.modelo || !formData.marca || !formData.color) {
       alert('Por favor, complete todos los campos requeridos.');
       return;
     }
@@ -37,7 +35,7 @@ const CreateVehicle = () => {
     try {
       const formDataToSend = new FormData();
       Object.entries(formData).forEach(([key, value]) => {
-        if (value) {
+        if (key !== 'incluirFoto' && value) {
           formDataToSend.append(key, value);
         }
       });
@@ -51,12 +49,13 @@ const CreateVehicle = () => {
   };
 
   const fields = [
-    { label: 'Placa', name: 'licensePlate', type: 'text', value: formData.licensePlate },
-    { label: 'Modelo', name: 'model', type: 'text', value: formData.model },
-    { label: 'Marca', name: 'brand', type: 'text', value: formData.brand },
-    { label: 'Color', name: 'color', type: 'text', value: formData.color },
-    { label: 'Foto', name: 'photo', type: 'file' },
-  ];
+    { label: 'matricula', name: 'matricula', type: 'text', value: formData.matricula },
+    { label: 'modelo', name: 'modelo', type: 'text', value: formData.modelo },
+    { label: 'marca', name: 'marca', type: 'text', value: formData.marca },
+    { label: 'color', name: 'color', type: 'text', value: formData.color },
+    { label: 'incluir foto', name: 'incluirFoto', type: 'checkbox', checked: formData.incluirFoto },
+    formData.incluirFoto && { label: 'foto', name: 'foto', type: 'file' },
+  ].filter(Boolean);
 
   return (
     <Form

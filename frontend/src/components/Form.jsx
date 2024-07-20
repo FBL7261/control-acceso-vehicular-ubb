@@ -1,5 +1,4 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const Form = ({ backgroundColor, title, fields, onSubmit, onChange }) => {
   return (
@@ -13,6 +12,13 @@ const Form = ({ backgroundColor, title, fields, onSubmit, onChange }) => {
               <input
                 type="file"
                 name={field.name}
+                onChange={onChange}
+              />
+            ) : field.type === 'checkbox' ? (
+              <input
+                type="checkbox"
+                name={field.name}
+                checked={field.checked}
                 onChange={onChange}
               />
             ) : (
