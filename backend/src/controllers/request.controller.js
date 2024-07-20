@@ -4,7 +4,7 @@ import requestService from '../services/request.service.js';
 import { requestBodySchema } from '../schema/request.schema.js';
 
 // CREATE
-async function createRequest(req, res) {
+export async function createRequest(req, res) {
     try {
         const email = req.email;  // Obteniendo el email del usuario autenticado
         const requestData = req.body;
@@ -29,32 +29,25 @@ async function createRequest(req, res) {
     }
 }
 
-
 // DELETE
-async function deleteRequest(req, res) {
+export async function deleteRequest(req, res) {
     try {
-        // Obtiene el ID de la solicitud de los parámetros de la URL
         const requestId = req.params.id;
-        const deletedRequest = await requestService.deleteRequest(requestId);
-        if (!deletedRequest) {
-            return res.status(404).json({ message: 'Solicitud no encontrada' });
+        const [deletedRequest, error] = await requestService.deleteRequest(requestId);
+        if (error || !deletedRequest) {
+            return respondError(req, res, 404, 'Solicitud no encontrada');
         }
-        res.status(200).json({ 
-            message: 'Solicitud eliminada con éxito',
-            data: deletedRequest,
-        });
+        return respondSuccess(req, res, 200, 'Solicitud eliminada con éxito', deletedRequest);
     } catch (error) {
-        res.status(400).json({ message: 'No se pudo eliminar la solicitud', error: error.message });
+        handleError(error, 'request.controller -> deleteRequest');
+        return respondError(req, res, 400, 'No se pudo eliminar la solicitud');
     }
 }
 
-
 // UPDATE
-async function updateRequest(req,res) {
-
+export async function updateRequest(req, res) {
     try {
-        // Obtiene el ID de la solicitud de los parámetros de la URL
-        const {id} = req.params;
+        const { id } = req.params;
         const updateRequest = req.body;
 
         const [modifyRequest, requestError] = await requestService.updateRequest(id, updateRequest);
@@ -62,14 +55,13 @@ async function updateRequest(req,res) {
         if (requestError) return respondError(req, res, 400, requestError);
 
         if (!modifyRequest) return respondError(req, res, 404, 'No se pudo actualizar la solicitud');
-        
-        respondSuccess(req, res, 200, 'Solicitud actualizada con éxito');
 
-    }catch (error) {
-        console.error(error);
-        res.status(400).json({ message: 'Error al actualizar la solicitud controller' });
-      }
-      
+        respondSuccess(req, res, 200, 'Solicitud actualizada con éxito', modifyRequest);
+
+    } catch (error) {
+        handleError(error, 'request.controller -> updateRequest');
+        return respondError(req, res, 400, 'Error al actualizar la solicitud controller');
+    }
 }
 
 // GET ALL
@@ -77,36 +69,37 @@ export async function getRequests(req, res) {
     try {
         const [requests, error] = await requestService.getRequests();
         if (error) {
-            return res.status(400).json({ error });
+            return respondError(req, res, 400, error);
         }
-        return res.status(200).json(requests);
+        return respondSuccess(req, res, 200, requests);
     } catch (error) {
         handleError(error, "request.controller -> getRequests");
-        return res.status(500).json({ error: 'Error al obtener las solicitudes' });
+        return respondError(req, res, 500, 'Error al obtener las solicitudes');
     }
 }
 
-export async function getRequestsByUserId(req, res) {
+// GET REQUEST BY ID
+export async function getRequestById(req, res) {
     try {
-        const userId = req.userId;  // Suponiendo que el ID del usuario está en req.userId
-        const [requests, error] = await requestService.getRequestsByUserId(userId);
+        const requestId = req.params.id;  // Obteniendo el ID de la solicitud desde los parámetros de la URL
+        console.log(`ID de solicitud recibido en el controlador: ${requestId}`);
+        const [request, error] = await requestService.getRequestById(requestId);
         if (error) {
-            return res.status(400).json({ error });
+            return respondError(req, res, 400, error);
         }
-        return res.status(200).json(requests);
+        return respondSuccess(req, res, 200, request);
     } catch (error) {
-        handleError(error, "request.controller -> getRequestsByUserId");
-        return res.status(500).json({ error: 'Error al obtener las solicitudes' });
+        handleError(error, "request.controller -> getRequestById");
+        return respondError(req, res, 500, 'Error al obtener la solicitud');
     }
 }
 
-async function updateRequestStatus(req, res) {
-    // Obtiene el ID de la solicitud de los parámetros de la URL
+export async function updateRequestStatus(req, res) {
     const requestId = req.params.id;
     const newStatus = req.body.status;
 
     try {
-        const request = await Request.findByIdAndUpdate(requestId, { status: newStatus }, { new: true });
+        const request = await requestService.updateRequestStatus(requestId, newStatus);
 
         if (!request) {
             return respondError(req, res, 404, "Solicitud no encontrada");
@@ -119,12 +112,17 @@ async function updateRequestStatus(req, res) {
     }
 }
 
-
-export default {
-    createRequest,
-    deleteRequest,
-    updateRequest,
-    getRequests,
-    getRequestsByUserId,
-    updateRequestStatus,
-};
+// GET REQUESTS BY USER EMAIL
+export async function getRequestsByEmail(req, res) {
+    try {
+        const email = req.email;  // Obteniendo el email del usuario autenticado desde el token
+        const [requests, error] = await requestService.getRequestsByUserEmail(email);
+        if (error) {
+            return respondError(req, res, 400, error);
+        }
+        return respondSuccess(req, res, 200, requests);
+    } catch (error) {
+        handleError(error, "request.controller -> getRequestsByEmail");
+        return respondError(req, res, 500, 'Error al obtener las solicitudes del usuario');
+    }
+}

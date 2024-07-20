@@ -13,14 +13,16 @@ const CreateRequest = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Crear un objeto FormData para enviar los datos del formulario
     const formData = new FormData();
-    formData.append('user[username]', username);
-    formData.append('user[rut]', rut);
-    formData.append('user[email]', email);
+    formData.append('username', username);
+    formData.append('rut', rut);
+    formData.append('email', email);
     formData.append('description', description);
     formData.append('pdf', pdfFile);
 
     try {
+      // Llamar a la función de servicio para crear la solicitud
       await createRequest(formData);
       console.log('Request created');
       navigate('/home'); // Redirigir a /home después de crear la solicitud

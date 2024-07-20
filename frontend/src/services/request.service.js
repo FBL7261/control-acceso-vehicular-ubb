@@ -19,23 +19,9 @@ export const createRequest = async (data) => {
   }
 };
 
-export const getRequests = async () => {
+export const getRequestsByEmail = async (email) => {
   try {
-    const response = await axios.get(API_URL, {
-      headers: {
-        'Authorization': `Bearer ${getAuthToken()}`
-      }
-    });
-    return [response.data, null]; // Devuelve la respuesta como array
-  } catch (error) {
-    const errorMessage = error.response ? JSON.stringify(error.response.data) : error.message;
-    console.error('Error fetching requests:', errorMessage);
-    return [null, errorMessage]; // Devuelve el error como segundo elemento del array
-  }
-};
-export const getRequestsByUserId = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/user`, {
+    const response = await axios.get(`${API_URL}/user?email=${encodeURIComponent(email)}`, {
       headers: {
         'Authorization': `Bearer ${getAuthToken()}`
       }

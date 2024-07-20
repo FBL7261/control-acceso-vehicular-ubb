@@ -2,16 +2,22 @@ import mongoose from "mongoose";
 import STATES from '../constants/request.state.constants.js';
 
 const requestSchema = new mongoose.Schema({
-    user:{
-        type: {
-            username: String,
-            rut: String,
-            email: String,
-        },
+    username: {
+        type: String,
+        required: true
+    },
+    rut: {
+        type: String,
+        required: true
+    },
+    email: {
+        type: String,
+        required: true
     },
     description: {
         type: String,
         trim: true,
+        required: true
     },
     status: {
         type: String,

@@ -3,16 +3,22 @@ const router = Router();
 
 import authenticationMiddleware from "../middlewares/authentication.middleware.js";
 import upload from "../middlewares/handleMulter.middlewares.js";
-import requestController from '../controllers/request.controller.js';
+import {
+  createRequest,
+  deleteRequest,
+  updateRequest,
+  getRequests,
+  getRequestsByEmail, // Asegúrate de importar la función correcta
+  updateRequestStatus,
+} from "../controllers/request.controller.js";
 
 router.use(authenticationMiddleware);
 
-// La ruta para crear una solicitud ahora también maneja la subida de archivos PDF
-router.post('/', upload.single('pdf'), requestController.createRequest);
-router.delete('/:id', requestController.deleteRequest);
-router.put('/:id', requestController.updateRequest);
-router.get('/', requestController.getRequests);
-router.get('/user/:id', requestController.getRequestsByUserId);
-router.put('/newstate/:id', requestController.updateRequestStatus);
+router.post('/', upload.single('pdf'), createRequest);
+router.delete('/:id', deleteRequest);
+router.put('/:id', updateRequest);
+router.get('/', getRequests);
+router.get('/user/:email', getRequestsByEmail); // Ruta para obtener solicitudes por email
+router.put('/newstate/:id', updateRequestStatus);
 
 export default router;
