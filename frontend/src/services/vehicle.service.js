@@ -4,7 +4,6 @@ import { handleError } from '../utils/errorHandler';
 
 const API_URL = 'http://localhost:3000/api/vehicles';// Ajusta esta URL si es necesario
 
-// Crear un nuevo vehículo
 export const createVehicle = async (vehicleData) => {
 
   if (!vehicleData) {
@@ -16,9 +15,27 @@ export const createVehicle = async (vehicleData) => {
 
   try {
 
+    const user = JSON.parse(localStorage.getItem('user'));
+
+    const token = user?.token;
+
+
+    const config = {
+
+      headers: {
+
+        'Content-Type': 'multipart/form-data',
+
+        'Authorization': `Bearer ${token}`
+
+      }
+
+    };
+
+
     console.log('Enviando solicitud para crear vehículo:', `${API_URL}/`, vehicleData);
 
-    const response = await axios.post(`${API_URL}/`, vehicleData);
+    const response = await axios.post(`${API_URL}/`, vehicleData, config);
 
     console.log('Respuesta al crear vehículo:', response.data);
 
