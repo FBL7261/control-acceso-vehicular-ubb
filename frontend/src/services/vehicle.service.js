@@ -1,7 +1,7 @@
 import axios from './root.service';
 import { handleError } from '../utils/errorHandler';
 
-const API_URL = 'http://localhost:3000/api/vehicles'; // Base URL para vehículos
+const API_URL = 'http://localhost:3000/api/vehicles'; // URL base para vehículos
 
 // Crear vehículo
 export const createVehicle = async (vehicleData) => {
@@ -20,35 +20,23 @@ export const createVehicle = async (vehicleData) => {
       }
     };
 
-    console.log('Enviando solicitud para crear vehículo:', `${API_URL}/`, vehicleData);
     const response = await axios.post(`${API_URL}/`, vehicleData, config);
-    console.log('Respuesta al crear vehículo:', response.data);
     return [response.data, null];
   } catch (error) {
     return handleError(error);
   }
 };
 
-// Obtener todos los vehículos de un usuario
+// Otros métodos
 export const getVehiclesByUserId = async (userId) => {
   try {
-    const user = JSON.parse(localStorage.getItem('user'));
-    const token = user?.token;
-
-    const config = {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    };
-
-    const response = await axios.get(`${API_URL}/user/${userId}`, config);
-    return [response.data, null]; // Retorna la lista de vehículos
+    const response = await axios.get(`${API_URL}/user/${userId}`);
+    return [response.data, null];
   } catch (error) {
-    return [null, error.response?.data || error.message];
+    return handleError(error);
   }
 };
 
-// Eliminar un vehículo
 export const deleteVehicle = async (vehicleId) => {
   try {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -61,13 +49,12 @@ export const deleteVehicle = async (vehicleId) => {
     };
 
     const response = await axios.delete(`${API_URL}/${vehicleId}`, config);
-    return [response.data, null]; // Retorna los datos del vehículo eliminado
+    return [response.data, null];
   } catch (error) {
-    return [null, error.response?.data || error.message];
+    return handleError(error);
   }
 };
 
-// Actualizar un vehículo
 export const updateVehicle = async (vehicleId, vehicleData) => {
   try {
     const user = JSON.parse(localStorage.getItem('user'));
@@ -81,9 +68,9 @@ export const updateVehicle = async (vehicleId, vehicleData) => {
     };
 
     const response = await axios.put(`${API_URL}/${vehicleId}`, vehicleData, config);
-    return [response.data, null]; // Retorna los datos del vehículo actualizado
+    return [response.data, null];
   } catch (error) {
-    return [null, error.response?.data || error.message];
+    return handleError(error);
   }
 };
 

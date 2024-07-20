@@ -12,6 +12,11 @@ const CreateVehicle = () => {
     incluirFoto: false,
   });
 
+  const [submitStatus, setSubmitStatus] = useState({
+    success: null,
+    message: ''
+  });
+
   const handleChange = (e) => {
     const { name, value, files, type, checked } = e.target;
 
@@ -28,7 +33,10 @@ const CreateVehicle = () => {
     e.preventDefault();
 
     if (!formData.matricula || !formData.modelo || !formData.marca || !formData.color) {
-      alert('Por favor, complete todos los campos requeridos.');
+      setSubmitStatus({
+        success: false,
+        message: 'Por favor, complete todos los campos requeridos.'
+      });
       return;
     }
 
@@ -41,33 +49,59 @@ const CreateVehicle = () => {
       });
 
       const [response, error] = await vehicleService.createVehicle(formDataToSend);
+
       if (error) {
         throw new Error(error);
       }
-      alert('Vehículo creado con éxito');
+
+      setSubmitStatus({
+        success: true,
+        message: 'Vehículo creado con éxito.'
+      });
+
+      // Limpiar formulario si es necesario
+      setFormData({
+        matricula: '',
+        modelo: '',
+        marca: '',
+        color: '',
+        foto: null,
+        incluirFoto: false,
+      });
+
     } catch (error) {
+      setSubmitStatus({
+        success: false,
+        message: 'Hubo un problema al crear el vehículo. Por favor, intente de nuevo.'
+      });
       console.error('Error creando vehículo:', error.response?.data || error.message);
-      alert('Hubo un problema al crear el vehículo. Por favor, intente de nuevo.');
     }
   };
 
   const fields = [
-    { label: 'matricula', name: 'matricula', type: 'text', value: formData.matricula },
-    { label: 'modelo', name: 'modelo', type: 'text', value: formData.modelo },
-    { label: 'marca', name: 'marca', type: 'text', value: formData.marca },
-    { label: 'color', name: 'color', type: 'text', value: formData.color },
-    { label: 'incluir foto', name: 'incluirFoto', type: 'checkbox', checked: formData.incluirFoto },
-    formData.incluirFoto && { label: 'foto', name: 'foto', type: 'file' },
+    { label: 'Matrícula', name: 'matricula', type: 'text', value: formData.matricula },
+    { label: 'Modelo', name: 'modelo', type: 'text', value: formData.modelo },
+    { label: 'Marca', name: 'marca', type: 'text', value: formData.marca },
+    { label: 'Color', name: 'color', type: 'text', value: formData.color },
+    { label: 'Incluir foto', name: 'incluirFoto', type: 'checkbox', checked: formData.incluirFoto },
+    formData.incluirFoto && { label: 'Foto', name: 'foto', type: 'file' },
   ].filter(Boolean);
 
   return (
-    <Form
-      backgroundColor="#f0f0f0"
-      title="Crear Vehículo"
-      fields={fields}
-      onSubmit={handleSubmit}
-      onChange={handleChange}
-    />
+    <div>
+      <Form
+        backgroundColor="#f0f0f0"
+        title="Crear Vehículo"
+        fields={fields}
+        onSubmit={handleSubmit}
+        onChange={handleChange}
+      />
+      {submitStatus.message && (
+        <div style={{ color: submitStatus.success ? 'green' : 'red' }}>
+          {submitStatus.message}
+        </div>
+      )}
+    </div>
   );
 };
 
