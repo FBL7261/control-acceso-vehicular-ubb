@@ -12,38 +12,40 @@ import VehicleService from "../services/vehicle.service.js";
 import vehicleSchema from "../schema/vehicle.schema.js";
 import { handleError } from "../utils/errorHandler.js";
 
-// Crear un nuevo vehículo, automáticamente se le asigna al usuario actual
 async function createVehicle(req, res) {
   try {
-    const { body } = req; // Datos del cuerpo de la solicitud
-    const currentUserEmail = req.email; // Correo del usuario autenticado
-    const isAdmin = req.roles.includes("admin"); // Verificar si es administrador
+    const { userId } = req.params;
+    const currentUserEmail = req.email;
 
-    // Validar los datos del vehículo con el esquema
-    const { error: bodyError } = vehicleSchema.validate(body);
-    if (bodyError) {
-      return respondError(req, res, 400, bodyError.message); // Manejar errores de validación
+    // Validar que el userId en la URL sea un identificador válido
+    if (!userId) {
+      return respondError(req, res, 400, "ID de usuario no proporcionado");
     }
 
-    // Verificar si se ha subido una foto
-    if (req.files && req.files.foto) {
-      body.foto = req.files.foto[0].path; // Ajustar según la forma en que guardes las fotos
+    // Verificar que el email del usuario actual exista en la base de datos
+    const currentUser = await User.findOne({ email: currentUserEmail });
+
+    if (!currentUser) {
+      return respondError(req, res, 404, "Usuario autenticado no encontrado");
     }
 
-    const [newVehicle, vehicleError] = await VehicleService.createVehicle(body, currentUserEmail, isAdmin);
-    console.log("newVehicle:", newVehicle);
-
-    console.log("vehicleError", vehicleError);
-    
-    if (vehicleError) {
-      console.log("newVehicle:", newVehicle);
-      return respondError(req, res, 400, vehicleError); // Manejo de errores
+    // Verificar que el usuario autenticado tenga permiso para crear vehículos
+    if (currentUser._id.toString() !== userId) {
+      return respondError(req, res, 403, "No tienes permiso para crear vehículos para otros usuarios");
     }
 
-    respondSuccess(req, res, 201, newVehicle); // Vehículo creado con éxito
+    // Crear un nuevo vehículo
+    const newVehicle = new Vehicle({
+      ...req.body,
+      user: userId,
+    });
+
+    await newVehicle.save();
+
+    respondSuccess(req, res, 201, newVehicle);
   } catch (error) {
     handleError(error, "vehicle.controller -> createVehicle");
-    respondError(req, res, 500, "No se pudo crear el vehículo");
+    respondError(req, res, 500, "Error al crear el vehículo");
   }
 }
 

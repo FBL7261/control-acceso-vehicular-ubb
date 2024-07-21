@@ -9,7 +9,8 @@ async function login(req, res) {
     const { email, password } = req.body;
     const user = { email, password };
     const tokens = await AuthService.login(user);
-    respondSuccess(req, res, 200, tokens);
+    res.cookie('jwt', tokens.refreshToken, { httpOnly: true, secure: true }); // Almacena el token de refresco en una cookie
+    respondSuccess(req, res, 200, { accessToken: tokens.accessToken });
   } catch (error) {
     handleError(error, "auth.controller -> login");
     respondError(req, res, 400, error.message);
@@ -20,11 +21,11 @@ async function logout(req, res) {
   try {
     const cookies = req.cookies;
     if (!cookies?.jwt) return respondError(req, res, 400, "No hay token");
-    res.clearCookie("jwt", { httpOnly: true });
+    res.clearCookie("jwt", { httpOnly: true, secure: true }); // Añadido 'secure: true' para entornos de producción
     respondSuccess(req, res, 200, { message: "Sesión cerrada correctamente" });
   } catch (error) {
     handleError(error, "auth.controller -> logout");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message); // Código de estado HTTP 500 para errores del servidor
   }
 }
 
@@ -33,14 +34,14 @@ async function refresh(req, res) {
     const cookies = req.cookies;
     if (!cookies?.jwt) return respondError(req, res, 400, "No hay token");
 
-    const [accessToken, errorToken] = await AuthService.refresh(cookies);
+    const [accessToken, errorToken] = await AuthService.refresh(cookies.jwt);
 
     if (errorToken) return respondError(req, res, 400, errorToken);
 
     respondSuccess(req, res, 200, { accessToken });
   } catch (error) {
     handleError(error, "auth.controller -> refresh");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message); // Código de estado HTTP 500 para errores del servidor
   }
 }
 
@@ -52,7 +53,7 @@ async function profile(req, res) {
     respondSuccess(req, res, 200, userProfile);
   } catch (error) {
     handleError(error, "auth.controller -> profile");
-    respondError(req, res, 400, error.message);
+    respondError(req, res, 500, error.message); // Código de estado HTTP 500 para errores del servidor
   }
 }
 
