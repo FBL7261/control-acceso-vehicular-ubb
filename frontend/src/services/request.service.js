@@ -33,17 +33,18 @@ const getRequests = async () => {
   }
 };
 
-
-const getRequestsByEmail = async () => {
+const getRequestsByUserEmail = async () => {
   try {
+    console.log('Iniciando fetch de solicitudes por email de usuario...');
     const response = await axios.get(`${API_URL}/user`, {
       headers: {
         'Authorization': `Bearer ${getAuthToken()}`
       }
     });
-    return response.data;
+    console.log('Respuesta del servidor:', response.data);
+    return response.data.data; // Asegúrate de acceder a la propiedad 'data'
   } catch (error) {
-    console.error('Error fetching requests by email:', error.response ? error.response.data : error.message);
+    console.error('Error fetching requests by user email:', error.response ? error.response.data : error.message);
     throw error;
   }
 };
@@ -79,5 +80,5 @@ export const deleteRequest = async (id) => {
 
 export default {
   getRequests,
-  getRequestsByEmail,
+  getRequestsByUserEmail,
 }

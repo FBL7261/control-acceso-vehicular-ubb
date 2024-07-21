@@ -1,0 +1,72 @@
+/* Estilos para RequestList */
+.request-list {
+  margin: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative; /* Para posicionar el botón */
+}
+
+.request-list h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.request-list ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.request-list li {
+  margin-bottom: 20px;
+  padding: 15px;
+  background-color: #e0f7fa; /* Color de fondo diferente */
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.request-list li strong {
+  color: #555;
+}
+
+.request-list li ul {
+  margin-top: 10px;
+  padding-left: 20px;
+}
+
+.request-list li ul li {
+  margin-bottom: 5px;
+}
+
+.request-list li ul li a {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.request-list li ul li a:hover {
+  text-decoration: underline;
+}
+
+.loading, .error {
+  text-align: center;
+  color: #888;
+}
+
+.back-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.back-button:hover {
+  background-color: #0056b3;
+}

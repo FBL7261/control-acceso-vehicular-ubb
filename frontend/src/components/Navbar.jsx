@@ -25,18 +25,17 @@ const Navbar = () => {
                     <NavLink to="/home">Inicio</NavLink>
                 </li>
                 {userRole === 'admin' && (
-                    <li className={location.pathname === "/admin/requests" ? "active" : ""}>
-                        <NavLink to="/admin/requests">Solicitudes</NavLink>
-                    </li>
+                    <>
+                        <li className={location.pathname === "/admin/requests" ? "active" : ""}>
+                            <NavLink to="/admin/requests">Solicitudes</NavLink>
+                        </li>
+                    </>
                 )}
                 <li className={location.pathname === "/create-request" ? "active" : ""}>
                     <NavLink to="/create-request">Crear Solicitud</NavLink>
                 </li>
-                <li className={location.pathname === "/vehicles" ? "active" : ""}>
-                    <NavLink to="/vehicles">Vehículos</NavLink>
-                </li>
                 <li className={location.pathname === "/" ? "active" : ""}>
-                    <NavLink to="/" onClick={logoutSubmit}>Cerrar sesión</NavLink>
+                    <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
                 </li>
             </ul>
         </nav>
