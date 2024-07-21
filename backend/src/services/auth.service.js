@@ -1,16 +1,10 @@
-"use strict";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
-import { ACCESS_JWT_SECRET, REFRESH_JWT_SECRET } from "../config/configEnv.js";
-import { handleError } from "../utils/errorHandler.js";
-import User from "../models/user.model.js";
+"use strict"
+import jwt from 'jsonwebtoken';
+import bcrypt from 'bcrypt';
+import { ACCESS_JWT_SECRET, REFRESH_JWT_SECRET } from '../config/configEnv.js';
+import { handleError } from '../utils/errorHandler.js';
+import User from '../models/user.model.js';
 
-/**
- * Inicia sesión con un usuario.
- * @async
- * @function login
- * @param {Object} user - Objeto de usuario
- */
 async function login(user) {
   try {
     const userFound = await User.findOne({ email: user.email }).populate("roles").exec();
@@ -18,7 +12,6 @@ async function login(user) {
       throw new Error("Usuario no encontrado");
     }
 
-    // Verificar la contraseña
     const isPasswordValid = await bcrypt.compare(user.password, userFound.password);
     if (!isPasswordValid) {
       throw new Error("Contraseña incorrecta");
@@ -30,14 +23,13 @@ async function login(user) {
 
     const accessToken = jwt.sign(
       {
+        id: userFound._id,
         email: userFound.email,
         roles: userFound.roles.map((role) => role.name),
       },
       ACCESS_JWT_SECRET,
-      { expiresIn: "1h" }
+      { expiresIn: '5h' }
     );
-
-    console.log("Token generado:", accessToken); // Añadir log para verificar el token generado
 
     return { accessToken };
   } catch (error) {

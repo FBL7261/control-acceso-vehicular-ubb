@@ -10,8 +10,8 @@ import {
   deleteRequest,
   updateRequest,
   getRequests,
-  getRequestsByEmail, // Asegúrate de importar la función correcta
   updateRequestStatus,
+  getRequestsByUserEmail   ,
 } from "../controllers/request.controller.js";
 
 router.use(authenticationMiddleware);
@@ -20,7 +20,7 @@ router.post('/', upload.single('pdf'), createRequest);
 router.delete('/:id', isAdmin, deleteRequest);
 router.put('/:id', updateRequest);
 router.get('/', isAdmin, getRequests);
-router.get('/user/:email', getRequestsByEmail); // Ruta para obtener solicitudes por email
 router.put('/newstate/:id', isAdmin, updateRequestStatus);
+router.get('/user', getRequestsByUserEmail   );
 
 export default router;

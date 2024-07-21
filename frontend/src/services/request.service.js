@@ -26,25 +26,26 @@ const getRequests = async () => {
         'Authorization': `Bearer ${getAuthToken()}`
       }
     });
-    return response; // Devolver la respuesta completa
+    return response;  // Devolver la respuesta completa
   } catch (error) {
     console.error('Error fetching requests:', error.response ? error.response.data : error.message);
     throw error;
   }
 };
 
-export const getRequestsByEmail = async (email) => {
+const getRequestsByUserEmail = async () => {
   try {
-    const response = await axios.get(`${API_URL}/user?email=${encodeURIComponent(email)}`, {
+    console.log('Iniciando fetch de solicitudes por email de usuario...');
+    const response = await axios.get(`${API_URL}/user`, {
       headers: {
         'Authorization': `Bearer ${getAuthToken()}`
       }
     });
-    return [response.data, null];
+    console.log('Respuesta del servidor:', response.data);
+    return response.data.data; // Asegúrate de acceder a la propiedad 'data'
   } catch (error) {
-    const errorMessage = error.response ? JSON.stringify(error.response.data) : error.message;
-    console.error('Error fetching requests:', errorMessage);
-    return [null, errorMessage];
+    console.error('Error fetching requests by user email:', error.response ? error.response.data : error.message);
+    throw error;
   }
 };
 
@@ -78,5 +79,6 @@ export const deleteRequest = async (id) => {
 
 
 export default {
-  getRequests
+  getRequests,
+  getRequestsByUserEmail,
 }
