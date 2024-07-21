@@ -30,7 +30,7 @@ export const createRegEntryUser = async (data) => {
     }
 };
 
-export const getRegEntries = async () => {
+export const getRegEntry = async () => {
   try {
     const response = await axios.get(API_URL, {
       headers: {

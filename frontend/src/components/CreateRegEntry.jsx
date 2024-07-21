@@ -5,7 +5,6 @@ import '../index.css';
 
 const CreateRegEntry = () => {
   const [entry, setEntry] = useState({ rut: '', plate: '', name: '', reason: '' });
-  const [message, setMessage] = useState('');
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -16,10 +15,10 @@ const CreateRegEntry = () => {
     e.preventDefault();
     try {
       await createRegEntry(entry);
-      setMessage('Entrada registrada con éxito');
+      console.log('Entrada registrada con éxito');
       setEntry({ rut: '', plate: '', name: '', reason: '' }); // Limpiar el formulario
     } catch (error) {
-      setMessage('Error al registrar la entrada');
+      console.log('Error al registrar la entrada');
     }
   };
 

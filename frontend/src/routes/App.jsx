@@ -9,13 +9,14 @@ import RequestList from '../components/RequestList';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { AuthProvider } from '../context/AuthContext';
 import GuardHome from './HomeGuard'; // Importar GuardHome
-import CreateRegEntry from '../components/createRegEntry.jsx'; // Importar CreateRegEntry
+import CreateRegEntry from "../components/createRegEntry.jsx"; // Importar CreateRegEntry
 //import RegEntryList from './RegEntryList'; // Importar RegEntryList
 
-const App = () => {
+function App() {
   return (
     <Router>
       <AuthProvider>
+
         <Routes>
           <Route path="/auth" element={<Login />} />
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
@@ -31,6 +32,6 @@ const App = () => {
       </AuthProvider>
     </Router>
   );
-};
+}
 
 export default App;
