@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../services/auth.service';
+import { login, getCurrentUser } from '../services/auth.service';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await login({ email, password });
       if (response.status === 200) {
-        navigate('/home');
+        const storedUser = getCurrentUser();
+        const userRole = storedUser?.roles?.[0];
+        if(userRole === 'guardia') {
+          navigate('/guard-home');
+        }else{
+        navigate('/home');}
       }
     } catch (error) {
       setError('Credenciales incorrectas');

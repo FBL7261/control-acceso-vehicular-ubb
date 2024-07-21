@@ -10,6 +10,9 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
   }
 
   if (allowedRoles && !allowedRoles.includes(user.roles[0])) {
+    if (user.role === 'guard') {
+      return <Navigate to="/guard-home" />;
+    }
     return <Navigate to="/home" />;
   }
 
