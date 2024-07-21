@@ -78,7 +78,7 @@ export async function getRequests(req, res) {
                 if (!user) {
                     throw new Error("Usuario no encontrado para la solicitud");
                 }
-                const pdfs = await requestService.getPDFsForUser(user._id);  // Utiliza el ID del usuario para obtener los PDFs
+                const pdfs = await requestService.getPDFsForUser(user._id);  
                 return { ...request.toObject(), pdfs };
             })
         );
@@ -90,33 +90,25 @@ export async function getRequests(req, res) {
 }
 
 export async function getRequestsByUserEmail(req, res) {
-    console.log("Entrando en getRequestsByUserEmail");
     try {
-      const email = req.email; // Obteniendo el email del usuario autenticado
-      const userId = req.userId; // Obteniendo el userId del usuario autenticado
-      console.log(`Email del usuario autenticado: ${email}`);
-      console.log(`ID del usuario autenticado: ${userId}`);
-  
+      const email = req.email; 
+      const userId = req.userId; 
+
       const [requests, error] = await requestService.getRequestsByUserEmail(email);
   
       if (error) {
         return respondError(req, res, 400, error);
       }
-      console.log(`Solicitudes encontradas: ${JSON.stringify(requests, null, 2)}`);
   
-      // Obtener los PDFs asociados a las solicitudes
       const [pdfs, pdfError] = await requestService.getPDFsByUserId(userId);
       if (pdfError) {
         return respondError(req, res, 400, pdfError);
       }
-      console.log(`PDFs encontrados: ${JSON.stringify(pdfs, null, 2)}`);
   
-      // Añadir los PDFs correspondientes a cada solicitud
       const requestsWithPDFs = requests.map(request => ({
         ...request.toObject(),
         pdfs: pdfs.filter(pdf => pdf.user.equals(userId))
       }));
-      console.log(`Solicitudes con PDFs: ${JSON.stringify(requestsWithPDFs, null, 2)}`);
   
       return respondSuccess(req, res, 200, { data: requestsWithPDFs });
     } catch (error) {
@@ -125,9 +117,13 @@ export async function getRequestsByUserEmail(req, res) {
     }
   }
 
-export async function updateRequestStatus(req, res) {
+  export async function updateRequestStatus(req, res) {
     const requestId = req.params.id;
     const newStatus = req.body.status;
+
+    if (!requestId || !newStatus) {
+        return respondError(req, res, 400, 'Faltan parámetros: ID o estado');
+    }
 
     try {
         const request = await requestService.updateRequestStatus(requestId, newStatus);
@@ -136,9 +132,9 @@ export async function updateRequestStatus(req, res) {
             return respondError(req, res, 404, "Solicitud no encontrada");
         }
 
-        return respondSuccess(req, res, request);
+        return respondSuccess(req, res, 200, 'Solicitud actualizada con éxito', request);
     } catch (error) {
         handleError(error, "request.controller -> updateRequestStatus");
-        return respondError(req, res, 500, "Error al actualizar el estado de la solicitud");
+        return respondError(req, res, 500, `Error al actualizar el estado de la solicitud: ${error.message}`);
     }
 }

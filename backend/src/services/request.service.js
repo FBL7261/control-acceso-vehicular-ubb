@@ -111,10 +111,8 @@ async function getPDFsForUser(userId) {
 
 // GET REQUESTS BY USER EMAIL
 async function getRequestsByUserEmail(email) {
-    console.log(`Buscando solicitudes para el email: ${email}`);
     try {
       const requests = await Request.find({ email: email });
-      console.log(`Solicitudes encontradas: ${JSON.stringify(requests, null, 2)}`);
       if (!requests || requests.length === 0) {
         return [[], "No hay solicitudes para este usuario"];
       }
@@ -129,10 +127,8 @@ async function getRequestsByUserEmail(email) {
   
   // GET PDFs BY USER ID
   async function getPDFsByUserId(userId) {
-    console.log(`Buscando PDFs para el user ID: ${userId}`);
     try {
       const pdfs = await PDFModel.find({ user: userId });
-      console.log(`PDFs encontrados: ${JSON.stringify(pdfs, null, 2)}`);
       if (!pdfs || pdfs.length === 0) {
         return [[], "No hay PDFs para este usuario"];
       }
@@ -145,8 +141,8 @@ async function getRequestsByUserEmail(email) {
     }
   }
 
-// Update Status Request
-async function updateRequestStatus(requestId, newStatus) {
+  async function updateRequestStatus(requestId, newStatus) {
+
     try {
         const request = await Request.findByIdAndUpdate(requestId, { status: newStatus }, { new: true });
 
@@ -156,16 +152,17 @@ async function updateRequestStatus(requestId, newStatus) {
 
         return request;
     } catch (error) {
+        console.error(`Error al actualizar el estado de la solicitud: ${error.message}`);
         throw new Error("Error al actualizar el estado de la solicitud");
     }
 }
+
 
 export default {
     createRequest,
     deleteRequest,
     getRequests,
     getRequestsByUserEmail,
-    updateRequest,
     updateRequestStatus,
     getPDFsForUser,
     getPDFsByUserId,

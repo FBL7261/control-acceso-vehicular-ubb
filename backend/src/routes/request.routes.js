@@ -20,7 +20,7 @@ router.post('/', upload.single('pdf'), createRequest);
 router.delete('/:id', isAdmin, deleteRequest);
 router.put('/:id', updateRequest);
 router.get('/', isAdmin, getRequests);
-router.put('/newstate/:id', isAdmin, updateRequestStatus);
+router.put('/:id/status',  isAdmin, updateRequestStatus);
 router.get('/user', getRequestsByUserEmail   );
 
 export default router;
