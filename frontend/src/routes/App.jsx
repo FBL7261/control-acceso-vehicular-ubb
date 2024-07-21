@@ -14,6 +14,7 @@ import DeleteVehiclePage from '../pages/DeleteVehiclePage';
 import UserVehicles from '../pages/UserVehicles';
 import Error404 from './Error404';
 import Profile from './Profile';
+import VehiclesPage from '../pages/VehiclesPage';
 
 const App = () => {
   return (
@@ -22,7 +23,7 @@ const App = () => {
         <Routes>
           <Route path="/auth/login" element={<Login />} />
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
-          <Route path="/vehicles" element={<VehicleList />} />
+          <Route path="/vehicles" element={<VehiclesPage />} />
           <Route path="/create-request" element={<ProtectedRoute><CreateRequest /></ProtectedRoute>} />
           <Route path="/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />
           <Route path="/vehicles/delete/:vehicleId" element={<DeleteVehiclePage />} />

@@ -1,4 +1,3 @@
-// src/pages/VehiclesPage.jsx
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,25 +10,25 @@ function VehiclesPage() {
 
   return (
     <div className="vehicles-page">
-      <h1>Gestión de Vehículos</h1>
+      <h1>Vehículos</h1>
       <div className="button-container">
         <button 
           className="button-green" 
           onClick={() => handleRedirect('/vehicles/create-vehicle')}
         >
-          Crear Vehículos
+          Registrar vehículo
         </button>
         <button 
           className="button-green" 
           onClick={() => handleRedirect('/vehicles/my-vehicles')}
         >
-          Mis Vehículos
+          Mis vehículos
         </button>
         <button 
           className="button-green" 
           onClick={() => handleRedirect('/vehicles/update-vehicle')}
         >
-          Actualizar Vehículo
+          Actualizar información vehículo
         </button>
         <button 
           className="button-green" 
