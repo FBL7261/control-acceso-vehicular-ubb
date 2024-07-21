@@ -1,5 +1,3 @@
-// src/components/Mensajes.jsx
-
 import React, { useState, useContext, createContext } from 'react';
 import { createPortal } from 'react-dom';
 
@@ -14,12 +12,12 @@ export const MensajesProvider = ({ children }) => {
 
   const mensajeExito = (mensaje) => {
     setMensaje({ tipo: 'exito', texto: mensaje });
-    setTimeout(() => setMensaje(null), 3000); // Ocultar mensaje después de 3 segundos
+    setTimeout(() => setMensaje(null), 3000);
   };
 
   const mensajeError = (mensaje) => {
     setMensaje({ tipo: 'error', texto: mensaje });
-    setTimeout(() => setMensaje(null), 3000); // Ocultar mensaje después de 3 segundos
+    setTimeout(() => setMensaje(null), 3000);
   };
 
   return (

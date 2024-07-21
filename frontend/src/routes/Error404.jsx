@@ -1,3 +1,4 @@
+import React from 'react';
 
 const Error404 = () => {
   console.log("Error 404, Page not found");
