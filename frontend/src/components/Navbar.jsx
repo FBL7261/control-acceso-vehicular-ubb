@@ -7,7 +7,7 @@ const Navbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
     const { isAuthenticated, user } = useAuth();
-    const userRole = user?.roles?.[0]; // Ajusta según la estructura de tu objeto de usuario
+    const userRole = user?.roles?.[0];
 
     const logoutSubmit = async () => {
         try {
@@ -21,7 +21,7 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <ul>
-                {isAuthenticated && (
+                {isAuthenticated ? (
                     <>
                         <li className={location.pathname === "/home" ? "active" : ""}>
                             <NavLink to="/home">Inicio</NavLink>
@@ -41,8 +41,7 @@ const Navbar = () => {
                             <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
                         </li>
                     </>
-                )}
-                {!isAuthenticated && (
+                ) : (
                     <li className={location.pathname === "/auth/login" ? "active" : ""}>
                         <NavLink to="/auth/login">Iniciar Sesión</NavLink>
                     </li>
