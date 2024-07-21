@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import requestService from '../services/request.service';
 import { getCurrentUser } from '../services/auth.service';
 import { Worker, Viewer } from '@react-pdf-viewer/core';
 import '@react-pdf-viewer/core/lib/styles/index.css';
 import '@react-pdf-viewer/default-layout/lib/styles/index.css';
-
+import '../styles/RequestList.css'; // Importar el archivo CSS
 
 const RequestList = () => {
     const [requests, setRequests] = useState([]);
@@ -13,6 +14,7 @@ const RequestList = () => {
     const [isAdmin, setIsAdmin] = useState(false);
     const [selectedPdf, setSelectedPdf] = useState(null);
     const pdfjsDistVersion = '3.1.81'; // Definir la versión aquí
+    const navigate = useNavigate();
 
     useEffect(() => {
         const currentUser = getCurrentUser();
@@ -40,30 +42,53 @@ const RequestList = () => {
         }
     }, []);
 
+    const handleStatusChange = async (id, newStatus) => {
+        try {
+            console.log('Updating status...');
+            await requestService.updateRequestStatus(id, newStatus);
+            setRequests((prevRequests) =>
+                prevRequests.map((request) =>
+                    request._id === id ? { ...request, status: newStatus } : request
+                )
+            );
+        } catch (error) {
+            console.error('Error updating request status:', error.message);
+        }
+    };
+
     if (isLoading) {
-        return <div>Cargando...</div>;
+        return <div className="loading">Cargando...</div>;
     }
 
     if (!isAdmin) {
-        return <div>No tienes permisos para ver esta página</div>;
+        return <div className="error">No tienes permisos para ver esta página</div>;
     }
 
     if (error) {
-        return <div>Error: {error}</div>;
+        return <div className="error">Error: {error}</div>;
     }
 
     return (
-        <div>
+        <div className="request-list">
+            <button className="back-button" onClick={() => navigate(-1)}>Volver</button>
             <h2>Lista de Solicitudes</h2>
             <ul>
                 {requests.map((request) => (
-                    <li key={request._id}>
+                    <li key={request._id} className="request-item">
                         <strong>ID:</strong> {request._id}<br />
                         <strong>Username:</strong> {request.username}<br />
                         <strong>RUT:</strong> {request.rut}<br />
                         <strong>Email:</strong> {request.email}<br />
                         <strong>Description:</strong> {request.description}<br />
-                        <strong>Status:</strong> {request.status}<br />
+                        <strong>Status:</strong>
+                        <select
+                            value={request.status}
+                            onChange={(e) => handleStatusChange(request._id, e.target.value)}
+                        >
+                            <option value="Pendiente">Pendiente</option>
+                            <option value="Aprobado">Aprobado</option>
+                            <option value="Rechazado">Rechazado</option>
+                        </select><br />
                         <strong>Created At:</strong> {new Date(request.createdAt).toLocaleString()}<br />
                         <strong>PDFs:</strong>
                         <ul>
@@ -74,7 +99,7 @@ const RequestList = () => {
                                             Ver {pdf.name}
                                         </button>
                                         {selectedPdf === `http://localhost:3000/uploads/${pdf.filePath}` && (
-                                            <div style={{ height: '500px' }}>
+                                            <div className="pdf-viewer">
                                                 <Worker workerUrl={`https://unpkg.com/pdfjs-dist@${pdfjsDistVersion}/build/pdf.worker.min.js`}>
                                                     <Viewer fileUrl={selectedPdf} />
                                                 </Worker>

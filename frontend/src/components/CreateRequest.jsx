@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { createRequest } from '../services/request.service';
 import { useNavigate } from 'react-router-dom';
+import '../styles/CreateRequest.css'; // Importar el archivo CSS
 
 const CreateRequest = () => {
   const [username, setUsername] = useState('');
@@ -32,11 +33,12 @@ const CreateRequest = () => {
   };
 
   return (
-    <div>
-      <h2>Create Request</h2>
+    <div className="create-request">
+      <button className="back-button" onClick={() => navigate(-1)}>Volver</button>
+      <h2>Crear Solicitud</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Username:</label>
+          <label>Nombre:</label>
           <input
             type="text"
             value={username}
@@ -45,7 +47,7 @@ const CreateRequest = () => {
           />
         </div>
         <div>
-          <label>RUT:</label>
+          <label>Rut:</label>
           <input
             type="text"
             value={rut}
@@ -54,7 +56,7 @@ const CreateRequest = () => {
           />
         </div>
         <div>
-          <label>Email:</label>
+          <label>Correo Electrónico:</label>
           <input
             type="email"
             value={email}
@@ -63,7 +65,7 @@ const CreateRequest = () => {
           />
         </div>
         <div>
-          <label>Description:</label>
+          <label>Descripcion:</label>
           <input
             type="text"
             value={description}
@@ -72,7 +74,7 @@ const CreateRequest = () => {
           />
         </div>
         <div>
-          <label>Upload PDF:</label>
+          <label>Seleccionar PDF:</label>
           <input
             type="file"
             accept="application/pdf"
@@ -80,7 +82,7 @@ const CreateRequest = () => {
             required
           />
         </div>
-        <button type="submit">Create Request</button>
+        <button type="submit">Enviar</button>
       </form>
     </div>
   );
