@@ -17,7 +17,7 @@ export function AuthProvider({ children }) {
       navigate("/");
     }
     if (isAuthenticated && allowedRoutes.includes(location.pathname)) {
-      navigate("/dashboard");
+      navigate("/home");
     }
   }, [isAuthenticated, location, navigate]);
 

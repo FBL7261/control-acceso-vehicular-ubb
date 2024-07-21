@@ -1,57 +1,70 @@
 import User from '../models/user.model.js';
-import Request from  '../models/request.model.js';
-import {handleError}  from '../utils/errorHandler.js';
-
+import Request from '../models/request.model.js';
+import PDFModel from "../models/pdf.model.js";
+import mongoose from 'mongoose';
+import { handleError } from '../utils/errorHandler.js';
 
 // CREATE
-async function createRequest(email, requestData) {
+async function createRequest(email, requestData, file) {
     try {
-        const user = await User.findOne({email});
+        const user = await User.findOne({ email });
         if (!user) {
             return [null, "Usuario no encontrado"];
         }
-        if (user.username !== requestData.user.username){
+        if (user.username !== requestData.username) {
             return [null, "El usuario no coincide con la persona autenticada"];
         }
-        if (user.rut !== requestData.user.rut){
+        if (user.rut !== requestData.rut) {
             return [null, "El rut no coincide con la persona autenticada"];
         }
-        if (user.email !== requestData.user.email){
+        if (user.email !== requestData.email) {
             return [null, "El email no coincide con la persona autenticada"];
         }
         const requestExistente = await Request.findOne({
-            "user.email": requestData.user.email,
-          });
-          if (requestExistente) {
+            email: requestData.email,
+        });
+        if (requestExistente) {
             return [null, "Ya existe una solicitud para esta persona"];
-          }
-         const newRequest = new Request({
-            user : {
-                username : requestData.user.username,
-                rut : requestData.user.rut,
-                email : requestData.user.email
-            },
-            state : requestData.state,
-         });
+        }
 
-         await newRequest.save();
-         return [newRequest, null];
+        const newRequest = new Request({
+            username: requestData.username,
+            rut: requestData.rut,
+            email: requestData.email,
+            description: requestData.description,
+            status: requestData.status || 'Pendiente', // Proporcionar un valor por defecto si no se proporciona
+        });
 
-    }catch(error){
+        await newRequest.save();
+
+        if (file) {
+            const newPDF = new PDFModel({
+                name: file.originalname,
+                filePath: file.path,
+                user: user._id,
+                nombre: user.username,
+            });
+
+            await newPDF.save();
+        }
+
+        return [newRequest, null];  // Asegúrate de devolver el objeto de la solicitud creada
+
+    } catch (error) {
         handleError(error, "request.service -> createRequest");
         return [null, "Error al crear la solicitud en servicio"];
     }
 }
 
 // DELETE
-async function deleteRequest(request) {
+async function deleteRequest(requestId) {
     try {
-        const deletedRequest = await Request.findByIdAndDelete(request);
+        const deletedRequest = await Request.findByIdAndDelete(requestId);
 
         return [deletedRequest, null];
     } catch (error) {
         handleError(error, "request.service -> deleteRequest");
-        return [null, "Error al eliminar la solicitud service"];
+        return [null, "Error al eliminar la solicitud en el servicio"];
     }
 }
 
@@ -66,37 +79,62 @@ async function updateRequest(id, requestUpdate) {
 
         Object.assign(request, requestUpdate);
 
-        const modifyRequest = await request.save();
+        const modifiedRequest = await request.save();
         
-        return [modifyRequest, null];
+        return [modifiedRequest, null];
     } catch (error) {
         handleError(error, "request.service -> updateRequest");
-        return [null, "Error al actualizar la solicitud service"];
+        return [null, "Error al actualizar la solicitud en el servicio"];
     }
 }
 
-// GET ALL
 async function getRequests() {
-    try {    
-
-        const requests = await Request.find();
+    try {
+        const requests = await Request.find().exec();
         return [requests, null];
-
-    }catch(error){
+    } catch (error) {
         handleError(error, "request.service -> getRequests");
-        return [null, "Error al obtener las solicitudes servicio"];
+        return [null, "Error al obtener las solicitudes en el servicio"];
     }
-
 }
 
-// GET BY ID
-async function getRequestById(request) {
+// GET PDFs FOR USER
+async function getPDFsForUser(userId) {
     try {
-        const requestFound = await Request.findById(request).populate('user');
-        return [requestFound, null];
-    }catch(error){
-        handleError(error, "request.service -> getRequestById");
-        return [null, "Error al obtener la solicitud por id servicio"];
+        const pdfs = await PDFModel.find({ user: userId }).exec();
+        return pdfs;
+    } catch (error) {
+        handleError(error, "request.service -> getPDFsForUser");
+        return [];
+    }
+}
+
+// GET REQUEST BY ID
+async function getRequestsByEmail(userEmail) {
+    try {
+      const requests = await Request.find({ email: userEmail });
+      if (!requests || requests.length === 0) {
+        return [[], "No hay solicitudes para este usuario"];
+      }
+      return [requests, null];
+    } catch (error) {
+      handleError(error, "request.service -> getRequestsByEmail");
+      return [null, "Error al obtener las solicitudes en el servicio"];
+    }
+  }
+
+// Update Status Request
+async function updateRequestStatus(requestId, newStatus) {
+    try {
+        const request = await Request.findByIdAndUpdate(requestId, { status: newStatus }, { new: true });
+
+        if (!request) {
+            throw new Error("Solicitud no encontrada");
+        }
+
+        return request;
+    } catch (error) {
+        throw new Error("Error al actualizar el estado de la solicitud");
     }
 }
 
@@ -104,6 +142,8 @@ export default {
     createRequest,
     deleteRequest,
     getRequests,
-    getRequestById,
+    getRequestsByEmail,
     updateRequest,
+    updateRequestStatus,
+    getPDFsForUser,
 };

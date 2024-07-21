@@ -1,50 +1,21 @@
 "use strict";
 
 import { respondSuccess, respondError } from "../utils/resHandler.js";
-import  {handleError}  from "../utils/errorHandler.js";
-
-/** Servicios de autenticación */
+import { handleError } from "../utils/errorHandler.js";
 import AuthService from "../services/auth.service.js";
-import { authLoginBodySchema } from "../schema/auth.schema.js";
 
-/**
- * Inicia sesión con un usuario.
- * @async
- * @function login
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
 async function login(req, res) {
   try {
-    const { body } = req;
-    const { error: bodyError } = authLoginBodySchema.validate(body);
-    if (bodyError) return respondError(req, res, 400, bodyError.message);
-
-    const [accessToken, refreshToken, errorToken] =
-      await AuthService.login(body);
-
-    if (errorToken) return respondError(req, res, 400, errorToken);
-
-    // * Existen mas opciones de seguirdad para las cookies *//
-    res.cookie("jwt", refreshToken, {
-      httpOnly: true,
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 días
-    });
-
-    respondSuccess(req, res, 200, { accessToken });
+    const { email, password } = req.body;
+    const user = { email, password };
+    const tokens = await AuthService.login(user);
+    respondSuccess(req, res, 200, tokens);
   } catch (error) {
     handleError(error, "auth.controller -> login");
     respondError(req, res, 400, error.message);
   }
 }
 
-/**
- * @name logout
- * @description Cierra la sesión del usuario
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- * @returns
- */
 async function logout(req, res) {
   try {
     const cookies = req.cookies;
@@ -57,12 +28,6 @@ async function logout(req, res) {
   }
 }
 
-/**
- * @name refresh
- * @description Refresca el token de acceso
- * @param {Object} req - Objeto de petición
- * @param {Object} res - Objeto de respuesta
- */
 async function refresh(req, res) {
   try {
     const cookies = req.cookies;
@@ -79,8 +44,21 @@ async function refresh(req, res) {
   }
 }
 
+async function profile(req, res) {
+  try {
+    console.log("Email en el controlador:", req.email); // Añade este log
+    const userProfile = await AuthService.getProfile(req.email);
+    if (!userProfile) return respondError(req, res, 404, "Perfil no encontrado");
+    respondSuccess(req, res, 200, userProfile);
+  } catch (error) {
+    handleError(error, "auth.controller -> profile");
+    respondError(req, res, 400, error.message);
+  }
+}
+
 export default {
   login,
   logout,
   refresh,
+  profile,
 };

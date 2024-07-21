@@ -1,22 +1,23 @@
-// frontend/src/routes/Profile.jsx
+// src/pages/Profile.jsx
+
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import Form from "../components/Form";
 import Navbar from "../components/Navbar";
-import { profile as fetchProfile } from "../services/auth.service";
+import authService from "../services/auth.service";
 
 const Profile = () => {
   const [userProfile, setUserProfile] = useState({
     username: '',
     email: '',
-    rut: ''
+    rut: '',
+    rolName: ''
   });
 
   useEffect(() => {
-    async function dataProfile() {  
+    async function dataProfile(){  
       try {
-        const data = await fetchProfile();
-        setUserProfile(data.data); // Ajusta según la estructura de tu respuesta
+        const data = await authService.profile();
+        setUserProfile(data);
       } catch (error) {
         console.error("Error fetching profile:", error);
       }
@@ -30,43 +31,40 @@ const Profile = () => {
       <div className="sections">
         <img className="profile_image" src="profile.png" alt="Imagen de perfil" />
         <div className="form">
-          <Form
-            backgroundColor="#FFFFFF"
-            title="Perfil"
-            fields={[
-              {
-                label: "Nombre de usuario",
-                name: "username",
-                type: "text",
-                value: userProfile.username,
-                disabled: true,
-              },
-              {
-                label: "Correo electrónico",
-                name: "email",
-                type: "email",
-                value: userProfile.email,
-                disabled: true,
-              },
-              {
-                label: "RUT",
-                name: "rut",
-                type: "text",
-                value: userProfile.rut,
-                disabled: true,
-              }
-              // Eliminado el campo rol
-            ]}
-          />
-        </div>
-        <div className="options">
-          <h2>Opciones de Vehículos</h2>
-          <ul>
-            <li><Link to="/create-vehicle">Crear Vehículo</Link></li>
-            <li><Link to="/update-vehicle">Actualizar Vehículo</Link></li>
-            <li><Link to="/delete-vehicle">Eliminar Vehículo</Link></li>
-            <li><Link to="/view-vehicles">Mis Vehículos</Link></li>
-          </ul>
+        <Form
+          backgroundColor="#FFFFFF"
+          title="Perfil"
+          fields={[
+            {
+              label: "Nombre de usuario",
+              name: "username",
+              type: "text",
+              value: userProfile.username,
+              disabled: true,
+            },
+            {
+              label: "Correo electrónico",
+              name: "email",
+              type: "email",
+              value: userProfile.email,
+              disabled: true,
+            },
+            {
+              label: "RUT",
+              name: "rut",
+              type: "text",
+              value: userProfile.rut,
+              disabled: true,
+            },
+            {
+              label: "Rol",
+              name: "role",
+              type: "text",
+              value: userProfile.rolName,
+              disabled: true,
+            },
+          ]}
+        />
         </div>
       </div>
     </main>
