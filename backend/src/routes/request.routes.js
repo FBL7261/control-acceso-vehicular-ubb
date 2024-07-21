@@ -11,7 +11,7 @@ import {
   updateRequest,
   getRequests,
   updateRequestStatus,
-  getRequestByEmail ,
+  getRequestsByUserEmail   ,
 } from "../controllers/request.controller.js";
 
 router.use(authenticationMiddleware);
@@ -21,6 +21,6 @@ router.delete('/:id', isAdmin, deleteRequest);
 router.put('/:id', updateRequest);
 router.get('/', isAdmin, getRequests);
 router.put('/newstate/:id', isAdmin, updateRequestStatus);
-router.get('/user', getRequestByEmail );
+router.get('/user', getRequestsByUserEmail   );
 
 export default router;

@@ -109,17 +109,39 @@ async function getPDFsForUser(userId) {
     }
 }
 
-// GET REQUEST BY ID
-async function getRequestsByEmail(userEmail) {
+// GET REQUESTS BY USER EMAIL
+async function getRequestsByUserEmail(email) {
+    console.log(`Buscando solicitudes para el email: ${email}`);
     try {
-      const requests = await Request.find({ email: userEmail });
+      const requests = await Request.find({ email: email });
+      console.log(`Solicitudes encontradas: ${JSON.stringify(requests, null, 2)}`);
       if (!requests || requests.length === 0) {
         return [[], "No hay solicitudes para este usuario"];
       }
+  
       return [requests, null];
     } catch (error) {
-      handleError(error, "request.service -> getRequestsByEmail");
-      return [null, "Error al obtener las solicitudes en el servicio"];
+      handleError(error, "request.service -> getRequestsByUserEmail");
+      console.error("Error al obtener las solicitudes en el servicio", error);
+      return [[], "Error al obtener las solicitudes en el servicio"];
+    }
+  }
+  
+  // GET PDFs BY USER ID
+  async function getPDFsByUserId(userId) {
+    console.log(`Buscando PDFs para el user ID: ${userId}`);
+    try {
+      const pdfs = await PDFModel.find({ user: userId });
+      console.log(`PDFs encontrados: ${JSON.stringify(pdfs, null, 2)}`);
+      if (!pdfs || pdfs.length === 0) {
+        return [[], "No hay PDFs para este usuario"];
+      }
+  
+      return [pdfs, null];
+    } catch (error) {
+      handleError(error, "request.service -> getPDFsByUserId");
+      console.error("Error al obtener los PDFs en el servicio", error);
+      return [[], "Error al obtener los PDFs en el servicio"];
     }
   }
 
@@ -142,8 +164,9 @@ export default {
     createRequest,
     deleteRequest,
     getRequests,
-    getRequestsByEmail,
+    getRequestsByUserEmail,
     updateRequest,
     updateRequestStatus,
     getPDFsForUser,
+    getPDFsByUserId,
 };

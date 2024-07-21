@@ -89,17 +89,38 @@ export async function getRequests(req, res) {
     }
 }
 
-// GET REQUEST BY ID
-export async function getRequestByEmail(req, res) {
+export async function getRequestsByUserEmail(req, res) {
+    console.log("Entrando en getRequestsByUserEmail");
     try {
-      const userEmail = req.email;
-      const [requests, error] = await requestService.getRequestsByEmail(userEmail);
+      const email = req.email; // Obteniendo el email del usuario autenticado
+      const userId = req.userId; // Obteniendo el userId del usuario autenticado
+      console.log(`Email del usuario autenticado: ${email}`);
+      console.log(`ID del usuario autenticado: ${userId}`);
+  
+      const [requests, error] = await requestService.getRequestsByUserEmail(email);
+  
       if (error) {
         return respondError(req, res, 400, error);
       }
-      return respondSuccess(req, res, 200, requests);
+      console.log(`Solicitudes encontradas: ${JSON.stringify(requests, null, 2)}`);
+  
+      // Obtener los PDFs asociados a las solicitudes
+      const [pdfs, pdfError] = await requestService.getPDFsByUserId(userId);
+      if (pdfError) {
+        return respondError(req, res, 400, pdfError);
+      }
+      console.log(`PDFs encontrados: ${JSON.stringify(pdfs, null, 2)}`);
+  
+      // Añadir los PDFs correspondientes a cada solicitud
+      const requestsWithPDFs = requests.map(request => ({
+        ...request.toObject(),
+        pdfs: pdfs.filter(pdf => pdf.user.equals(userId))
+      }));
+      console.log(`Solicitudes con PDFs: ${JSON.stringify(requestsWithPDFs, null, 2)}`);
+  
+      return respondSuccess(req, res, 200, { data: requestsWithPDFs });
     } catch (error) {
-      handleError(error, "request.controller -> getRequestByEmail");
+      handleError(error, "request.controller -> getRequestsByUserEmail");
       return respondError(req, res, 500, 'Error al obtener las solicitudes');
     }
   }

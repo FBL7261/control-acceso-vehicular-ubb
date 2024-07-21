@@ -1,16 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import requestService from '../services/request.service';
-import { getCurrentUser } from '../services/auth.service';
+import '../styles/UserRequests.css'; // Importar el archivo CSS
 
 const UserRequests = () => {
   const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        const requests = await requestService.getRequestsByEmail();
+        console.log('Iniciando fetch de solicitudes...');
+        const response = await requestService.getRequestsByUserEmail();
+        const requests = response.data;
+        console.log('Solicitudes recibidas:', requests);
         if (Array.isArray(requests)) {
           setRequests(requests);
         } else {
@@ -27,15 +32,16 @@ const UserRequests = () => {
   }, []);
 
   if (isLoading) {
-    return <div>Cargando...</div>;
+    return <div className="loading">Cargando...</div>;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="error">Error: {error}</div>;
   }
 
   return (
-    <div>
+    <div className="user-requests">
+      <button className="back-button" onClick={() => navigate(-1)}>Volver</button>
       <h2>Mis Solicitudes</h2>
       <ul>
         {requests.map((request) => (
