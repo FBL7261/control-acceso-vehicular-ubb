@@ -1,45 +1,68 @@
-import React, { useState, useEffect } from 'react';
-import { getRequests } from '../services/request.service';
+import React, { useEffect, useState } from 'react';
+import requestService from '../services/request.service';
+import { getCurrentUser } from '../services/auth.service';
 
 const RequestList = () => {
-  const [requests, setRequests] = useState([]);
-  const [error, setError] = useState('');
+    const [requests, setRequests] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [isAdmin, setIsAdmin] = useState(false);
 
-  useEffect(() => {
-    const fetchRequests = async () => {
-      try {
-        const response = await getRequests();
-        // Aplanar el array de arrays y filtrar elementos nulos
-        const validRequests = response.flat().filter(request => request && request.user);
-        setRequests(validRequests);
-      } catch (error) {
-        setError('Failed to fetch requests');
-      }
-    };
+    useEffect(() => {
+        const currentUser = getCurrentUser();
 
-    fetchRequests();
-  }, []);
+        if (currentUser && currentUser.roles && currentUser.roles.includes('admin')) {
+            setIsAdmin(true);
+            requestService.getRequests().then(
+                (response) => {
+                    if (response.data && Array.isArray(response.data.data)) {
+                        setRequests(response.data.data);
+                    } else {
+                        setError('La respuesta del servidor no es un array.');
+                    }
+                    setIsLoading(false);
+                },
+                (error) => {
+                    setError(error.message);
+                    setIsLoading(false);
+                }
+            );
+        } else {
+            setIsAdmin(false);
+            setIsLoading(false);
+        }
+    }, []);
 
-  return (
-    <div>
-      <h1>Requests</h1>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
-      <ul>
-        {requests.length > 0 ? (
-          requests.map((request, index) => (
-            <li key={index}>
-              <p>User: {request.user.username}</p>
-              <p>RUT: {request.user.rut}</p>
-              <p>Email: {request.user.email}</p>
-              <p>Description: {request.description}</p>
-            </li>
-          ))
-        ) : (
-          <p>No valid requests found.</p>
-        )}
-      </ul>
-    </div>
-  );
+    if (isLoading) {
+        return <div>Cargando...</div>;
+    }
+
+    if (!isAdmin) {
+        return <div>No tienes permisos para ver esta página</div>;
+    }
+
+    if (error) {
+        return <div>Error: {error}</div>;
+    }
+
+    return (
+        <div>
+            <h2>Lista de Solicitudes</h2>
+            <ul>
+                {requests.map((request) => (
+                    <li key={request._id}>
+                        <strong>ID:</strong> {request._id}<br />
+                        <strong>Username:</strong> {request.username}<br />
+                        <strong>RUT:</strong> {request.rut}<br />
+                        <strong>Email:</strong> {request.email}<br />
+                        <strong>Description:</strong> {request.description}<br />
+                        <strong>Status:</strong> {request.status}<br />
+                        <strong>Created At:</strong> {new Date(request.createdAt).toLocaleString()}<br />
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 };
 
 export default RequestList;

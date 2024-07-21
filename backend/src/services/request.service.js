@@ -91,7 +91,7 @@ async function updateRequest(id, requestUpdate) {
 // GET ALL
 async function getRequests() {
     try {
-        const requests = await Request.find();
+        const requests = await Request.find().exec();
         return [requests, null];
     } catch (error) {
         handleError(error, "request.service -> getRequests");

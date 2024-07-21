@@ -17,16 +17,9 @@ export const login = async ({ email, password }) => {
       localStorage.setItem('user', JSON.stringify(decodedToken)); // Almacena el usuario en localStorage
       sessionStorage.setItem('token', data.data.accessToken); // Almacena el token en sessionStorage
 
-      const userId = decodedToken.id || decodedToken.userId || decodedToken.sub; // Ajusta según la estructura de tu token
-      if (userId) {
-        sessionStorage.setItem('userId', userId); // Almacena el userId en sessionStorage
-        console.log('User ID almacenado en sessionStorage:', userId); // Verificación de almacenamiento
-      } else {
-        console.error('User ID no encontrado en el token');
-      }
-
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.accessToken}`;
     }
+    return response; // Asegúrate de devolver la respuesta
   } catch (error) {
     console.error('Error al iniciar sesión:', error); // Log de errores
     throw new Error(error);
@@ -38,5 +31,8 @@ export const logout = () => {
   delete axios.defaults.headers.common['Authorization'];
   cookies.remove('jwt');
   sessionStorage.removeItem('token'); // Elimina el token de sessionStorage
-  sessionStorage.removeItem('userId'); // Elimina el userId de sessionStorage
+};
+
+export const getCurrentUser = () => {
+  return JSON.parse(localStorage.getItem('user'));
 };
