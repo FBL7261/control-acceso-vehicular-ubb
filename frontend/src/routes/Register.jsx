@@ -1,17 +1,23 @@
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import register from '../services/auth.service.js';
-import Form from "../components/Form";
-import ImgLogo from "../components/ImgLogo";
+import { register } from '../services/auth.service'; // Asegúrate de importar correctamente el servicio de registro
+import Form from './Form';
+import ImgLogo from './ImgLogo';
 
 const Register = () => {
-
     const navigate = useNavigate();
 
-    const registerSubmit = (data) => {
-        register(data).then(() => {
-            navigate('/')
-        })
-    }
+    const registerSubmit = async (data) => {
+        try {
+            const response = await register(data);
+            if (response.data) {
+                sessionStorage.setItem('usuario', JSON.stringify(response.data)); // Guarda el usuario en sessionStorage
+                navigate('/home');
+            }
+        } catch (error) {
+            console.error('Error al registrar:', error);
+        }
+    };
 
     return (
         <main className="container">

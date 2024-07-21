@@ -1,7 +1,6 @@
 "use strict";
-/** Modulo 'jsonwebtoken' para crear tokens */
 import jwt from "jsonwebtoken";
-
+import bcrypt from "bcrypt";
 import { ACCESS_JWT_SECRET, REFRESH_JWT_SECRET } from "../config/configEnv.js";
 import { handleError } from "../utils/errorHandler.js";
 import User from "../models/user.model.js";
@@ -17,6 +16,12 @@ async function login(user) {
     const userFound = await User.findOne({ email: user.email }).populate("roles").exec();
     if (!userFound) {
       throw new Error("Usuario no encontrado");
+    }
+
+    // Verificar la contraseña
+    const isPasswordValid = await bcrypt.compare(user.password, userFound.password);
+    if (!isPasswordValid) {
+      throw new Error("Contraseña incorrecta");
     }
 
     if (!Array.isArray(userFound.roles)) {

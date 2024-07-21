@@ -19,6 +19,20 @@ export const createRequest = async (data) => {
   }
 };
 
+const getRequests = async () => {
+  try {
+    const response = await axios.get(API_URL, {
+      headers: {
+        'Authorization': `Bearer ${getAuthToken()}`
+      }
+    });
+    return response; // Devolver la respuesta completa
+  } catch (error) {
+    console.error('Error fetching requests:', error.response ? error.response.data : error.message);
+    throw error;
+  }
+};
+
 export const getRequestsByEmail = async (email) => {
   try {
     const response = await axios.get(`${API_URL}/user?email=${encodeURIComponent(email)}`, {
@@ -61,3 +75,8 @@ export const deleteRequest = async (id) => {
     throw error;
   }
 };
+
+
+export default {
+  getRequests
+}
