@@ -88,7 +88,6 @@ async function updateRequest(id, requestUpdate) {
     }
 }
 
-// GET ALL
 async function getRequests() {
     try {
         const requests = await Request.find().exec();
@@ -99,22 +98,30 @@ async function getRequests() {
     }
 }
 
-// GET REQUEST BY ID
-async function getRequestById(requestId) {
+// GET PDFs FOR USER
+async function getPDFsForUser(userId) {
     try {
-        if (!mongoose.Types.ObjectId.isValid(requestId)) {
-            return [null, "Invalid Request ID"];
-        }
-        const request = await Request.findById(requestId);
-        if (!request) {
-            return [null, "Solicitud no encontrada"];
-        }
-        return [request, null];
+        const pdfs = await PDFModel.find({ user: userId }).exec();
+        return pdfs;
     } catch (error) {
-        handleError(error, "request.service -> getRequestById");
-        return [null, "Error al obtener la solicitud en el servicio"];
+        handleError(error, "request.service -> getPDFsForUser");
+        return [];
     }
 }
+
+// GET REQUEST BY ID
+async function getRequestsByEmail(userEmail) {
+    try {
+      const requests = await Request.find({ email: userEmail });
+      if (!requests || requests.length === 0) {
+        return [[], "No hay solicitudes para este usuario"];
+      }
+      return [requests, null];
+    } catch (error) {
+      handleError(error, "request.service -> getRequestsByEmail");
+      return [null, "Error al obtener las solicitudes en el servicio"];
+    }
+  }
 
 // Update Status Request
 async function updateRequestStatus(requestId, newStatus) {
@@ -131,27 +138,12 @@ async function updateRequestStatus(requestId, newStatus) {
     }
 }
 
-// GET REQUESTS BY USER EMAIL
-async function getRequestsByUserEmail(email) {
-    try {
-        const requests = await Request.find({ email: email });
-        if (!requests) {
-            return [null, "No se encontraron solicitudes para este usuario"];
-        }
-        return [requests, null];
-    } catch (error) {
-        handleError(error, "request.service -> getRequestsByUserEmail");
-        return [null, "Error al obtener las solicitudes del usuario en el servicio"];
-    }
-}
-
-
 export default {
     createRequest,
     deleteRequest,
     getRequests,
-    getRequestById,
+    getRequestsByEmail,
     updateRequest,
     updateRequestStatus,
-    getRequestsByUserEmail,
+    getPDFsForUser,
 };

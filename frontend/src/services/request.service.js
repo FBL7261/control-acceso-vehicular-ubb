@@ -26,25 +26,25 @@ const getRequests = async () => {
         'Authorization': `Bearer ${getAuthToken()}`
       }
     });
-    return response; // Devolver la respuesta completa
+    return response;  // Devolver la respuesta completa
   } catch (error) {
     console.error('Error fetching requests:', error.response ? error.response.data : error.message);
     throw error;
   }
 };
 
-export const getRequestsByEmail = async (email) => {
+
+const getRequestsByEmail = async () => {
   try {
-    const response = await axios.get(`${API_URL}/user?email=${encodeURIComponent(email)}`, {
+    const response = await axios.get(`${API_URL}/user`, {
       headers: {
         'Authorization': `Bearer ${getAuthToken()}`
       }
     });
-    return [response.data, null];
+    return response.data;
   } catch (error) {
-    const errorMessage = error.response ? JSON.stringify(error.response.data) : error.message;
-    console.error('Error fetching requests:', errorMessage);
-    return [null, errorMessage];
+    console.error('Error fetching requests by email:', error.response ? error.response.data : error.message);
+    throw error;
   }
 };
 
@@ -78,5 +78,6 @@ export const deleteRequest = async (id) => {
 
 
 export default {
-  getRequests
+  getRequests,
+  getRequestsByEmail,
 }

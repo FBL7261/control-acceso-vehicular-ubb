@@ -2,6 +2,7 @@ import { respondSuccess, respondError } from "../utils/resHandler.js";
 import { handleError } from "../utils/errorHandler.js";
 import requestService from '../services/request.service.js';
 import { requestBodySchema } from '../schema/request.schema.js';
+import User from '../models/user.model.js';
 
 // CREATE
 export async function createRequest(req, res) {
@@ -71,7 +72,17 @@ export async function getRequests(req, res) {
         if (error) {
             return respondError(req, res, 400, error);
         }
-        return respondSuccess(req, res, 200, requests);
+        const requestsWithPDFs = await Promise.all(
+            requests.map(async (request) => {
+                const user = await User.findOne({ email: request.email });
+                if (!user) {
+                    throw new Error("Usuario no encontrado para la solicitud");
+                }
+                const pdfs = await requestService.getPDFsForUser(user._id);  // Utiliza el ID del usuario para obtener los PDFs
+                return { ...request.toObject(), pdfs };
+            })
+        );
+        return respondSuccess(req, res, 200, requestsWithPDFs);
     } catch (error) {
         handleError(error, "request.controller -> getRequests");
         return respondError(req, res, 500, 'Error al obtener las solicitudes');
@@ -79,20 +90,19 @@ export async function getRequests(req, res) {
 }
 
 // GET REQUEST BY ID
-export async function getRequestById(req, res) {
+export async function getRequestByEmail(req, res) {
     try {
-        const requestId = req.params.id;  // Obteniendo el ID de la solicitud desde los parámetros de la URL
-        console.log(`ID de solicitud recibido en el controlador: ${requestId}`);
-        const [request, error] = await requestService.getRequestById(requestId);
-        if (error) {
-            return respondError(req, res, 400, error);
-        }
-        return respondSuccess(req, res, 200, request);
+      const userEmail = req.email;
+      const [requests, error] = await requestService.getRequestsByEmail(userEmail);
+      if (error) {
+        return respondError(req, res, 400, error);
+      }
+      return respondSuccess(req, res, 200, requests);
     } catch (error) {
-        handleError(error, "request.controller -> getRequestById");
-        return respondError(req, res, 500, 'Error al obtener la solicitud');
+      handleError(error, "request.controller -> getRequestByEmail");
+      return respondError(req, res, 500, 'Error al obtener las solicitudes');
     }
-}
+  }
 
 export async function updateRequestStatus(req, res) {
     const requestId = req.params.id;
@@ -109,20 +119,5 @@ export async function updateRequestStatus(req, res) {
     } catch (error) {
         handleError(error, "request.controller -> updateRequestStatus");
         return respondError(req, res, 500, "Error al actualizar el estado de la solicitud");
-    }
-}
-
-// GET REQUESTS BY USER EMAIL
-export async function getRequestsByEmail(req, res) {
-    try {
-        const email = req.email;  // Obteniendo el email del usuario autenticado desde el token
-        const [requests, error] = await requestService.getRequestsByUserEmail(email);
-        if (error) {
-            return respondError(req, res, 400, error);
-        }
-        return respondSuccess(req, res, 200, requests);
-    } catch (error) {
-        handleError(error, "request.controller -> getRequestsByEmail");
-        return respondError(req, res, 500, 'Error al obtener las solicitudes del usuario');
     }
 }

@@ -19,9 +19,9 @@ export const login = async ({ email, password }) => {
 
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.accessToken}`;
     }
-    return response; // Asegúrate de devolver la respuesta
+    return response;
   } catch (error) {
-    console.error('Error al iniciar sesión:', error); // Log de errores
+    console.error('Error al iniciar sesión:', error);
     throw new Error(error);
   }
 };
