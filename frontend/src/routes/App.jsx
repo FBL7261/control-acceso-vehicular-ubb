@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import { Route, Routes, Navigate } from 'react-router-dom';
 import Home from './Home';
 import Login from './Login';
 import CreateRequest from '../components/CreateRequest';
@@ -18,12 +18,12 @@ import VehiclesPage from '../pages/VehiclesPage';
 
 const App = () => {
   return (
-    <Router>
       <AuthProvider>
         <Routes>
           <Route path="/auth/login" element={<Login />} />
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/vehicles" element={<VehiclesPage />} />
+          <Route path="/vehicles/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />
           <Route path="/create-request" element={<ProtectedRoute><CreateRequest /></ProtectedRoute>} />
           <Route path="/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />
           <Route path="/vehicles/delete/:vehicleId" element={<DeleteVehiclePage />} />
@@ -35,7 +35,6 @@ const App = () => {
           <Route path="*" element={<Error404 />} />
         </Routes>
       </AuthProvider>
-    </Router>
   );
 };
 
