@@ -7,7 +7,10 @@ import UserRequests from '../components/UserRequests';
 import RequestList from '../components/RequestList';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { AuthProvider } from '../context/AuthContext';
-import CreateVehicle from '../pages/CreateVehicle';
+import CreateVehicle from '../pages/CreateVehicle'; 
+import VehicleList from '../components/VehicleList';
+import UpdateVehiclePage from '../pages/UpdateVehiclePage';
+import DeleteVehiclePage from '../pages/DeleteVehiclePage';
 import UserVehicles from '../pages/UserVehicles';
 import Error404 from './Error404';
 import Profile from './Profile';
@@ -19,8 +22,10 @@ const App = () => {
         <Routes>
           <Route path="/auth/login" element={<Login />} />
           <Route path="/home" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+          <Route path="/vehicles" element={<VehicleList />} />
           <Route path="/create-request" element={<ProtectedRoute><CreateRequest /></ProtectedRoute>} />
           <Route path="/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />
+          <Route path="/vehicles/delete/:vehicleId" element={<DeleteVehiclePage />} />
           <Route path="/my-vehicles" element={<ProtectedRoute><UserVehicles /></ProtectedRoute>} />
           <Route path="/requests" element={<ProtectedRoute><UserRequests /></ProtectedRoute>} />
           <Route path="/admin/requests" element={<ProtectedRoute allowedRoles={['admin']}><RequestList /></ProtectedRoute>} />

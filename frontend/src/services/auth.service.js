@@ -9,20 +9,26 @@ export const login = async ({ email, password }) => {
       email,
       password,
     });
+
     console.log('Respuesta del servidor:', response); // Log de la respuesta
     const { status, data } = response;
+
     if (status === 200) {
       const decodedToken = jwtDecode(data.data.accessToken);
       console.log('Decoded Token:', decodedToken); // Verifica qué contiene el token decodificado
-      localStorage.setItem('user', JSON.stringify(decodedToken)); // Almacena el usuario en localStorage
-      sessionStorage.setItem('token', data.data.accessToken); // Almacena el token en sessionStorage
 
+      // Almacena el usuario en localStorage y el token en sessionStorage
+      localStorage.setItem('user', JSON.stringify(decodedToken));
+      sessionStorage.setItem('token', data.data.accessToken);
+
+      // Configura el token en los headers de axios
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.accessToken}`;
     }
+
     return response;
   } catch (error) {
     console.error('Error al iniciar sesión:', error);
-    throw new Error(error);
+    throw error; // Propaga el error para manejarlo en el componente
   }
 };
 
@@ -34,15 +40,11 @@ export const logout = () => {
 };
 
 export const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem('user'));
+  return JSON.parse(localStorage.getItem('user')) || null;
 };
 
 export default {
-
   login,
-
   logout,
-
   getCurrentUser,
-
 };

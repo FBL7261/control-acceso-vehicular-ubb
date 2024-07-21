@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import vehicleService from '../services/vehicle.service';
+import vehicleService from '../services/vehicle.service'; // Asegúrate de importar el servicio correctamente
 
 function VehicleForm({ onSubmit, initialData = {} }) {
   const [vehicle, setVehicle] = useState({
@@ -21,7 +21,12 @@ function VehicleForm({ onSubmit, initialData = {} }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    await onSubmit(vehicle);
+    try {
+      await vehicleService.createVehicle(vehicle);
+      if (onSubmit) onSubmit(); // Llama a onSubmit si se pasa
+    } catch (error) {
+      console.error("Error submitting vehicle:", error);
+    }
   };
 
   return (
