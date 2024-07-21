@@ -1,54 +1,55 @@
 "use strict";
-// Import the 'mongoose' module to create the database connection
+// Importar el módulo 'mongoose' para crear la conexión con la base de datos
 import mongoose from "mongoose";
 import bcrypt from "bcryptjs";
 
-// Create the 'users' collection schema
-const userSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-    },
-    rut: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    password: {
-      type: String,
-      required: true,
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true,
-    },
-    roles: [
-      {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Role",
-      },
-    ],
+// Definir el esquema del usuario
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
   },
-  {
-    versionKey: false,
+  rut: {
+    type: String,
+    required: true,
+    unique: true,
   },
-);
+  password: {
+    type: String,
+    required: true,
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  roles: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Role",
+    },
+  ],
+  vehicles: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Vehicle", // Referencia al modelo de vehículos
+    },
+  ],
+}, {
+  versionKey: false,
+});
 
-/** Encrypts the user's password */
+// Métodos para encriptar y comparar contraseñas
 userSchema.statics.encryptPassword = async (password) => {
   const salt = await bcrypt.genSalt(10);
   return await bcrypt.hash(password, salt);
 };
 
-/** Compares the user's password */
-userSchema.statics.comparePassword = async (password, receivedPassword) => {
-  return await bcrypt.compare(password, receivedPassword);
+userSchema.statics.comparePassword = (password, receivedPassword) => {
+  return bcrypt.compare(password, receivedPassword);
 };
 
-/** 'User' data model */
+// Crear el modelo de usuario
 const User = mongoose.model("User", userSchema);
 
-// Export the 'User' data model
 export default User;

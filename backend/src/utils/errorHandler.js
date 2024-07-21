@@ -5,7 +5,7 @@
  * @param {Object} error Objecto con las especificaciones del error
  * @param {String} msg Mensaje para dar contexto al error
  */
-async function handleFatalError(error, msg) {
+function handleFatalError(error, msg) {
   console.log("[FATAL ERROR] Apagando servidor \n", msg);
   console.error(error);
   process.exit(1);
@@ -16,12 +16,9 @@ async function handleFatalError(error, msg) {
  * @param {Object} error Objecto con las especificaciones del error
  * @param {String} msg Mensaje para dar contexto al error
  */
-async function handleError(error, msg) {
+function handleError(error, msg) {
   console.log("❌ [ERROR] A ocurrido un error en: \n📁", msg);
   console.error("🗯  " + error.message);
 }
 
-export { 
-  handleFatalError, 
-  handleError,
-};
+export { handleFatalError, handleError };
