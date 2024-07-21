@@ -1,13 +1,13 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
-import { logout, getCurrentUser } from '../services/auth.service.js';
+import { logout } from '../services/auth.service.js';
+import { useAuth } from '../context/AuthContext.jsx';
 
 const Navbar = () => {
     const location = useLocation();
     const navigate = useNavigate();
-
-    const storedUser = getCurrentUser();
-    const userRole = storedUser?.roles?.[0]; // Ajusta según la estructura de tu objeto de usuario
+    const { isAuthenticated, user } = useAuth();
+    const userRole = user?.roles?.[0]; // Ajusta según la estructura de tu objeto de usuario
 
     const logoutSubmit = async () => {
         try {
@@ -21,22 +21,32 @@ const Navbar = () => {
     return (
         <nav className="navbar">
             <ul>
-                <li className={location.pathname === "/home" ? "active" : ""}>
-                    <NavLink to="/home">Inicio</NavLink>
-                </li>
-                {userRole === 'admin' && (
+                {isAuthenticated && (
                     <>
-                        <li className={location.pathname === "/admin/requests" ? "active" : ""}>
-                            <NavLink to="/admin/requests">Solicitudes</NavLink>
+                        <li className={location.pathname === "/home" ? "active" : ""}>
+                            <NavLink to="/home">Inicio</NavLink>
+                        </li>
+                        {userRole === 'admin' && (
+                            <li className={location.pathname === "/admin/requests" ? "active" : ""}>
+                                <NavLink to="/admin/requests">Solicitudes</NavLink>
+                            </li>
+                        )}
+                        <li className={location.pathname === "/create-request" ? "active" : ""}>
+                            <NavLink to="/create-request">Crear Solicitud</NavLink>
+                        </li>
+                        <li className={location.pathname === "/vehicles" ? "active" : ""}>
+                            <NavLink to="/vehicles">Vehículos</NavLink>
+                        </li>
+                        <li className={location.pathname === "/" ? "active" : ""}>
+                            <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
                         </li>
                     </>
                 )}
-                <li className={location.pathname === "/create-request" ? "active" : ""}>
-                    <NavLink to="/create-request">Crear Solicitud</NavLink>
-                </li>
-                <li className={location.pathname === "/" ? "active" : ""}>
-                    <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
-                </li>
+                {!isAuthenticated && (
+                    <li className={location.pathname === "/auth/login" ? "active" : ""}>
+                        <NavLink to="/auth/login">Iniciar Sesión</NavLink>
+                    </li>
+                )}
             </ul>
         </nav>
     );
