@@ -1,6 +1,7 @@
+// frontend/src/components/CreateVehicle.jsx
 import React, { useState } from 'react';
-import axios from '../services/root.service';
 import { useNavigate } from 'react-router-dom';
+import { createVehicle } from '../services/vehicle.service';
 
 const CreateVehicle = () => {
   const [formData, setFormData] = useState({
@@ -29,23 +30,12 @@ const CreateVehicle = () => {
     setError(null);
 
     try {
-      const user = JSON.parse(localStorage.getItem('user')); // Obtener el usuario autenticado del localStorage
-      if (!user || !user._id) {
-        throw new Error('Usuario no autenticado');
-      }
-
       const formDataToSend = new FormData();
       for (const key in formData) {
         formDataToSend.append(key, formData[key]);
       }
 
-      await axios.post(`/vehicles/user/${user._id}`, formDataToSend, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${localStorage.getItem('accessToken')}`, // Asegúrate de enviar el token de acceso
-        },
-      });
-
+      await createVehicle(formDataToSend);
       navigate('/my-vehicles');
     } catch (error) {
       setError(`Error al crear el vehículo: ${error.response?.data?.message || error.message}`);
