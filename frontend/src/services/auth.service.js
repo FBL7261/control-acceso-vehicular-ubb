@@ -36,3 +36,13 @@ export const logout = () => {
 export const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem('user'));
 };
+
+export default {
+
+  login,
+
+  logout,
+
+  getCurrentUser,
+
+};

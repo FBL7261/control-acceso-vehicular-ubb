@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import vehicleService from '../services/vehicleService';
+import vehicleService from '../services/vehicle.service';
 
 function VehicleForm({ onSubmit, initialData = {} }) {
   const [vehicle, setVehicle] = useState({

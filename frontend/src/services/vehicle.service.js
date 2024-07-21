@@ -9,3 +9,8 @@ export const getUserVehicles = async () => {
     throw error;
   }
 };
+
+// Exportar el objeto con las funciones que deseas exportar
+export default {
+  getUserVehicles,
+};
