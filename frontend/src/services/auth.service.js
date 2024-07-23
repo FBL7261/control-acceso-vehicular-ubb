@@ -20,6 +20,7 @@ export const login = async ({ email, password }) => {
       // Almacena el usuario en localStorage y el token en sessionStorage
       localStorage.setItem('user', JSON.stringify(decodedToken));
       sessionStorage.setItem('token', data.data.accessToken);
+      sessionStorage.setItem('userId', decodedToken.userId); // Store userId in session storage
 
       // Configura el token en los headers de axios
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.accessToken}`;
@@ -37,10 +38,12 @@ export const logout = () => {
   delete axios.defaults.headers.common['Authorization'];
   cookies.remove('jwt');
   sessionStorage.removeItem('token'); // Elimina el token de sessionStorage
+  sessionStorage.removeItem('userId'); // Elimina el userId de sessionStorage
 };
 
 export const getCurrentUser = () => {
   return JSON.parse(localStorage.getItem('user')) || null;
+ 
 };
 
 export default {

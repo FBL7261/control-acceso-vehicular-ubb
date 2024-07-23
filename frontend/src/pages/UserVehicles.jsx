@@ -7,6 +7,7 @@ const UserVehicles = () => {
 
   useEffect(() => {
     const userIdFromSession = sessionStorage.getItem('userId');
+    console.log('User ID from session:', userIdFromSession); // Debug log
     setUserId(userIdFromSession);
   }, []);
 
@@ -15,6 +16,7 @@ const UserVehicles = () => {
       if (!userId) return;
       try {
         const data = await getUserVehicles(userId);
+        console.log('Fetched vehicles:', data); // Debug log
         setVehicles(data);
       } catch (error) {
         console.error('Error al obtener los vehículos:', error);
