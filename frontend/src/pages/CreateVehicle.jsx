@@ -1,5 +1,6 @@
 import React from 'react';
 import VehicleForm from '../components/VehicleForm';
+import '../styles/CreateVehicle.css'; // Asegúrate de que la ruta sea correcta
 
 const CreateVehicle = () => {
   const handleVehicleCreated = () => {
@@ -8,7 +9,7 @@ const CreateVehicle = () => {
   };
 
   return (
-    <div>
+    <div className="create-vehicle-container">
       <h1>Crear Vehículo</h1>
       <VehicleForm onSubmit={handleVehicleCreated} />
     </div>

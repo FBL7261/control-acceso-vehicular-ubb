@@ -45,7 +45,6 @@ build/Release
 
 # Dependency directories
 backend/node_modules/
-backend/upload/
 frontend/node_modules/
 jspm_packages/
 
@@ -160,3 +159,12 @@ frontend/.env*.local
 
 # vercel
 frontend/.vercel
+
+# Ignorar todos los archivos de imagen en backend/src/upload
+/src/upload/*.jpg
+/src/upload/*.jpeg
+/src/upload/*.png
+/src/upload/*.gif
+/src/upload/*.bmp
+/src/upload/*.webp
+/src/upload/*.svg
