@@ -1,8 +1,17 @@
-import axios from './root.service'; // Asegúrate de importar axios desde la configuración correcta
+import axios from 'axios';
 
-export const getUserVehicles = async () => {
+const API_URL = 'http://localhost:3000/api/vehicles';
+
+const getAuthToken = () => sessionStorage.getItem('token');
+
+export const getUserVehicles = async (userId) => {
   try {
-    const response = await axios.get('/api/vehicles');
+    const response = await axios.get(`/api/vehicles/user/${userId}`, {
+      headers: {
+        'Authorization':  `Bearer ${getAuthToken()}`
+      },
+      withCredentials: true
+    });
     return response.data;
   } catch (error) {
     console.error('Error fetching user vehicles:', error);
@@ -10,25 +19,25 @@ export const getUserVehicles = async () => {
   }
 };
 
-// Agregar la función para crear un vehículo
 export const createVehicle = async (vehicleData) => {
   try {
     const formData = new FormData();
     for (const key in vehicleData) {
       formData.append(key, vehicleData[key]);
     }
-    const response = await axios.post('/api/vehicles', formData, {
+    const response = await axios.post(API_URL, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${getAuthToken()}`
       },
+      withCredentials: true
     });
     return response.data;
   } catch (error) {
-    console.error('Error creating vehicle:', error);
+    console.error('Error creando vehiculo:', error.response ? error.response.data : error.message);
     throw error;
   }
 };
-
 export default {
   getUserVehicles,
   createVehicle,
