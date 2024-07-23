@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import vehicleService from '../services/vehicle.service'; // Asegúrate de importar el servicio correctamente
+import vehicleService from '../services/vehicle.service';
 
 function VehicleForm({ onSubmit, initialData = {} }) {
   const [vehicle, setVehicle] = useState({
@@ -9,6 +9,8 @@ function VehicleForm({ onSubmit, initialData = {} }) {
     color: initialData.color || '',
     foto: initialData.foto || null,
   });
+
+  const [addPhoto, setAddPhoto] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -22,8 +24,12 @@ function VehicleForm({ onSubmit, initialData = {} }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await vehicleService.createVehicle(vehicle);
-      if (onSubmit) onSubmit(); // Llama a onSubmit si se pasa
+      const vehicleData = { ...vehicle };
+      if (!vehicle.foto) {
+        delete vehicleData.foto; // Eliminar campo foto si no está presente
+      }
+      await vehicleService.createVehicle(vehicleData);
+      if (onSubmit) onSubmit();
     } catch (error) {
       console.error("Error submitting vehicle:", error);
     }
@@ -48,8 +54,16 @@ function VehicleForm({ onSubmit, initialData = {} }) {
         <input type="text" name="color" value={vehicle.color} onChange={handleChange} required />
       </div>
       <div>
-        <label>Foto:</label>
-        <input type="file" name="foto" onChange={handleFileChange} />
+        <label>
+          <input type="checkbox" checked={addPhoto} onChange={(e) => setAddPhoto(e.target.checked)} />
+          Añadir Foto
+        </label>
+        {addPhoto && (
+          <div>
+            <label>Subir Foto Vehículo:</label>
+            <input type="file" name="foto" onChange={handleFileChange} />
+          </div>
+        )}
       </div>
       <button type="submit">Guardar</button>
     </form>
