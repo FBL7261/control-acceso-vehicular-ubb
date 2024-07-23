@@ -3,11 +3,16 @@ import { getUserVehicles } from '../services/vehicle.service';
 
 const UserVehicles = () => {
   const [vehicles, setVehicles] = useState([]);
-  //reemplazar esto con la lógica para obtener el ID del usuario autenticado
-  //const user = '669ecd62d103e55162017b7f';
+  const [userId, setUserId] = useState(null);
+
+  useEffect(() => {
+    const userIdFromSession = sessionStorage.getItem('userId');
+    setUserId(userIdFromSession);
+  }, []);
 
   useEffect(() => {
     const fetchVehicles = async () => {
+      if (!userId) return;
       try {
         const data = await getUserVehicles(userId);
         setVehicles(data);

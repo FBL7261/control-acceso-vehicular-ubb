@@ -6,9 +6,9 @@ const getAuthToken = () => sessionStorage.getItem('token');
 
 export const getUserVehicles = async (userId) => {
   try {
-    const response = await axios.get(`/api/vehicles/user/${userId}`, {
+    const response = await axios.get(`${API_URL}/user/${userId}`, {
       headers: {
-        'Authorization':  `Bearer ${getAuthToken()}`
+        'Authorization': `Bearer ${getAuthToken()}`
       },
       withCredentials: true
     });
