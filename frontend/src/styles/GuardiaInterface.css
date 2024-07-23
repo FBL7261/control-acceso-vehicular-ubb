@@ -1,0 +1,84 @@
+/*estilo interface guardia*/
+.guard-interface {
+    margin: 0 auto;
+    max-width: 800px;
+
+}
+.navbar-guard{
+    background-color: #005295;
+    padding: 1px;
+    border-radius: 5px;
+}
+
+.navbar-guard ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+  
+.navbar-guard li {
+    display: inline;
+    border-right: 1px solid #fff; /*fbfff1 Línea de separación blanca */
+    padding: 0 10px; /* Espaciado alrededor de los enlaces */
+}
+  
+.navbar-guard li:last-child {
+    border-right: none; /* Elimina la línea de separación del último elemento */
+}
+  
+.navbar-guard a {
+    text-decoration: none;
+    color: #fff; /* Color del texto */
+    font-weight: bold;
+}
+  
+.navbar-guard a.active {
+  text-decoration: underline;
+}
+  
+/* Contenedor para los formularios de la interfaz de guardia */
+.guard-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #DCDCDC; /* Fondo gris claro */
+}
+  
+h2 {
+    text-align: center;
+}
+  
+.form-group {
+    margin-bottom: 15px;
+}
+  
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+  
+input,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+  
+.guard-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #0060c0;  
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+  
+ .guard-button:hover {
+    background-color: #006ad4; 
+}

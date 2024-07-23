@@ -24,6 +24,11 @@ const Navbar = () => {
                 <li className={location.pathname === "/home" ? "active" : ""}>
                     <NavLink to="/home">Inicio</NavLink>
                 </li>
+                {userRole === 'guardia' && (
+                    <li className={location.pathname === "/guard-home" ? "active" : ""}>
+                        <NavLink to="/guard-home">Panel de Guardia</NavLink>
+                    </li>
+                )}
                 {userRole === 'admin' && (
                     <>
                         <li className={location.pathname === "/admin/requests" ? "active" : ""}>

@@ -2,7 +2,7 @@ import axios from "axios";
 
 const API_URL = 'http://localhost:3000/api/regEntry';
 
-const getToken = () => localStorage.getItem('token');
+const getToken = () => sessionStorage.getItem('token');
 
 export const createRegEntry = async (data) => {
   try {
@@ -32,6 +32,10 @@ export const createRegEntryUser = async (data) => {
 
 export const getRegEntry = async () => {
   try {
+    const token = getToken();
+    if(!token) {
+      throw new Error('No hay un token de autenticación');
+    }
     const response = await axios.get(API_URL, {
       headers: {
         Authorization: `Bearer ${getToken()}`
@@ -39,7 +43,8 @@ export const getRegEntry = async () => {
     });
     return response.data;
   } catch (error) {
-    throw error.response.data;
+    console.error('Error al obtener los registros de entrada:', error);
+    throw error.response ? error.response.data : new Error('Error en la solicitud');
   }
 };
 

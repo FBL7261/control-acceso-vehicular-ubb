@@ -10,7 +10,7 @@ import ProtectedRoute from '../components/ProtectedRoute';
 import { AuthProvider } from '../context/AuthContext';
 import GuardHome from './HomeGuard'; // Importar GuardHome
 import CreateRegEntry from "../components/createRegEntry.jsx"; // Importar CreateRegEntry
-//import RegEntryList from './RegEntryList'; // Importar RegEntryList
+import RegEntryList from '../components/RegEntryList'; // Importar RegEntryList
 
 function App() {
   return (
@@ -25,7 +25,7 @@ function App() {
           <Route path="/admin/requests" element={<ProtectedRoute allowedRoles={['admin']}><RequestList /></ProtectedRoute>} />
           <Route path="/guard-home" element={<ProtectedRoute allowedRoles={['guardia']}><GuardHome /></ProtectedRoute>} /> {/* Añadir ruta para GuardHome */}
           <Route path="/create-reg-entry" element={<ProtectedRoute allowedRoles={['guardia']}><CreateRegEntry /></ProtectedRoute>} /> {/* Añadir ruta para CreateRegEntry */}
-          {/* <Route path="/reg-entries" element={<ProtectedRoute allowedRoles={['guard']}><RegEntryList /></ProtectedRoute>} /> Añadir ruta para RegEntryList */}
+          <Route path="/reg-entries" element={<ProtectedRoute allowedRoles={['guardia']}><RegEntryList /></ProtectedRoute>} /> 
           <Route path="/" element={<Login />} />
           <Route path="*" element={<Navigate to="/home" replace />} /> {/* Redirige a home si no se encuentra la ruta */}
         </Routes>
