@@ -15,9 +15,9 @@ const UserVehicles = () => {
     const fetchVehicles = async () => {
       if (!userId) return;
       try {
-        const data = await getUserVehicles(userId);
-        console.log('Fetched vehicles:', data); // Debug log
-        setVehicles(data);
+        const response = await getUserVehicles(userId);
+        console.log('Fetched vehicles:', response); // Debug log
+        setVehicles(response.data); // Access the data property
       } catch (error) {
         console.error('Error al obtener los vehículos:', error);
       }
