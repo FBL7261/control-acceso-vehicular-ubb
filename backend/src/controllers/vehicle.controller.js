@@ -127,45 +127,18 @@ async function deleteVehicle(req, res) {
   }
 }
 
+// Actualizar un vehículo por su ID
 async function updateVehicle(req, res) {
   try {
     const { vehicleId } = req.params;
     const vehicleData = req.body;
     const currentUserEmail = req.email;
 
-    // Validar los datos de actualización permitidos
-    const { error: bodyError } = Joi.object({
-      matricula: Joi.string().required(),
-      marca: Joi.string().required(),
-      color: Joi.string().required(),
-      modelo: Joi.string().optional(), // Permitir que el modelo sea opcional en la actualización
-    }).validate(vehicleData);
-
+    const { error: bodyError } = vehicleSchema.validate(vehicleData);
     if (bodyError) {
       return respondError(req, res, 400, bodyError.message);
     }
 
-    // Verificar si el usuario tiene permiso para editar el vehículo
-    const vehicle = await Vehicle.findById(vehicleId);
-    if (!vehicle) {
-      return respondError(req, res, 404, "Vehículo no encontrado");
-    }
-
-    if (vehicle.propietario.toString() !== currentUserEmail) {
-      return respondError(req, res, 403, "No tienes permiso para editar este vehículo");
-    }
-
-    // Verificar si se intenta actualizar el modelo directamente
-    if (vehicleData.modelo !== undefined) {
-      return respondError(req, res, 400, "El modelo no puede ser actualizado directamente.");
-    }
-
-    // Verificar si se ha subido una foto nueva
-    if (req.files && req.files.foto) {
-      vehicleData.foto = req.files.foto[0].path; // Ajustar según la forma en que guardes las fotos
-    }
-
-    // Actualizar el vehículo
     const [updatedVehicle, updateError] = await VehicleService.updateVehicle(vehicleId, vehicleData, currentUserEmail);
     if (updateError) {
       return respondError(req, res, 403, updateError);
