@@ -11,7 +11,7 @@ const Users = () => {
   const navigate = useNavigate();
 
   const columns = ['Nombre', 'Rut', 'Correo', 'Rol', 'Acción'];
-
+//ESTA FUNCION SE ENCARGA DE OBTENER A TODOS LOS USUARIOS REGISTRADOS EN EL SISTEMA
   const dataUser = async () => {
     try {
       const response = await getUsers();

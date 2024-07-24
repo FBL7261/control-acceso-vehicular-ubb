@@ -6,6 +6,10 @@ const getToken = () => sessionStorage.getItem('token');
 
 export const createRegEntry = async (data) => {
   try {
+    const token = getToken();
+    if (!token) {
+      throw new Error('No hay un token de autenticación');
+    }
     const response = await axios.post(API_URL, data, {
       headers: {
         Authorization: `Bearer ${getToken()}`
@@ -19,6 +23,10 @@ export const createRegEntry = async (data) => {
 
 export const createRegEntryUser = async (data) => {
   try {
+    const token = getToken();
+    if (!token) {
+      throw new Error('No hay un token de autenticación');
+    }
     const response = await axios.post(`${API_URL}/user`, data, {
       headers: {
         Authorization: `Bearer ${getToken()}`
@@ -43,8 +51,7 @@ export const getRegEntry = async () => {
     });
     return response.data;
   } catch (error) {
-    console.error('Error al obtener los registros de entrada:', error);
-    throw error.response ? error.response.data : new Error('Error en la solicitud');
+    throw error.response.data;
   }
 };
 

@@ -1,52 +1,54 @@
-import React, { useState, useEffect } from 'react';
-import { getRegEntry } from '../services/regEntry.service';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getRegEntry } from '../services/regEntry.service';
+import '../styles/RegList.css'; // Importar el archivo CSS
 
 const RegEntryList = () => {
-  const [entries, setEntries] = useState([]);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const navigate = useNavigate();
+    const [entries, setEntries] = useState([]);
+    const [error, setError] = useState(null);
+    const navigate = useNavigate();
 
-  useEffect(() => {
-    const fetchEntries = async () => {
-      try {
-        const data = await getRegEntry();
-        if (Array.isArray(data)) {
-          setEntries(data);
-        } else {
-          setEntries([]);
+    useEffect(() => {
+        if (entries.length === 0) {
+            getRegEntry().then(
+                (response) => {
+                    if (response.data && Array.isArray(response.data.data)) {
+                        console.log('Entries from server:', response.data.data);
+                        setEntries(response.data.data);
+                    } else {
+                        setError('La respuesta del servidor no es un array.');
+                    }
+                },
+                (error) => {
+                    setError(error.message);
+                }
+            );
         }
-        setLoading(false);
-      } catch (error) {
-        console.error('Error al obtener los registros de entrada:', error);
-        setError('Error al obtener los registros de entrada');
-        setLoading(false);
-      }
-    };
+    }, []);
 
-    fetchEntries();
-  }, []);
+    if (error) {
+        return <div className="error">Error: {error}</div>;
+    }
 
-  if (loading) return <p>Cargando...</p>;
-  if (error) return <p>{error}</p>;
-
-  return (
-    <div>
-      <h2>Registros de Entrada</h2>
-      {entries.length > 0 ? (
-        <ul>
-          {entries.map(entry => (
-            <li key={entry._id}>
-              {entry.rut} - {entry.plate} - {entry.name} - {new Date(entry.date).toLocaleString()}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p>No se encontraron registros.</p>
-      )}
-    </div>
-  );
+    return (
+        <div className="container">
+            <button className="back-button" onClick={() => navigate(-1)}>Volver</button>
+            <h2>Lista de Registros de Entrada</h2>
+            <div className="entry-list">
+                <div className="entry-regs">
+                    {entries.map((entry) => (
+                        <div key={entry._id} className="entry-reg">
+                            <strong>RUT:</strong> {entry.rut}<br />
+                            <strong>Patente:</strong> {entry.plate}<br />
+                            <strong>Nombre:</strong> {entry.name}<br />
+                            <strong>Razón:</strong> {entry.reason}<br />
+                            <strong>Fecha:</strong> {new Date(entry.date).toLocaleString()}<br />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
 };
 
 export default RegEntryList;
