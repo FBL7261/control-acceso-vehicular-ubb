@@ -27,18 +27,38 @@ const UserVehicles = () => {
   }, [userId]);
 
   return (
+
     <div>
+
       <h1>Mis Vehículos</h1>
+
       <ul>
+
         {vehicles.map(vehicle => (
+
           <li key={vehicle._id}>
-            <p>{vehicle.marca} - {vehicle.modelo}</p>
+
+            <p>Matrícula: {vehicle.matricula}</p>
+
+            <p>Modelo: {vehicle.modelo}</p>
+
+            <p>Marca: {vehicle.marca}</p>
+
+            <p>Color: {vehicle.color}</p>
+
             {vehicle.foto && <img src={`http://localhost:3000/${vehicle.foto}`} alt={`${vehicle.marca} ${vehicle.modelo}`} />}
+
           </li>
+
         ))}
+
       </ul>
+
     </div>
+
   );
+
 }
+
 
 export default UserVehicles;
