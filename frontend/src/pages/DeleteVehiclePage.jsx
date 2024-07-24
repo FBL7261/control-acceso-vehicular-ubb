@@ -1,32 +1,39 @@
 // src/pages/DeleteVehiclePage.jsx
 
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { getUserVehicles, deleteVehicle } from '../services/vehicle.service';
 
 const DeleteVehiclePage = () => {
-  const { vehicleId } = useParams(); // ID del vehículo desde la URL
-  const navigate = useNavigate(); // Para redireccionar después de la eliminación
-  const [vehicle, setVehicle] = useState(null);
+  const navigate = useNavigate(); // For redirection after deletion
+  const [vehicles, setVehicles] = useState([]);
+  const [userId, setUserId] = useState(null);
   const [error, setError] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  // Cargar los datos del vehículo
   useEffect(() => {
-    const fetchVehicle = async () => {
+    const userIdFromSession = sessionStorage.getItem('userId');
+    console.log('User ID from session:', userIdFromSession); // Debug log
+    setUserId(userIdFromSession);
+  }, []);
+
+  useEffect(() => {
+    const fetchVehicles = async () => {
+      if (!userId) return;
       try {
-        const response = await axios.get(`/api/vehicles/${vehicleId}`);
-        setVehicle(response.data);
-      } catch (err) {
-        setError('Error al cargar los datos del vehículo.');
+        const response = await getUserVehicles(userId);
+        console.log('Fetched vehicles:', response); // Debug log
+        setVehicles(response.data); // Access the data property
+      } catch (error) {
+        console.error('Error al obtener los vehículos:', error);
+        setError('Error al cargar los datos de los vehículos.');
       }
     };
 
-    fetchVehicle();
-  }, [vehicleId]);
+    fetchVehicles();
+  }, [userId]);
 
-  // Manejar la eliminación del vehículo
-  const handleDelete = async () => {
+  const handleDelete = async (vehicleId) => {
     if (!window.confirm('¿Estás seguro de que deseas eliminar este vehículo?')) {
       return;
     }
@@ -34,8 +41,8 @@ const DeleteVehiclePage = () => {
     setIsDeleting(true);
 
     try {
-      await axios.delete(`/api/vehicles/${vehicleId}`);
-      navigate('/vehicles'); // Redirigir después de la eliminación
+      await deleteVehicle(vehicleId);
+      setVehicles(vehicles.filter(vehicle => vehicle._id !== vehicleId));
     } catch (err) {
       setError('Error al eliminar el vehículo.');
     } finally {
@@ -49,19 +56,24 @@ const DeleteVehiclePage = () => {
 
   return (
     <div>
-      <h1>Delete Vehicle</h1>
+      <h1>Eliminar Vehículo</h1>
       {error && <p className="error">{error}</p>}
-      {vehicle ? (
-        <div>
-          <p><strong>Matricula:</strong> {vehicle.matricula}</p>
-          <p><strong>Modelo:</strong> {vehicle.modelo}</p>
-          <p><strong>Marca:</strong> {vehicle.marca}</p>
-          <p><strong>Color:</strong> {vehicle.color}</p>
-          <button onClick={handleDelete}>Delete Vehicle</button>
-        </div>
-      ) : (
-        <p>Cargando datos del vehículo...</p>
-      )}
+      <ul>
+        {vehicles.length > 0 ? (
+          vehicles.map((vehicle) => (
+            <li key={vehicle._id}>
+              <p><strong>Matrícula:</strong> {vehicle.matricula}</p>
+              <p><strong>Modelo:</strong> {vehicle.modelo}</p>
+              <p><strong>Marca:</strong> {vehicle.marca}</p>
+              <p><strong>Color:</strong> {vehicle.color}</p>
+              {vehicle.foto && <img src={`http://localhost:3000/${vehicle.foto}`} alt={`${vehicle.marca} ${vehicle.modelo}`} />}
+              <button onClick={() => handleDelete(vehicle._id)}>Eliminar</button>
+            </li>
+          ))
+        ) : (
+          <p>No hay vehículos disponibles.</p>
+        )}
+      </ul>
     </div>
   );
 };

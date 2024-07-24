@@ -26,7 +26,7 @@ const App = () => {
           <Route path="/vehicles/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />
           <Route path="/create-request" element={<ProtectedRoute><CreateRequest /></ProtectedRoute>} />
           <Route path="/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />
-          <Route path="/vehicles/delete/:vehicleId" element={<DeleteVehiclePage />} />
+          <Route path="/vehicles/delete-vehicle" element={<ProtectedRoute><DeleteVehiclePage /></ProtectedRoute>} />
           <Route path="/vehicles/my-vehicles" element={<ProtectedRoute><UserVehicles /></ProtectedRoute>} />
           <Route path="/requests" element={<ProtectedRoute><UserRequests /></ProtectedRoute>} />
           <Route path="/admin/requests" element={<ProtectedRoute allowedRoles={['admin']}><RequestList /></ProtectedRoute>} />
