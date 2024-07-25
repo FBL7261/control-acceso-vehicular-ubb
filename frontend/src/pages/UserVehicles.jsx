@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { getUserVehicles } from '../services/vehicle.service';
+import Modal from '../components/Modal'; // Import the Modal component
 import '../styles/UserVehicles.css'; // Import the CSS file
 
 const UserVehicles = () => {
   const [vehicles, setVehicles] = useState([]);
   const [userId, setUserId] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    // Obtener el ID del usuario desde la sesión
     const userIdFromSession = sessionStorage.getItem('userId');
-    console.log('User ID from session:', userIdFromSession); // Debug log
     setUserId(userIdFromSession);
   }, []);
 
@@ -17,37 +18,53 @@ const UserVehicles = () => {
     const fetchVehicles = async () => {
       if (!userId) return;
       try {
-        // Obtener los vehículos del usuario
         const response = await getUserVehicles(userId);
-        console.log('Fetched vehicles:', response); // Debug log
-        setVehicles(response.data); // Ajuste: acceso a los datos de la respuesta
+        setVehicles(response.data);
       } catch (error) {
-        console.error('Error al obtener los vehículos:', error);
+        console.error('Error al obtener los vehÃ­culos:', error);
       }
     };
 
     fetchVehicles();
   }, [userId]);
 
+  const handleImageClick = (imageSrc) => {
+    setSelectedImage(imageSrc);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
+
   return (
     <div className="user-vehicles-page">
-      <h1>Mis Vehículos</h1>
+      <h1>Mis Vehi­culos</h1>
       {vehicles.length === 0 ? (
-        <p>Actualmente no posees vehículos registrados</p>
+        <p>Actualmente no posees vehÃ­culos registrados</p>
       ) : (
         <div className="vehicle-grid">
           {vehicles.map(vehicle => (
             <div key={vehicle._id} className="vehicle-card">
-              {/* Mostrar la imagen del vehículo si existe */}
-              {vehicle.foto && <img src={`http://localhost:3000/upload/${vehicle.foto}`} alt={`${vehicle.marca} ${vehicle.modelo}`} />}
-              <p><strong>Matrícula:</strong> {vehicle.matricula}</p>
-              <p><strong>Modelo:</strong> {vehicle.modelo}</p>
-              <p><strong>Marca:</strong> {vehicle.marca}</p>
-              <p><strong>Color:</strong> {vehicle.color}</p>
+              {vehicle.foto && (
+                <img
+                  src={`http://localhost:3000/upload/${vehicle.foto}`}
+                  alt={`${vehicle.marca} ${vehicle.modelo}`}
+                  onClick={() => handleImageClick(`http://localhost:3000/upload/${vehicle.foto}`)}
+                />
+              )}
+              <p><strong>Matri­cula</strong> {vehicle.matricula}</p>
+              <p><strong>Modelo</strong> {vehicle.modelo}</p>
+              <p><strong>Marc:</strong> {vehicle.marca}</p>
+              <p><strong>Colo:</strong> {vehicle.color}</p>
             </div>
           ))}
         </div>
       )}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {selectedImage && <img src={selectedImage} alt="Vehicle" style={{ maxWidth: '100%' }} />}
+      </Modal>
     </div>
   );
 }
