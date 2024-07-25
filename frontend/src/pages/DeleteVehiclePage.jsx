@@ -1,8 +1,7 @@
-// src/pages/DeleteVehiclePage.jsx
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserVehicles, deleteVehicle } from '../services/vehicle.service';
+import '../styles/DeleteVehiclePage.css'; // Import the CSS file
 
 const DeleteVehiclePage = () => {
   const navigate = useNavigate(); // For redirection after deletion
@@ -55,13 +54,13 @@ const DeleteVehiclePage = () => {
   }
 
   return (
-    <div>
+    <div className="delete-vehicle-container">
       <h1>Eliminar Vehículo</h1>
       {error && <p className="error">{error}</p>}
       <ul>
         {vehicles.length > 0 ? (
           vehicles.map((vehicle) => (
-            <li key={vehicle._id}>
+            <li key={vehicle._id} className="vehicle-card">
               <p><strong>Matrícula:</strong> {vehicle.matricula}</p>
               <p><strong>Modelo:</strong> {vehicle.modelo}</p>
               <p><strong>Marca:</strong> {vehicle.marca}</p>

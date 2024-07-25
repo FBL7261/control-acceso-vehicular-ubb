@@ -79,7 +79,7 @@ const UpdateVehiclePage = () => {
 
   return (
     <div>
-      <h1>Update Vehicle</h1>
+      <h1>Actualizar Vehiculo</h1>
       {error && <p className="error">{error}</p>}
       <VehicleSelect vehicles={vehicles} onSelect={setSelectedVehicleId} />
       {selectedVehicleId && (
