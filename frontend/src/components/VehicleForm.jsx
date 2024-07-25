@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import vehicleService from '../services/vehicle.service';
-import '../styles/VehicleForm.css'; // Asegúrate de que la ruta sea correcta
+import '../styles/VehicleForm.css';
 
 function VehicleForm({ onSubmit, initialData = {} }) {
   const [vehicle, setVehicle] = useState({
@@ -23,7 +23,6 @@ function VehicleForm({ onSubmit, initialData = {} }) {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      // Puedes agregar validaciones para el archivo aquí
       setVehicle((prev) => ({ ...prev, foto: file }));
     }
   };
@@ -35,7 +34,7 @@ function VehicleForm({ onSubmit, initialData = {} }) {
     try {
       const vehicleData = { ...vehicle };
       if (!vehicle.foto) {
-        delete vehicleData.foto; // Eliminar campo foto si no está presente
+        delete vehicleData.foto;
       }
       await vehicleService.createVehicle(vehicleData);
       if (onSubmit) onSubmit();
@@ -53,20 +52,28 @@ function VehicleForm({ onSubmit, initialData = {} }) {
         {error && <div className="error-message">{error}</div>}
         <form onSubmit={handleSubmit} className="vehicle-form">
           <div>
-            <label>Matrícula:</label>
-            <input type="text" name="matricula" value={vehicle.matricula} onChange={handleChange} required />
+            <label>Matrícula</label>
+            <input
+            placeholder='Ej: ZK32T2'
+             type="text" name="matricula" value={vehicle.matricula} onChange={handleChange} required />
           </div>
           <div>
-            <label>Modelo:</label>
-            <input type="text" name="modelo" value={vehicle.modelo} onChange={handleChange} required />
+            <label>Modelo</label>
+            <input
+            placeholder='Ford Focus'
+             type="text" name="modelo" value={vehicle.modelo} onChange={handleChange} required />
           </div>
           <div>
             <label>Marca:</label>
-            <input type="text" name="marca" value={vehicle.marca} onChange={handleChange} required />
+            <input
+            placeholder='Toyota, etc'
+             type="text" name="marca" value={vehicle.marca} onChange={handleChange} required />
           </div>
           <div>
             <label>Color:</label>
-            <input type="text" name="color" value={vehicle.color} onChange={handleChange} required />
+            <input
+            placeholder='Rojo' 
+            type="text" name="color" value={vehicle.color} onChange={handleChange} required />
           </div>
           <div className="checkbox-container">
             <label>
