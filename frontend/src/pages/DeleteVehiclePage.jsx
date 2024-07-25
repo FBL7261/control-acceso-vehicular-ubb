@@ -54,23 +54,23 @@ const DeleteVehiclePage = () => {
   }
 
   return (
-    <div className="delete-vehicle-container">
-      <h1>Eliminar Vehículo</h1>
+    <div className="delete-vehicle-page">
+      <h1 style={{ color: 'white' }}>Eliminar Vehículo</h1>
       {error && <p className="error">{error}</p>}
-      <ul>
+      <ul className="vehicle-list">
         {vehicles.length > 0 ? (
           vehicles.map((vehicle) => (
             <li key={vehicle._id} className="vehicle-card">
+              {vehicle.foto && <img src={`http://localhost:3000/${vehicle.foto}`} alt={`${vehicle.marca} ${vehicle.modelo}`} />}
               <p><strong>Matrícula:</strong> {vehicle.matricula}</p>
               <p><strong>Modelo:</strong> {vehicle.modelo}</p>
               <p><strong>Marca:</strong> {vehicle.marca}</p>
               <p><strong>Color:</strong> {vehicle.color}</p>
-              {vehicle.foto && <img src={`http://localhost:3000/${vehicle.foto}`} alt={`${vehicle.marca} ${vehicle.modelo}`} />}
               <button onClick={() => handleDelete(vehicle._id)}>Eliminar</button>
             </li>
           ))
         ) : (
-          <p>No hay vehículos disponibles.</p>
+          <p style={{ color: 'white' }}>No hay vehículos disponibles.</p>
         )}
       </ul>
     </div>
