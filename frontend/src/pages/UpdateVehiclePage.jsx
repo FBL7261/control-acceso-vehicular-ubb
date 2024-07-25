@@ -98,6 +98,7 @@ const UpdateVehiclePage = () => {
           <div>
             <label htmlFor="marca">Marca:</label>
             <input
+            disabled
               type="text"
               id="marca"
               name="marca"
@@ -109,6 +110,7 @@ const UpdateVehiclePage = () => {
           <div>
             <label htmlFor="color">Color:</label>
             <input
+            placeholder='Color Auto'
               type="text"
               id="color"
               name="color"
