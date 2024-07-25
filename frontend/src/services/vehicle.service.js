@@ -69,8 +69,37 @@ export const deleteVehicle = async (vehicleId) => {
 
 };
 
+export const updateVehicle = async (vehicleId, vehicleData) => {
+
+  try {
+
+    const response = await axios.put(`${API_URL}/${vehicleId}`, vehicleData, {
+
+      headers: {
+
+        'Authorization': `Bearer ${getAuthToken()}`
+
+      },
+
+      withCredentials: true
+
+    });
+
+    return response.data;
+
+  } catch (error) {
+
+    console.error('Error actualizando vehiculo:', error.response ? error.response.data : error.message);
+
+    throw error;
+
+  }
+
+};
+
 export default {
   getUserVehicles,
   createVehicle,
-  deleteVehicle
+  deleteVehicle,
+  updateVehicle
 };

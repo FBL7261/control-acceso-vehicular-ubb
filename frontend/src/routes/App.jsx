@@ -8,7 +8,6 @@ import RequestList from '../components/RequestList';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { AuthProvider } from '../context/AuthContext';
 import CreateVehicle from '../pages/CreateVehicle'; 
-import VehicleList from '../components/VehicleList';
 import UpdateVehiclePage from '../pages/UpdateVehiclePage';
 import DeleteVehiclePage from '../pages/DeleteVehiclePage';
 import UserVehicles from '../pages/UserVehicles';
@@ -28,6 +27,7 @@ const App = () => {
           <Route path="/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />
           <Route path="/vehicles/delete-vehicle" element={<ProtectedRoute><DeleteVehiclePage /></ProtectedRoute>} />
           <Route path="/vehicles/my-vehicles" element={<ProtectedRoute><UserVehicles /></ProtectedRoute>} />
+          <Route path="/vehicles/update-vehicle" element={<ProtectedRoute><UpdateVehiclePage /></ProtectedRoute>} />
           <Route path="/requests" element={<ProtectedRoute><UserRequests /></ProtectedRoute>} />
           <Route path="/admin/requests" element={<ProtectedRoute allowedRoles={['admin']}><RequestList /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
