@@ -1,8 +1,5 @@
-import Joi from "joi"; // Framework para validación
+import Joi from "joi";
 
-// Esquema para validar vehículos
-
-// Verificación para matrículas
 const vehicleSchema = Joi.object({
 
   matricula: Joi.string()
@@ -13,7 +10,6 @@ const vehicleSchema = Joi.object({
       "any.required": "La matrícula es obligatoria.",
     }),
 
-// Verificación modelo
   modelo: Joi.string()
   .when(Joi.ref("$isUpdate"), {
     is: true,
@@ -30,7 +26,6 @@ const vehicleSchema = Joi.object({
       "any.required": "El modelo es obligatorio.",
     }),
 
-// Verificacion marca
   marca: Joi.string()
   .required()
   .min(1)
@@ -43,7 +38,6 @@ const vehicleSchema = Joi.object({
     "any.required": "La marca es obligatoria.",
 }),
 
-// Verificación color
   color: Joi.string()
   .required()
   .regex(/^[a-zA-Z\s]+$/)
@@ -58,7 +52,6 @@ const vehicleSchema = Joi.object({
     "any.required": "El color es obligatorio.",
 }),
 
-// Verificación foto
   foto: Joi.string()
   .optional()
   .uri()
@@ -66,13 +59,12 @@ const vehicleSchema = Joi.object({
     "string.uri": "La foto debe ser una URL válida.",
 }),
 
-// Verificación propietario
   propietario: Joi.string()
     .optional()
     .regex(/^[0-9a-fA-F]{24}$/)
     .messages({
       "string.pattern.base": "El propietario debe ser un ID de usuario válido",
-    }), // Propietario opcional para permitir asignación automática
+    }),
 });
 
-export default vehicleSchema; // Exporta el esquema de vehículos
+export default vehicleSchema;

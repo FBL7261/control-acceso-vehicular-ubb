@@ -1,32 +1,11 @@
 "use strict";
 
-// Importaciones necesarias
-
-// Para validar `ObjectId`
 import mongoose from "mongoose";
-
-// Para permitir que modelo siga siendo requerido al crear un vehiculo
-// pero que no sea aceptado al actualizar, en tal caso se recomienda crear un vehiculo nuevo.
-import Joi from "joi";
-
-
-// Importar usuario
 import User from "../models/user.model.js";
-
-// Importar vehiculo
 import Vehicle from "../models/vehicle.model.js";
-
-// Manejo de respuestas
 import { respondSuccess, respondError } from "../utils/resHandler.js";
-
-// Servicio para operaciones de vehículos
-
 import VehicleService from "../services/vehicle.service.js";
- 
-// Esquema para validación de vehículos
 import vehicleSchema from "../schema/vehicle.schema.js";
-
-// Para manejo de errores
 import { handleError } from "../utils/errorHandler.js";
 
 // Crear un nuevo vehículo, automáticamente se le asigna al usuario actual
