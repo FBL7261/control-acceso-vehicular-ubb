@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getUserVehicles } from '../services/vehicle.service';
+import '../styles/UserVehicles.css'; // Import the CSS file
 
 const UserVehicles = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -27,22 +28,22 @@ const UserVehicles = () => {
   }, [userId]);
 
   return (
-    <div>
+    <div className="user-vehicles-page">
       <h1>Mis Vehículos</h1>
       {vehicles.length === 0 ? (
         <p>Actualmente no posees vehículos registrados</p>
       ) : (
-        <ul>
+        <div className="vehicle-grid">
           {vehicles.map(vehicle => (
-            <li key={vehicle._id}>
-              <p>Matrícula: {vehicle.matricula}</p>
-              <p>Modelo: {vehicle.modelo}</p>
-              <p>Marca: {vehicle.marca}</p>
-              <p>Color: {vehicle.color}</p>
+            <div key={vehicle._id} className="vehicle-card">
               {vehicle.foto && <img src={`http://localhost:3000/${vehicle.foto}`} alt={`${vehicle.marca} ${vehicle.modelo}`} />}
-            </li>
+              <p><strong>Matrícula:</strong> {vehicle.matricula}</p>
+              <p><strong>Modelo:</strong> {vehicle.modelo}</p>
+              <p><strong>Marca:</strong> {vehicle.marca}</p>
+              <p><strong>Color:</strong> {vehicle.color}</p>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
