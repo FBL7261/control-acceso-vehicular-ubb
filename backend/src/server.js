@@ -8,6 +8,7 @@ import express, { urlencoded, json } from "express";
 import morgan from "morgan";
 // Importa el módulo 'cookie-parser' para manejar las cookies
 import cookieParser from "cookie-parser";
+import path from 'path';  // Importa el módulo path
 /** El enrutador principal */
 import indexRoutes from "./routes/index.routes.js";
 // Importa el archivo 'configDB.js' para crear la conexión a la base de datos
@@ -36,11 +37,14 @@ async function setupServer() {
     server.use(morgan("dev"));
     // Agrega el enrutador principal al servidor
     server.use("/api", indexRoutes);
+    // Agrega el middleware para servir archivos estáticos desde la carpeta 'upload'
+    server.use('/upload', express.static(path.join(path.resolve(), 'src', 'upload')));
+    
 
     // Inicia el servidor en el puerto especificado
     server.listen(PORT, () => {
-      console.log(`=> Servidor corriendo en ${HOST}:${PORT}/api`);
-    });
+      console.log(`Servidor corriendo en ${HOST}:${PORT}/api`);
+  });
   } catch (err) {
     handleError(err, "/server.js -> setupServer");
   }

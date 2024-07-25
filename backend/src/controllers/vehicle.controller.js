@@ -8,40 +8,37 @@ import VehicleService from "../services/vehicle.service.js";
 import vehicleSchema from "../schema/vehicle.schema.js";
 import { handleError } from "../utils/errorHandler.js";
 
-// Crear un nuevo vehículo, automáticamente se le asigna al usuario actual
 async function createVehicle(req, res) {
   try {
-    const { body } = req; // Datos del cuerpo de la solicitud
-    const currentUserEmail = req.email; // Correo del usuario autenticado
-    const isAdmin = req.roles.includes("admin"); // Verificar si es administrador
+    const { body } = req;
+    const currentUserEmail = req.email;
+    const isAdmin = req.roles.includes("admin");
 
     // Validar los datos del vehículo con el esquema
     const { error: bodyError } = vehicleSchema.validate(body);
     if (bodyError) {
-      return respondError(req, res, 400, bodyError.message); // Manejar errores de validación
+      return respondError(req, res, 400, bodyError.message);
     }
 
     // Verificar si se ha subido una foto
     if (req.files && req.files.foto) {
-      body.foto = req.files.foto[0].path; // Ajustar según la forma en que guardes las fotos
+      // Guardar solo el nombre del archivo
+      body.foto = req.files.foto[0].filename;
     }
 
     const [newVehicle, vehicleError] = await VehicleService.createVehicle(body, currentUserEmail, isAdmin);
-    console.log("newVehicle:", newVehicle);
 
-    console.log("vehicleError", vehicleError);
-    
     if (vehicleError) {
-      console.log("newVehicle:", newVehicle);
-      return respondError(req, res, 400, vehicleError); // Manejo de errores
+      return respondError(req, res, 400, vehicleError);
     }
 
-    respondSuccess(req, res, 201, newVehicle); // Vehículo creado con éxito
+    respondSuccess(req, res, 201, newVehicle);
   } catch (error) {
     handleError(error, "vehicle.controller -> createVehicle");
     respondError(req, res, 500, "No se pudo crear el vehículo");
   }
 }
+
 
 // Obtener vehículos del usuario actual mediante su propio ID
 async function getVehiclesByUser(req, res) {
@@ -67,7 +64,13 @@ async function getVehiclesByUser(req, res) {
       return respondError(req, res, 404, vehicleError); // Manejo de errores al obtener vehículos
     }
 
-    respondSuccess(req, res, 200, vehicles); // Vehículos obtenidos con éxito
+    // Asegurarse de que cada vehículo tenga la propiedad foto
+    const vehiclesWithPhoto = vehicles.map(vehicle => ({
+      ...vehicle._doc,
+      foto: vehicle.foto || null // Asegúrate de devolver null si la foto no está definida
+    }));
+
+    respondSuccess(req, res, 200, vehiclesWithPhoto); // Vehículos obtenidos con éxito
   } catch (error) {
     handleError(error, "vehicle.controller -> getVehiclesByUser");
     respondError(req, res, 500, "Error al obtener vehículos del usuario");
@@ -98,7 +101,7 @@ async function deleteVehicle(req, res) {
     }
 
     // Eliminar el vehículo
-    await Vehicle.findByIdAndDelete(vehicleId); // Usar `findByIdAndDelete` para eliminar
+    await Vehicle.findByIdAndDelete(vehicleId); // Usar findByIdAndDelete para eliminar
     respondSuccess(req, res, 200, "Vehículo eliminado con éxito");
   } catch (error) {
     handleError(error, "vehicle.controller -> deleteVehicle");
