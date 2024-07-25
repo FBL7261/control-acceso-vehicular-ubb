@@ -42,31 +42,18 @@ export const createVehicle = async (vehicleData) => {
 };
 
 export const deleteVehicle = async (vehicleId) => {
-
   try {
-
     const response = await axios.delete(`${API_URL}/${vehicleId}`, {
-
       headers: {
-
         'Authorization': `Bearer ${getAuthToken()}`
-
       },
-
       withCredentials: true
-
     });
-
     return response.data;
-
   } catch (error) {
-
     console.error('Error eliminando vehiculo:', error);
-
     throw error;
-
   }
-
 };
 
 export const updateVehicle = async (vehicleId, vehicleData) => {

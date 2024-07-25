@@ -76,9 +76,9 @@ const DeleteVehiclePage = () => {
             <li key={vehicle._id} className="vehicle-card">
               {vehicle.foto && (
                 <img
-                  src={`http://localhost:3000/${vehicle.foto}`}
+                  src={`http://localhost:3000/upload/${vehicle.foto}`}
                   alt={`${vehicle.marca} ${vehicle.modelo}`}
-                  onClick={() => handleImageClick(`http://localhost:3000/${vehicle.foto}`)}
+                  onClick={() => handleImageClick(`http://localhost:3000/upload/${vehicle.foto}`)}
                 />
               )}
               <p><strong>Matrícula:</strong> {vehicle.matricula}</p>
