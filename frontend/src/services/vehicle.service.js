@@ -73,7 +73,12 @@ export const updateVehicle = async (vehicleId, vehicleData) => {
 
   try {
 
-    const response = await axios.put(`${API_URL}/${vehicleId}`, vehicleData, {
+    // Eliminar el campo 'modelo' de los datos de actualización
+
+    const { modelo, ...updateData } = vehicleData;
+
+
+    const response = await axios.put(`${API_URL}/${vehicleId}`, updateData, {
 
       headers: {
 
@@ -96,6 +101,7 @@ export const updateVehicle = async (vehicleId, vehicleData) => {
   }
 
 };
+
 
 export default {
   getUserVehicles,
