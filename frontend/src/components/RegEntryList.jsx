@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getRegEntry } from '../services/regEntry.service';
 import '../styles/RegList.css'; // Importar el archivo CSS
+import { deleteRegEntry } from '../services/regEntry.service';
 
 const RegEntryList = () => {
     const [entries, setEntries] = useState([]);
@@ -26,6 +27,16 @@ const RegEntryList = () => {
         }
     }, []);
 
+    const handleDelete = async (id) => {
+        try {
+            await deleteRegEntry(id);
+            setEntries(entries.filter((entry) => entry._id !== id));
+            console.log('Registro eliminado con éxito');
+        } catch (error) {
+            setError(error.message);
+        }
+    };
+
     if (error) {
         return <div className="error">Error: {error}</div>;
     }
@@ -38,6 +49,7 @@ const RegEntryList = () => {
                 <div className="entry-regs">
                     {entries.map((entry) => (
                         <div key={entry._id} className="entry-reg">
+                            <button className="deletereg-button" onClick={() => handleDelete(entry._id)}></button>
                             <strong>RUT:</strong> {entry.rut}<br />
                             <strong>Patente:</strong> {entry.plate}<br />
                             <strong>Nombre:</strong> {entry.name}<br />

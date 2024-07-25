@@ -11,8 +11,8 @@
     flex-direction: center;
 }
 
-.back-button {
-    background-color: #0069da;
+.backk-button {
+    background-color: #0069dadc;
     color: white;
     border: none;
     padding: 10px 20px;
@@ -20,7 +20,7 @@
     cursor: pointer;
 }
 
-.back-button:hover {
+.backk-button:hover {
     background-color: #0056b3;
 }
 
@@ -32,7 +32,7 @@
 }
 
 .entry-reg {
-    background-color: #e0f7fa;
+    background-color: #c7c7c794;
     border: 1px solid #ccc;
     border-radius: 8px;
     padding: 15px;
@@ -44,4 +44,31 @@
 .entry-reg strong {
     display: block;
     margin-bottom: 5px;
+}
+
+.deletereg-button {
+    background-color: #c50000d8;
+    color: white;
+    border: none;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    top: 1px;
+    right: 10px;
+    margin-left: 100%;
+    margin-top: -20px;
+}
+
+.deletereg-button:hover {
+    background-color: #830000;
+}
+
+.deletereg-button::before {
+    content: '✖';
+    font-size: 8px;
+    color: white;
 }

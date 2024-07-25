@@ -34,9 +34,6 @@ const NavbarGuard = () => {
                 <li className={location.pathname === "/reg-entries" ? "active" : ""}>
                     <NavLink to="/reg-entries">Ver Entradas</NavLink>
                 </li>
-                <li className={location.pathname === "/create-reg-entry" ? "active" : ""}>
-                    <NavLink to="/create-reg-entry">Registrar visitante</NavLink>
-                </li>
                 <li className={location.pathname === "/" ? "active" : ""}>
                     <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
                 </li>
