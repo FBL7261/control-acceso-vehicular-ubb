@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserVehicles, deleteVehicle } from '../services/vehicle.service';
+import Modal from '../components/Modal'; // Import the Modal component
 import '../styles/DeleteVehiclePage.css'; // Import the CSS file
 
 const DeleteVehiclePage = () => {
@@ -9,6 +10,8 @@ const DeleteVehiclePage = () => {
   const [userId, setUserId] = useState(null);
   const [error, setError] = useState(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
     const userIdFromSession = sessionStorage.getItem('userId');
@@ -49,6 +52,16 @@ const DeleteVehiclePage = () => {
     }
   };
 
+  const handleImageClick = (imageSrc) => {
+    setSelectedImage(imageSrc);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedImage(null);
+  };
+
   if (isDeleting) {
     return <p>Eliminando...</p>;
   }
@@ -61,7 +74,13 @@ const DeleteVehiclePage = () => {
         {vehicles.length > 0 ? (
           vehicles.map((vehicle) => (
             <li key={vehicle._id} className="vehicle-card">
-              {vehicle.foto && <img src={`http://localhost:3000/${vehicle.foto}`} alt={`${vehicle.marca} ${vehicle.modelo}`} />}
+              {vehicle.foto && (
+                <img
+                  src={`http://localhost:3000/${vehicle.foto}`}
+                  alt={`${vehicle.marca} ${vehicle.modelo}`}
+                  onClick={() => handleImageClick(`http://localhost:3000/${vehicle.foto}`)}
+                />
+              )}
               <p><strong>Matrícula:</strong> {vehicle.matricula}</p>
               <p><strong>Modelo:</strong> {vehicle.modelo}</p>
               <p><strong>Marca:</strong> {vehicle.marca}</p>
@@ -73,6 +92,9 @@ const DeleteVehiclePage = () => {
           <p style={{ color: 'white' }}>No hay vehículos disponibles.</p>
         )}
       </ul>
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        {selectedImage && <img src={selectedImage} alt="Vehicle" style={{ maxWidth: '100%' }} />}
+      </Modal>
     </div>
   );
 };

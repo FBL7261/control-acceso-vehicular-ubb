@@ -42,7 +42,7 @@ const UserVehicles = () => {
     <div className="user-vehicles-page">
       <h1>Mis Vehi­culos</h1>
       {vehicles.length === 0 ? (
-        <p>Actualmente no posees vehÃ­culos registrados</p>
+        <p>Actualmente no posees vehiculos registrados</p>
       ) : (
         <div className="vehicle-grid">
           {vehicles.map(vehicle => (
