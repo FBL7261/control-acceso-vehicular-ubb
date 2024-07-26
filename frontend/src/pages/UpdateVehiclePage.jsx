@@ -43,7 +43,8 @@ const UpdateVehiclePage = () => {
   };
 
   const handleUpdateClick = (vehicleId) => {
-    setSelectedVehicleId(vehicleId);
+    navigate(`/vehicles/update-vehicle/updating/${vehicleId}`);
+  
   };
 
   const handleFormSubmit = () => {
