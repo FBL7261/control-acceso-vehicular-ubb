@@ -89,10 +89,38 @@ export const updateVehicle = async (vehicleId, vehicleData) => {
 
 };
 
+export const getVehicleById = async (vehicleId) => {
+
+  try {
+
+    const response = await axios.get(`${API_URL}/${vehicleId}`, {
+
+      headers: {
+
+        'Authorization': `Bearer ${getAuthToken()}`
+
+      },
+
+      withCredentials: true
+
+    });
+
+    return response.data;
+
+  } catch (error) {
+
+    console.error('Error fetching vehicle by ID:', error);
+
+    throw error;
+
+  }
+
+};
 
 export default {
   getUserVehicles,
   createVehicle,
   deleteVehicle,
-  updateVehicle
+  updateVehicle,
+  getVehicleById
 };

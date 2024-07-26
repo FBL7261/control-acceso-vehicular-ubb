@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import vehicleService from '../services/vehicle.service';
 import '../styles/UpdateVehicleForm.css';
 
 const UpdateVehicleForm = ({ vehicleId, onSubmit }) => {
@@ -16,8 +16,8 @@ const UpdateVehicleForm = ({ vehicleId, onSubmit }) => {
   useEffect(() => {
     const fetchVehicle = async () => {
       try {
-        const response = await axios.get(`/api/vehicles/${vehicleId}`);
-        setVehicle(response.data);
+        const vehicleData = await vehicleService.getVehicleById(vehicleId);
+        setVehicle(vehicleData);
       } catch (err) {
         setError('Error al cargar los datos del vehículo.');
       }
@@ -60,13 +60,7 @@ const UpdateVehicleForm = ({ vehicleId, onSubmit }) => {
         formData.append('foto', vehicle.foto);
       }
 
-      await axios.put(`/api/vehicles/${vehicleId}`, formData, {
-        headers: {
-          'Authorization': `Bearer ${sessionStorage.getItem('token')}`,
-          'Content-Type': 'multipart/form-data',
-        },
-        withCredentials: true,
-      });
+      await vehicleService.updateVehicle(vehicleId, formData);
 
       if (onSubmit) onSubmit();
     } catch (err) {

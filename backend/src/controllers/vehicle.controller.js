@@ -133,9 +133,38 @@ async function updateVehicle(req, res) {
   }
 }
 
+async function getVehicleById(req, res) {
+
+  try {
+
+    const { vehicleId } = req.params;
+
+
+    const [vehicle, vehicleError] = await VehicleService.getVehicleById(vehicleId);
+
+    if (vehicleError) {
+
+      return respondError(req, res, 404, vehicleError);
+
+    }
+
+
+    respondSuccess(req, res, 200, vehicle);
+
+  } catch (error) {
+
+    handleError(error, "vehicle.controller -> getVehicleById");
+
+    respondError(req, res, 500, "Error al obtener el vehículo");
+
+  }
+
+}
+
 export default {
   createVehicle,
   getVehiclesByUser,
   deleteVehicle,
   updateVehicle,
+  getVehicleById,
 };

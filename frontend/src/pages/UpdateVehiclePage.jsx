@@ -49,7 +49,7 @@ const UpdateVehiclePage = () => {
 
   const handleFormSubmit = () => {
     setSelectedVehicleId(null);
-    // Optionally, you can refresh the vehicle list here
+
   };
 
   return (
