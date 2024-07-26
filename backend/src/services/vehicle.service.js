@@ -80,6 +80,12 @@ async function updateVehicle(vehicleId, vehicleData, currentUserEmail) {
       return [null, "El ID del vehículo no es válido"];
     }
 
+    // Validar los datos del vehículo con el esquema
+    const { error: bodyError } = vehicleSchema.validate(vehicleData);
+    if (bodyError) {
+      return [null, bodyError.message];
+    }
+
     const vehicle = await Vehicle.findById(vehicleId);
     if (!vehicle) {
       return [null, "El vehículo no se encontró"];
@@ -90,9 +96,8 @@ async function updateVehicle(vehicleId, vehicleData, currentUserEmail) {
       return [null, "No tienes permiso para editar este vehículo"];
     }
 
-    const { modelo, ...updateData } = vehicleData;
-
-    Object.assign(vehicle, updateData);
+    // Actualizar el vehículo con todos los datos
+    Object.assign(vehicle, vehicleData);
     await vehicle.save();
 
     return [vehicle, null];
