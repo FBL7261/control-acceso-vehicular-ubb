@@ -8,7 +8,7 @@ const UpdateVehicleForm = ({ vehicleId, onSubmit }) => {
     modelo: '',
     marca: '',
     color: '',
-    foto: null,
+    foto: '', // Cambiado de null a ''
   });
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -17,7 +17,13 @@ const UpdateVehicleForm = ({ vehicleId, onSubmit }) => {
     const fetchVehicle = async () => {
       try {
         const vehicleData = await vehicleService.getVehicleById(vehicleId);
-        setVehicle(vehicleData);
+        setVehicle({
+          matricula: vehicleData.matricula || '',
+          modelo: vehicleData.modelo || '',
+          marca: vehicleData.marca || '',
+          color: vehicleData.color || '',
+          foto: '', // Foto no se establece aquí
+        });
       } catch (err) {
         setError('Error al cargar los datos del vehículo.');
       }
@@ -137,3 +143,4 @@ const UpdateVehicleForm = ({ vehicleId, onSubmit }) => {
 };
 
 export default UpdateVehicleForm;
+2
