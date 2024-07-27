@@ -18,8 +18,9 @@ const LoginForm = () => {
         const userRole = storedUser?.roles?.[0];
         if(userRole === 'guardia') {
           navigate('/guard-home');
-        }else{
-        navigate('/home');}
+        } else {
+          navigate('/home');
+        }
       }
     } catch (error) {
       setError('Credenciales incorrectas');
@@ -39,7 +40,6 @@ const LoginForm = () => {
           <h1>Iniciar Sesión</h1>
           <form onSubmit={handleSubmit}>
             <div className="form-group">
-              
               <input
                 type="email"
                 value={email}
@@ -49,7 +49,6 @@ const LoginForm = () => {
               />
             </div>
             <div className="form-group">
-              
               <input
                 type="password"
                 value={password}
@@ -59,8 +58,8 @@ const LoginForm = () => {
               />
             </div>
             {error && <div className="error">{error}</div>}
-            <div className="button-container"> {/* Añadido para centrar el botón */}
-              <button type="submit" className='login-button'>Ingresar</button>
+            <div className="button-container">
+              <button type="submit" className="login-button">Ingresar</button>
             </div>
           </form>
         </div>

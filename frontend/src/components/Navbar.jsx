@@ -7,7 +7,7 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const storedUser = getCurrentUser();
-    const userRole = storedUser?.roles?.[0]; // Ajusta según la estructura de tu objeto de usuario
+    const userRole = storedUser?.roles?.[0];
 
     const logoutSubmit = async () => {
         try {
@@ -24,11 +24,6 @@ const Navbar = () => {
                 <li className={location.pathname === "/home" ? "active" : ""}>
                     <NavLink to="/home">Inicio</NavLink>
                 </li>
-                {userRole === 'guardia' && (
-                    <li className={location.pathname === "/guard-home" ? "active" : ""}>
-                        <NavLink to="/guard-home">Panel de Guardia</NavLink>
-                    </li>
-                )}
                 {userRole === 'admin' && (
                     <>
                         <li className={location.pathname === "/admin/requests" ? "active" : ""}>
@@ -36,9 +31,25 @@ const Navbar = () => {
                         </li>
                     </>
                 )}
-                <li className={location.pathname === "/create-request" ? "active" : ""}>
-                    <NavLink to="/create-request">Crear Solicitud</NavLink>
+                
+                {userRole === 'user' && (
+                    <>
+                        <li className={location.pathname === "/create-request" ? "active" : ""}>
+                        <NavLink to="/create-request">Crear Solicitud</NavLink>
+                        </li>
+                    </>
+                )}
+                {userRole === 'user' && (
+                    <>
+                        <li className={location.pathname === "/requests" ? "active" : ""}>
+                        <NavLink to="/requests">Mis Solicitudes</NavLink>
+                        </li>
+                    </>
+                )}
+                <li className={location.pathname === '/vehicles' ? 'active' : ''}>
+              <NavLink to="/vehicles">Vehículos</NavLink>
                 </li>
+                
                 <li className={location.pathname === "/" ? "active" : ""}>
                     <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
                 </li>

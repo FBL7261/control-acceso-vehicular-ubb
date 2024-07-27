@@ -162,3 +162,12 @@ frontend/.env*.local
 
 # vercel
 frontend/.vercel
+
+#evitar fotos autos al git
+/src/upload/*.jpg
+/src/upload/*.jpeg
+/src/upload/*.png
+/src/upload/*.gif
+/src/upload/*.bmp
+/src/upload/*.webp
+/src/upload/*.svg

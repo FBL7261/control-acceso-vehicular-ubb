@@ -4,11 +4,11 @@ const API_URL = 'http://localhost:3000/api/pdf';
 
 const getAuthToken = () => sessionStorage.getItem('token');
 
-export const uploadPDF = async (file, userId) => {
+export const uploadPDF = async (file, requestId) => {
   try {
     const formData = new FormData();
     formData.append('pdf', file);
-    const response = await axios.post(`${API_URL}/${userId}`, formData, {
+    const response = await axios.post(`${API_URL}/${requestId}`, formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${getAuthToken()}`
@@ -21,12 +21,9 @@ export const uploadPDF = async (file, userId) => {
   }
 };
 
-
-
-
-export const getPDFsForPerson = async (personId) => {
+export const getPDFsForRequest = async (requestId) => {
   try {
-    const response = await axios.get(`${API_URL}/${personId}`, {
+    const response = await axios.get(`${API_URL}/request/${requestId}`, {
       headers: {
         'Authorization': `Bearer ${getAuthToken()}`
       }
@@ -50,4 +47,10 @@ export const deletePDF = async (id) => {
     console.error('Error deleting PDF:', error);
     throw error;
   }
+};
+
+export default { 
+    uploadPDF, 
+    getPDFsForRequest, 
+    deletePDF 
 };

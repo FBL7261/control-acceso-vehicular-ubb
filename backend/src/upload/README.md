@@ -1,0 +1,1 @@
+Este archivo existe para garantizar la existencia de esta carpeta, la que permite la subida de vehiculos

@@ -29,13 +29,13 @@ export const createRegEntryUser = async (data) => {
     }
     const response = await axios.post(`${API_URL}/regEntryUser`, data, {
       headers: {
-        Authorization: `Bearer ${token}`,
-      },
+        Authorization: `Bearer ${getToken()}`
+      }
     });
-    return response.data; // Asegúrate de que la respuesta contenga 'data'
-  } catch (error) {
+    return response.data;
+    } catch (error) {
     throw error.response.data;
-  }
+    }
 };
 
 export const getRegEntry = async () => {

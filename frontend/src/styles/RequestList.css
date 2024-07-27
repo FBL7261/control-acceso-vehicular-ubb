@@ -1,11 +1,11 @@
-/* Estilos para RequestList */
+/* RequestList.css */
 .request-list {
   margin: 20px;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  position: relative; /* Para posicionar el botón */
+  position: relative;
 }
 
 .request-list h2 {
@@ -22,7 +22,7 @@
 .request-list li {
   margin-bottom: 20px;
   padding: 15px;
-  background-color: #e0f7fa; /* Color de fondo diferente */
+  background-color: #e0f7fa;
   border-radius: 8px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
@@ -60,23 +60,69 @@
 }
 
 .back-button {
-  position: absolute;
-  top: 10px;
-  left: 10px;
-  padding: 10px 20px;
-  background-color: #007bff;
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #6366F1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
   color: #fff;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+  background-color: #6366F1;
   text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 20px;
+}
+
+.back-button svg {
+  margin-right: 0.5rem;
 }
 
 .back-button:hover {
-  background-color: #0056b3;
+  background-color: #4f46e5;
+}
+
+.back-button .font-bold {
+  font-size: 1.125rem;
+  font-weight: bold;
 }
 
 .pdf-viewer {
   height: 500px;
   margin-top: 20px;
+}
+
+.action-buttons {
+  margin-top: 10px;
+  display: flex;
+}
+
+.approve-button {
+  background-color: green;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.reject-button {
+  background-color: red;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.approve-button:hover,
+.reject-button:hover {
+  opacity: 0.8;
+}
+
+.request-item {
+  margin-bottom: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }

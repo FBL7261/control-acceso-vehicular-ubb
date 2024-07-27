@@ -1,6 +1,5 @@
 
 const Error404 = () => {
-  console.log("Error 404, Page not found");
   return (
     <main className="error_404">
       <div className="card">

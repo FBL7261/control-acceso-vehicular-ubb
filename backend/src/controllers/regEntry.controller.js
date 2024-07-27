@@ -162,7 +162,6 @@ async function getRegEntryById(req, res) {
     }
 }
 
-
 async function getRegEntryByRut(req, res) {
     try {
         const { rut } = req.params;
@@ -181,6 +180,7 @@ async function getRegEntryByRut(req, res) {
         respondError(req, res, 400, error.message);
     }
 }
+
 
 /**
  * @name deleteRegEntryById

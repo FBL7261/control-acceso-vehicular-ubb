@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { createRegEntry } from '../services/regEntry.service';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import '../styles/CreateRegEntry.css';
+
 // Función para formatear el RUT
 const formatRut = (rut) => {
   const cleaned = rut.replace(/[^0-9kK]/g, '');
@@ -38,15 +41,17 @@ const CreateRegEntry = () => {
     e.preventDefault();
     try {
       await createRegEntry(entry);
-      console.log('Entrada registrada con éxito');
+      toast.success('Se ha registrado el ingreso con éxito');
       setEntry({ rut: '', plate: '', name: '', reason: '' }); // Limpiar el formulario
     } catch (error) {
+      toast.error('Error al registrar la entrada');
       console.log('Error al registrar la entrada', error);
     }
   };
 
   return (
     <div className="create-entry-container">
+      <ToastContainer />
       <form className="create-entry-form" onSubmit={handleSubmit}>
         <h2>Registrar Nueva Entrada</h2>
         <div className="form-group">

@@ -138,6 +138,20 @@ async function getRegEntryByPlate(plate) {
     }
 }
 
+async function getRegEntryByRut(rut) {
+    try {
+        const entries = await RegEntry.find({ rut });
+
+        if (!entries || entries.length === 0) {
+            return [null, "No se ha encontrado registro de entrada"];
+        }
+        return [entries, null];
+    } catch (error) {
+        handleError(error, "regEntry.controller -> getRegEntryByRut");
+        respondError(req, res, 400, error.message);
+    }
+}
+
 /**
  * 
  * @name getRegEntryById
@@ -157,20 +171,6 @@ async function getRegEntryById(id) {
     } catch (error) {
         handleError(error, "regEntry.service -> getRegEntryById");
         return [null, 'Error al buscar registro de entrada por ID'];
-    }
-}
-
-async function getRegEntryByRut(rut) {
-    try {
-        const entries = await RegEntry.find({ rut });
-
-        if (!entries || entries.length === 0) {
-            return [null, "No se ha encontrado registro de entrada"];
-        }
-        return [entries, null];
-    } catch (error) {
-        handleError(error, "regEntry.controller -> getRegEntryByRut");
-        respondError(req, res, 400, error.message);
     }
 }
 

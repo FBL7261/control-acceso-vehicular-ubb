@@ -24,6 +24,10 @@ const requestSchema = new mongoose.Schema({
         enum: STATES,
         default: 'Pendiente',
     },
+    pdfs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'PDF'
+    }],
     createdAt: {
         type: Date,
         default: Date.now
