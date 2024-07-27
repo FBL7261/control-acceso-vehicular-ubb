@@ -1,74 +1,77 @@
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 30px;
-}
-.entry-list {
-    margin-top: 10px;
+.container-entry-list {
+    max-width: 800px;
+    margin: 0 auto;
     padding: 20px;
-    display: flex;
-    flex-direction: center;
-}
-
-.backk-button {
-    background-color: #0069dadc;
-    color: white;
-    border: none;
-    padding: 10px 20px;
+  }
+  
+  .back-button {
     margin-bottom: 20px;
-    cursor: pointer;
-}
-
-.backk-button:hover {
-    background-color: #0056b3;
-}
-
-.entry-regs {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    max-width: 900px;
-}
-
-.entry-reg {
-    background-color: #c7c7c794;
+  }
+  
+  .title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #1e3a8a;
+    margin-bottom: 20px;
+  }
+  
+  .entry-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .entry-reg {
+    padding: 20px;
     border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 15px;
-    width: calc(33.333% - 40px); /* Three regs per row */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+    background-color: #fff;
     margin-bottom: 10px;
-}
-
-.entry-reg strong {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.deletereg-button {
-    background-color: #c50000d8;
+    transition: box-shadow 0.3s ease-in-out;
+  }
+  
+  .entry-reg:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .deletereg-button {
+    background-color: #e53e3e;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease-in-out;
+  }
+  
+  .deletereg-button:hover {
+    background-color: #c53030;
+  }
+  
+  .error {
+    color: #e53e3e;
+    text-align: center;
+  }
+  .filters {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 1rem;
+  }
+  
+  .sort-order {
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .today-button {
+    padding: 0.5rem 1rem;
+    background-color: #007bff;
     color: white;
     border: none;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    border-radius: 4px;
     cursor: pointer;
-    top: 1px;
-    right: 10px;
-    margin-left: 100%;
-    margin-top: -20px;
-}
-
-.deletereg-button:hover {
-    background-color: #830000;
-}
-
-.deletereg-button::before {
-    content: '✖';
-    font-size: 8px;
-    color: white;
-}
+  }
+  
+  .today-button:hover {
+    background-color: #0056b3;
+  }

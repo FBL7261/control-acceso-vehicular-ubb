@@ -1,7 +1,19 @@
 import React, { useState } from 'react';
 import { createRegEntry } from '../services/regEntry.service';
-//import { useNavigate } from 'react-router-dom';
 import '../styles/CreateRegEntry.css';
+// Función para formatear el RUT
+const formatRut = (rut) => {
+  const cleaned = rut.replace(/[^0-9kK]/g, '');
+  if (cleaned.length > 1) {
+    return `${cleaned.slice(0, -1)}-${cleaned.slice(-1)}`;
+  }
+  return cleaned;
+};
+// Función para formatear la patente
+const formatPlate = (plate) => {
+  const cleaned = plate.replace(/[^a-zA-Z0-9]/g, '').toUpperCase();
+  return cleaned.replace(/(.{2})(.{2})(.{2})/, '$1.$2.$3');
+};
 
 const CreateRegEntry = () => {
   const [entry, setEntry] = useState({ 
@@ -10,19 +22,24 @@ const CreateRegEntry = () => {
     name: '', 
     reason: '' 
   });
-
+// Función para manejar el cambio en los inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setEntry({ ...entry, [name]: value });
+    let formattedValue = value;
+    if (name === 'rut') {
+      formattedValue = formatRut(value);
+    } else if (name === 'plate') {
+      formattedValue = formatPlate(value);
+    }
+    setEntry({ ...entry, [name]: formattedValue });
   };
-  //const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       await createRegEntry(entry);
       console.log('Entrada registrada con éxito');
       setEntry({ rut: '', plate: '', name: '', reason: '' }); // Limpiar el formulario
-      //navigate('/guard-home'); // Redirigir a la página de inicio del guardia
     } catch (error) {
       console.log('Error al registrar la entrada', error);
     }
@@ -41,6 +58,8 @@ const CreateRegEntry = () => {
             placeholder='xxxxxxxx-x'
             onChange={handleChange} 
             required 
+            maxLength={10}
+            minLength={9}
           />
         </div>
         <div className="form-group">
@@ -49,8 +68,11 @@ const CreateRegEntry = () => {
             type="text" 
             name="plate" 
             value={entry.plate} 
+            placeholder='XX.XX.XX'
             onChange={handleChange} 
-            required 
+            required
+            maxLength={8}
+            minLength={8}
           />
         </div>
         <div className="form-group">

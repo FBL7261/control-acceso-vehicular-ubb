@@ -29,13 +29,13 @@ export const createRegEntryUser = async (data) => {
     }
     const response = await axios.post(`${API_URL}/regEntryUser`, data, {
       headers: {
-        Authorization: `Bearer ${getToken()}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     });
-    return response.data;
-    } catch (error) {
+    return response.data; // Asegúrate de que la respuesta contenga 'data'
+  } catch (error) {
     throw error.response.data;
-    }
+  }
 };
 
 export const getRegEntry = async () => {
@@ -55,8 +55,29 @@ export const getRegEntry = async () => {
   }
 };
 
+export const getRegEntryByRut = async (rut) => {  
+  try {
+    const token = getToken();
+    if(!token) {
+      throw new Error('No hay un token de autenticación');
+    }
+    const response = await axios.get(`${API_URL}/rut/${rut}`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+};
+
 export const getRegEntryByPlate = async (plate) => {
   try {
+    const token = getToken();
+    if(!token) {
+      throw new Error('No hay un token de autenticación');
+    }
     const response = await axios.get(`${API_URL}/plate/${plate}`, {
       headers: {
         Authorization: `Bearer ${getToken()}`
@@ -68,6 +89,18 @@ export const getRegEntryByPlate = async (plate) => {
   }
 };
 
+export const getEntryByDate = async (date) => {
+  try {
+    const response = await axios.get(`${API_URL}/date/${date}`, {
+      headers: {
+        Authorization: `Bearer ${getToken()}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response.data;
+  }
+}
 
 export const deleteRegEntry = async (id) => {
   try {
@@ -83,5 +116,27 @@ export const deleteRegEntry = async (id) => {
     return response.data;
   } catch (error) {
     throw error.response.data;
+  }
+};
+
+export const searchEntries = async ({ date, rut, plate }) => {
+  try {
+    const token = getToken();
+    if (!token) {
+      throw new Error('No hay un token de autenticación');
+    }
+    let endpoint = `${API_URL}/search?`;
+    if (date) endpoint += `date=${date}&`;
+    if (rut) endpoint += `rut=${rut}&`;
+    if (plate) endpoint += `plate=${plate}`;
+
+    const response = await axios.get(endpoint, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response ? error.response.data : error;
   }
 };

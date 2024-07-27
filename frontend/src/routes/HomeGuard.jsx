@@ -7,18 +7,40 @@ import '../styles/GuardiaInterface.css';
 
 const HomeGuard = () => {
   const navigate = useNavigate();
+  const handleViewRegEntries = () => {
+    navigate('/search');
+  }
+  const handleViewRegEntriesByDate = () => {
+    navigate('/search-by-date');
+  }
+  const handleViewRegEntriesByPlate = () => {
+    navigate('/search-by-plate');
+  }
+  const handleViewRegEntriesByRut = () => {
+    navigate('/search-reg-by-rut');
+  }
+  const handleViewRegEntriesTotally = () => {
+    navigate('/search-totally');
+  }
 
-  const handleViewEntries = () => {
-    navigate('/reg-entries'); // Redirigir a la ruta de entradas registradas
-  };
 
   return (
     <>
       <NavbarGuard />
       <div className='guard-interface'>
         <h1>Welcome</h1>
-        <p>Este es el contenido de la página de inicio para el guardia.</p>
-        <button onClick={handleViewEntries} className='guard-button'>Ver Entradas Registradas</button> {/* Botón para ver entradas */}
+        <h2>Instrucciones de uso</h2>
+        <p>Para ingresar rut: solo debe ingresar los nomeros y el digito de final sea k o algun numero. Se formateara automaticamente</p>
+        <p>Para ingresar patente: solo debe ingresar las letras y numeros. Se formateara automaticamente</p>
+        {/* <div className='search-bar-box'>
+        <SearchBar setSearchResults={setSearchResults} />
+        </div>
+        <RegEntryList entries={searchResults} /> */}
+        <button onClick={handleViewRegEntries} className='guard-view-entry'>Ver registros</button>
+        <button onClick={handleViewRegEntriesByDate} className='guard-view-entry'>Buscar por fecha</button>
+        <button onClick={handleViewRegEntriesByPlate} className='guard-view-entry'>Buscar por patente</button>
+        <button onClick={handleViewRegEntriesByRut} className='guard-view-entry'>Buscar por rut</button>
+        <button onClick={handleViewRegEntriesTotally} className='guard-view-entry'>Buscar todos los registros</button>
         <div className='create-entry-box'>
           <CreateRegEntry /> {/* Incluir el formulario de registro aquí */}
         </div>
