@@ -49,8 +49,7 @@
   text-decoration: underline;
 }
 
-.loading,
-.error {
+.loading, .error {
   text-align: center;
   color: #888;
 }

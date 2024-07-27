@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { createRequest } from "../services/request.service";
-import { useNavigate } from "react-router-dom";
+import React, { useState } from 'react';
+import { createRequest } from '../services/request.service';
+import { useNavigate } from 'react-router-dom';
 
 const CreateRequest = () => {
-  const [username, setUsername] = useState("");
-  const [rut, setRut] = useState("");
-  const [email, setEmail] = useState("");
-  const [description, setDescription] = useState("");
+  const [username, setUsername] = useState('');
+  const [rut, setRut] = useState('');
+  const [email, setEmail] = useState('');
+  const [description, setDescription] = useState('');
   const [pdfFile, setPdfFile] = useState(null);
   const navigate = useNavigate();
 
@@ -14,18 +14,18 @@ const CreateRequest = () => {
     e.preventDefault();
 
     const formData = new FormData();
-    formData.append("username", username);
-    formData.append("rut", rut);
-    formData.append("email", email);
-    formData.append("description", description);
-    formData.append("pdf", pdfFile);
+    formData.append('username', username);
+    formData.append('rut', rut);
+    formData.append('email', email);
+    formData.append('description', description);
+    formData.append('pdf', pdfFile);
 
     try {
       await createRequest(formData);
-      console.log("Request created");
-      navigate("/home");
+      console.log('Request created');
+      navigate('/home');
     } catch (error) {
-      console.error("Error creating request:", error);
+      console.error('Error creating request:', error);
     }
   };
 

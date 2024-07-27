@@ -1,11 +1,11 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { login } from "../services/auth.service";
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../services/auth.service';
 
 const LoginForm = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
@@ -13,11 +13,11 @@ const LoginForm = () => {
     try {
       const response = await login({ email, password });
       if (response.status === 200) {
-        navigate("/home");
+        navigate('/home');
       }
     } catch (error) {
-      setError("Credenciales incorrectas");
-      console.error("Error en el inicio de sesión:", error);
+      setError('Credenciales incorrectas');
+      console.error('Error en el inicio de sesión:', error);
     }
   };
 
@@ -41,7 +41,7 @@ const LoginForm = () => {
           required
         />
       </div>
-      {error && <div style={{ color: "red" }}>{error}</div>}
+      {error && <div style={{ color: 'red' }}>{error}</div>}
       <button type="submit">Iniciar Sesión</button>
     </form>
   );

@@ -1,5 +1,5 @@
 // src/components/Form.jsx
-import React from "react";
+import React from 'react';
 
 const Form = ({ backgroundColor, title, fields }) => {
   return (

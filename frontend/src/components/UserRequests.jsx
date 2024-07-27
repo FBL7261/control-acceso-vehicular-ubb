@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import requestService from "../services/request.service";
-import "../styles/UserRequests.css"; // Importar el archivo CSS
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import requestService from '../services/request.service';
+import '../styles/UserRequests.css'; // Importar el archivo CSS
 
 const UserRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -12,14 +12,14 @@ const UserRequests = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        console.log("Iniciando fetch de solicitudes...");
+        console.log('Iniciando fetch de solicitudes...');
         const response = await requestService.getRequestsByUserEmail();
         const requests = response.data;
-        console.log("Solicitudes recibidas:", requests);
+        console.log('Solicitudes recibidas:', requests);
         if (Array.isArray(requests)) {
           setRequests(requests);
         } else {
-          setError("La respuesta del servidor no es un array.");
+          setError('La respuesta del servidor no es un array.');
         }
       } catch (error) {
         setError(error.message);
@@ -41,38 +41,24 @@ const UserRequests = () => {
 
   return (
     <div className="user-requests">
-      <button className="back-button" onClick={() => navigate(-1)}>
-        Volver
-      </button>
+      <button className="back-button" onClick={() => navigate(-1)}>Volver</button>
       <h2>Mis Solicitudes</h2>
       <ul>
         {requests.map((request) => (
           <li key={request._id}>
-            <strong>ID:</strong> {request._id}
-            <br />
-            <strong>Username:</strong> {request.username}
-            <br />
-            <strong>RUT:</strong> {request.rut}
-            <br />
-            <strong>Email:</strong> {request.email}
-            <br />
-            <strong>Description:</strong> {request.description}
-            <br />
-            <strong>Status:</strong> {request.status}
-            <br />
-            <strong>Created At:</strong>{" "}
-            {new Date(request.createdAt).toLocaleString()}
-            <br />
+            <strong>ID:</strong> {request._id}<br />
+            <strong>Username:</strong> {request.username}<br />
+            <strong>RUT:</strong> {request.rut}<br />
+            <strong>Email:</strong> {request.email}<br />
+            <strong>Description:</strong> {request.description}<br />
+            <strong>Status:</strong> {request.status}<br />
+            <strong>Created At:</strong> {new Date(request.createdAt).toLocaleString()}<br />
             <strong>PDFs:</strong>
             <ul>
               {request.pdfs && request.pdfs.length > 0 ? (
-                request.pdfs.map((pdf) => (
+                request.pdfs.map(pdf => (
                   <li key={pdf._id}>
-                    <a
-                      href={`http://localhost:3000/uploads/${pdf.filePath}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
+                    <a href={`http://localhost:3000/uploads/${pdf.filePath}`} target="_blank" rel="noopener noreferrer">
                       {pdf.name}
                     </a>
                   </li>
