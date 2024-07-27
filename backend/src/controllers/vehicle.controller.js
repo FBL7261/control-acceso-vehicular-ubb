@@ -164,29 +164,11 @@ const getVehicleByModel = async (req, res) => {
 
 };
 
-async function updateVehicle(req, res) {
-  try {
-    const { vehicleId } = req.params;
-    const updates = req.body;
-
-    const [updatedVehicle, updateError] = await VehicleService.updateVehicle(vehicleId, updates);
-    if (updateError) {
-      return respondError(req, res, 400, updateError);
-    }
-
-    respondSuccess(req, res, 200, updatedVehicle);
-  } catch (error) {
-    handleError(error, "vehicle.controller -> updateVehicle");
-    respondError(req, res, 500, "Error al actualizar el vehículo");
-  }
-}
-
 export default {
   createVehicle,
   getVehiclesByUser,
   deleteVehicle,
   getVehicleModels,
-  updateVehicle,
   getVehicleByModel,
   updateVehicleByModel,
 };
