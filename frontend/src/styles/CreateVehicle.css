@@ -5,10 +5,12 @@
     border-radius: 8px;
     box-shadow: none;
     border: none;
+    position: relative; /* Added to position the go-back arrow */
 }
 
 .create-vehicle-container h1 {
     color: #000000; /* Color del texto del encabezado */
+    margin-left: 40px; /* Add margin to avoid overlap with the arrow */
 }
 
 .create-vehicle-container .vehicle-form-container {
@@ -102,4 +104,20 @@
 
 .create-vehicle-container .vehicle-form::-webkit-scrollbar-thumb:hover {
     background: var(--scrollbar-thumb-hover-bg);
+}
+
+.create-vehicle-container .go-back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 2em;
+    color: #000000; /* Color del texto del botón */
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-transition: color 0.3s ease;
+    transition: color 0.3s ease;
+}
+
+.create-vehicle-container .go-back:hover {
+    color: #fddb3a;
 }
