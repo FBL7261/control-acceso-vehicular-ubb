@@ -56,38 +56,6 @@ export const deleteVehicle = async (vehicleId) => {
   }
 };
 
-export const updateVehicle = async (vehicleId, vehicleData) => {
-  try {
-    const formData = new FormData();
-    
-    // Verificar qué datos estamos agregando a formData
-    for (const key in vehicleData) {
-      // Si vehicleData[key] es un archivo, asegúrate de que sea un objeto File
-      if (vehicleData[key] instanceof File) {
-        console.log(`Appending ${key}: [file] ${vehicleData[key].name}`);
-      } else {
-        console.log(`Appending ${key}:`, vehicleData[key]);
-      }
-      formData.append(key, vehicleData[key]);
-    }
-
-    // Realizar la solicitud PUT con axios
-    const response = await axios.put(`${API_URL}/${vehicleId}`, formData, {
-      headers: {
-        // 'Content-Type': 'multipart/form-data' es manejado automáticamente por axios
-        'Authorization': `Bearer ${getAuthToken()}`
-      },
-      withCredentials: true
-    });
-
-    return response.data;
-  } catch (error) {
-    console.error('Error actualizando vehículo:', error.response ? error.response.data : error.message);
-    throw error;
-  }
-};
-
-
 export const getVehicleById = async (vehicleId) => {
 
   try {

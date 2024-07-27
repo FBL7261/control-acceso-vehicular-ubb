@@ -97,30 +97,34 @@ async function deleteVehicle(req, res) {
 }
 
 async function updateVehicle(req, res) {
+
   try {
-    const { vehicleId } = req.params;
+
+    const vehicleId = req.params.id;
+
     const vehicleData = req.body;
-    const currentUserEmail = req.email;
 
-    if (req.files && req.files.foto) {
-      vehicleData.foto = req.files.foto[0].filename;
-    }
 
-    const { error: bodyError } = vehicleSchema.validate(vehicleData, { context: { isUpdate: true } });
-    if (bodyError) {
-      return respondError(req, res, 400, bodyError.message);
-    }
+    const [updatedVehicle, updateError] = await VehicleService.updateVehicle(vehicleId, vehicleData);
 
-    const [updatedVehicle, updateError] = await VehicleService.updateVehicle(vehicleId, vehicleData, currentUserEmail);
+
     if (updateError) {
-      return respondError(req, res, 403, updateError);
+
+      return respondError(req, res, 400, updateError);
+
     }
+
 
     respondSuccess(req, res, 200, updatedVehicle);
+
   } catch (error) {
+
     handleError(error, "vehicle.controller -> updateVehicle");
+
     respondError(req, res, 500, "Error al actualizar el vehículo");
+
   }
+
 }
 
 async function getVehicleById(req, res) {

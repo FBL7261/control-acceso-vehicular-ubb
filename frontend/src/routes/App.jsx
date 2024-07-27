@@ -8,22 +8,12 @@ import RequestList from '../components/RequestList';
 import ProtectedRoute from '../components/ProtectedRoute';
 import { AuthProvider } from '../context/AuthContext';
 import CreateVehicle from '../pages/CreateVehicle'; 
-import UpdateVehiclePage from '../pages/UpdateVehiclePage';
 import DeleteVehiclePage from '../pages/DeleteVehiclePage';
 import UserVehicles from '../pages/UserVehicles';
 import Error404 from './Error404';
 import Profile from './Profile';
 import VehiclesPage from '../pages/VehiclesPage';
-import UpdateVehicleForm from '../components/UpdateVehicleForm';
-import { useParams } from 'react-router-dom';
 
-const UpdateVehicleFormWrapper = () => {
-
-  const { vehicleId } = useParams();
-
-  return <UpdateVehicleForm vehicleId={vehicleId} />;
-
-};
 
 const App = () => {
   return (
@@ -37,8 +27,6 @@ const App = () => {
           <Route path="/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />
           <Route path="/vehicles/delete-vehicle" element={<ProtectedRoute><DeleteVehiclePage /></ProtectedRoute>} />
           <Route path="/vehicles/my-vehicles" element={<ProtectedRoute><UserVehicles /></ProtectedRoute>} />
-          <Route path="/vehicles/update-vehicle" element={<ProtectedRoute><UpdateVehiclePage /></ProtectedRoute>} />
-          <Route path="/vehicles/update-vehicle/updating/:vehicleId" element={<ProtectedRoute><UpdateVehicleFormWrapper /></ProtectedRoute>} />
           <Route path="/requests" element={<ProtectedRoute><UserRequests /></ProtectedRoute>} />
           <Route path="/admin/requests" element={<ProtectedRoute allowedRoles={['admin']}><RequestList /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

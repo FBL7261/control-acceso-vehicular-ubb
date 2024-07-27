@@ -74,35 +74,18 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
   }
 }
 
-async function updateVehicle(vehicleId, vehicleData, currentUserEmail) {
+async function updateVehicle(vehicleId, vehicleData) {
   try {
     if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
       return [null, "El ID del vehículo no es válido"];
     }
 
-    const vehicle = await Vehicle.findById(vehicleId);
-    if (!vehicle) {
+    const updatedVehicle = await Vehicle.findByIdAndUpdate(vehicleId, vehicleData, { new: true });
+    if (!updatedVehicle) {
       return [null, "El vehículo no se encontró"];
     }
 
-    const propietario = await User.findById(vehicle.propietario);
-    if (!propietario || propietario.email !== currentUserEmail) {
-      return [null, "No tienes permiso para editar este vehículo"];
-    }
-
-    const { error: bodyError } = vehicleSchema.validate(vehicleData, { context: { isUpdate: true } });
-    if (bodyError) {
-      return [null, bodyError.message];
-    }
-
-    if (vehicleData.foto) {
-      vehicleData.foto = vehicleData.foto[0].filename;
-    }
-
-    Object.assign(vehicle, vehicleData);
-    await vehicle.save();
-
-    return [vehicle, null];
+    return [updatedVehicle, null];
   } catch (error) {
     handleError(error, "vehicle.service -> updateVehicle");
     return [null, "Error al actualizar el vehículo"];

@@ -13,6 +13,5 @@ router.post("/", upload.fields([{ name: 'foto', maxCount: 1 }]), vehicleControll
 router.get("/user/:userId", vehicleController.getVehiclesByUser);
 router.get("/:vehicleId", vehicleController.getVehicleById);
 router.delete("/:vehicleId", vehicleController.deleteVehicle);
-router.put("/:vehicleId", upload.fields([{ name: 'foto', maxCount: 1 }]), vehicleController.updateVehicle);
 
 export default router;
