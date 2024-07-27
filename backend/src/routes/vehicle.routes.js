@@ -11,7 +11,6 @@ const router = Router();
 router.use(authenticationMiddleware);
 router.post("/", upload.fields([{ name: 'foto', maxCount: 1 }]), vehicleController.createVehicle);
 router.get("/user/:userId", vehicleController.getVehiclesByUser);
-router.get("/:vehicleId", vehicleController.getVehicleById);
 router.delete("/:vehicleId", vehicleController.deleteVehicle);
 
 export default router;

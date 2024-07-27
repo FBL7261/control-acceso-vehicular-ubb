@@ -74,28 +74,9 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
   }
 }
 
-async function getVehicleById(vehicleId) {
-  try {
-    if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
-      return [null, "El ID del vehículo no es válido"];
-    }
-
-    const vehicle = await Vehicle.findById(vehicleId);
-    if (!vehicle) {
-      return [null, "El vehículo no se encontró"];
-    }
-
-    return [vehicle, null];
-  } catch (error) {
-    handleError(error, "vehicle.service -> getVehicleById");
-    return [null, "Error al obtener el vehículo"];
-  }
-}
-
 export default {
   createVehicle,
   getVehiclesByUserId,
   deleteVehicle,
   updateVehicle,
-  getVehicleById,
 };
