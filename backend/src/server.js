@@ -26,7 +26,8 @@ async function setupServer() {
     server.use(morgan("dev"));
 
     server.use('/uploads', express.static(path.join(__dirname, 'src/uploads')));
-    
+    //Usado en el autos si no funciona quedaria unirlo con uploads o algo asi
+    server.use('/upload', express.static(path.join(path.resolve(), 'src', 'upload')));
 
     server.use("/api", indexRoutes);
 

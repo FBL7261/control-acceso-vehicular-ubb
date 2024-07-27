@@ -1,37 +1,50 @@
-"use strict"
+"use strict";
+
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { ACCESS_JWT_SECRET, REFRESH_JWT_SECRET } from '../config/configEnv.js';
 import { handleError } from '../utils/errorHandler.js';
 import User from '../models/user.model.js';
 
+/**
+ * Inicia sesión con un usuario.
+ * @async
+ * @function login
+ * @param {Object} user - Objeto de usuario
+ */
 async function login(user) {
   try {
-    const userFound = await User.findOne({ email: user.email }).populate("roles").exec();
+    const { email, password } = user;
+    const userFound = await User.findOne({ email }).populate("roles").exec();
+    
     if (!userFound) {
-      throw new Error("Usuario no encontrado");
+      return [null, null, "El usuario y/o contraseña son incorrectos"];
     }
 
-    const isPasswordValid = await bcrypt.compare(user.password, userFound.password);
-    if (!isPasswordValid) {
-      throw new Error("Contraseña incorrecta");
+    const matchPassword = await bcrypt.compare(password, userFound.password);
+    if (!matchPassword) {
+      return [null, null, "El usuario y/o contraseña son incorrectos"];
     }
 
-    if (!Array.isArray(userFound.roles)) {
-      throw new Error("Los roles del usuario no son un arreglo");
-    }
+    
 
     const accessToken = jwt.sign(
       {
-        id: userFound._id,
+        userId: userFound._id,
         email: userFound.email,
         roles: userFound.roles.map((role) => role.name),
       },
       ACCESS_JWT_SECRET,
-      { expiresIn: '5h' }
+      { expiresIn: '1d' }
     );
 
-    return { accessToken };
+    const refreshToken = jwt.sign(
+      { email: userFound.email },
+      REFRESH_JWT_SECRET,
+      { expiresIn: '7d' }
+    );
+
+    return [accessToken, refreshToken, null];
   } catch (error) {
     handleError(error, "auth.service -> login");
     throw error;
@@ -49,26 +62,22 @@ async function refresh(cookies) {
     if (!cookies.jwt) return [null, "No hay autorización"];
     const refreshToken = cookies.jwt;
 
-    const accessToken = await jwt.verify(
+    const [accessToken, errorToken] = await jwt.verify(
       refreshToken,
       REFRESH_JWT_SECRET,
       async (err, user) => {
         if (err) return [null, "La sesion a caducado, vuelva a iniciar sesion"];
 
-        const userFound = await User.findOne({
-          email: user.email,
-        })
+        const userFound = await User.findOne({ email: user.email })
           .populate("roles")
           .exec();
 
-        if (!userFound) return [null, "No usuario no autorizado"];
+        if (!userFound) return [null, "Usuario no autorizado"];
 
         const accessToken = jwt.sign(
-          { email: userFound.email, roles: userFound.roles },
+          { userId: userFound._id, email: userFound.email, roles: userFound.roles.map((role) => role.name) },
           ACCESS_JWT_SECRET,
-          {
-            expiresIn: "1d",
-          },
+          { expiresIn: '1d' }
         );
 
         return [accessToken, null];
@@ -89,12 +98,12 @@ async function refresh(cookies) {
  */
 async function getProfile(email) {
   try {
-    console.log("Buscando perfil para el email:", email); // Añade este log
-    const userFound = await User.findOne({ email: email })
+    console.log("Buscando perfil para el email:", email);
+    const userFound = await User.findOne({ email })
       .populate("roles")
       .exec();
     if (!userFound) {
-      console.log("Usuario no encontrado para el email:", email); // Añade este log
+      console.log("Usuario no encontrado para el email:", email);
       return null;
     }
 

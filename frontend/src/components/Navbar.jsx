@@ -31,6 +31,7 @@ const Navbar = () => {
                         </li>
                     </>
                 )}
+                
                 {userRole === 'user' && (
                     <>
                         <li className={location.pathname === "/create-request" ? "active" : ""}>
@@ -45,7 +46,9 @@ const Navbar = () => {
                         </li>
                     </>
                 )}
-
+                <li className={location.pathname === '/vehicles' ? 'active' : ''}>
+              <NavLink to="/vehicles">Vehículos</NavLink>
+                </li>
                 
                 <li className={location.pathname === "/" ? "active" : ""}>
                     <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
