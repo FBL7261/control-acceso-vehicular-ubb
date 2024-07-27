@@ -68,6 +68,7 @@ const DeleteVehiclePage = () => {
 
   return (
     <div className="delete-vehicle-page">
+      <a href="/vehicles" className="go-back">←</a>
       <h1 style={{ color: 'white' }}>Eliminar Vehículo</h1>
       {error && <p className="error">{error}</p>}
       <ul className="vehicle-list">
