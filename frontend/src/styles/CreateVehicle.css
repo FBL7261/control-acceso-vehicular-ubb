@@ -1,105 +1,108 @@
 /* CreateVehicle.css */
 .create-vehicle-container {
-    background-color: var(--page-background);
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: none;
-    border: none;
+  background-color: var(--page-background);
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: none;
+  border: none;
 }
 
 .create-vehicle-container h1 {
-    color: #000000; /* Color del texto del encabezado */
+  color: #000000; /* Color del texto del encabezado */
 }
 
 .create-vehicle-container .vehicle-form-container {
-    background-color: var(--page-background);
-    padding: 20px;
-    border-radius: var(--form-border-radius);
-    box-shadow: none;
-    border: none;
-    overflow-y: auto;
+  background-color: var(--page-background);
+  padding: 20px;
+  border-radius: var(--form-border-radius);
+  box-shadow: none;
+  border: none;
+  overflow-y: auto;
 }
 
 .create-vehicle-container .vehicle-form {
-    display: flex;
-    flex-direction: column;
-    max-width: 500px;
-    margin: auto;
-    padding: 20px;
-    background-color: var(--form-background);
-    border-radius: var(--form-border-radius);
-    box-shadow: none;
-    border: none;
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  background-color: var(--form-background);
+  border-radius: var(--form-border-radius);
+  box-shadow: none;
+  border: none;
 }
 
 .create-vehicle-container .vehicle-form div {
-    margin-bottom: 15px;
+  margin-bottom: 15px;
 }
 
 .create-vehicle-container .vehicle-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #000000; /* Color del texto en los labels */
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #000000; /* Color del texto en los labels */
 }
 
 .create-vehicle-container .vehicle-form input[type="text"],
 .create-vehicle-container .vehicle-form input[type="file"] {
-    width: 100%;
-    padding: var(--input-padding);
-    border: 1px solid var(--input-border-color);
-    border-radius: 4px;
-    background-color: var(--text-color);
-    color: var(--input-text-color);
+  width: 100%;
+  padding: var(--input-padding);
+  border: 1px solid var(--input-border-color);
+  border-radius: 4px;
+  background-color: var(--text-color);
+  color: var(--input-text-color);
 }
 
 .create-vehicle-container .vehicle-form button {
-    background-color: var(--form-button-bg);
-    color: #000000; /* Color del texto del botón */
-    border: none;
-    padding: var(--button-padding);
-    border-radius: var(--button-border-radius);
-    cursor: pointer;
-    font-size: 16px;
+  background-color: var(--form-button-bg);
+  color: #000000; /* Color del texto del botón */
+  border: none;
+  padding: var(--button-padding);
+  border-radius: var(--button-border-radius);
+  cursor: pointer;
+  font-size: 16px;
 }
 
 .create-vehicle-container .vehicle-form button:hover {
-    background-color: var(--button-hover-bg);
+  background-color: var(--button-hover-bg);
 }
 
 .create-vehicle-container .vehicle-form .checkbox-container {
-    display: flex;
-    align-items: center;
-    background-color: var(--checkbox-bg);
-    padding: var(--checkbox-container-padding);
-    border-radius: 4px;
+  display: flex;
+  align-items: center;
+  background-color: var(--checkbox-bg);
+  padding: var(--checkbox-container-padding);
+  border-radius: 4px;
 }
 
 .create-vehicle-container .vehicle-form .checkbox-container label {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-    color: #000000; /* Color del texto en el contenedor del checkbox */
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  color: #000000; /* Color del texto en el contenedor del checkbox */
 }
 
-.create-vehicle-container .vehicle-form .checkbox-container input[type="checkbox"] {
-    margin-right: 10px;
+.create-vehicle-container
+  .vehicle-form
+  .checkbox-container
+  input[type="checkbox"] {
+  margin-right: 10px;
 }
 
 /* Scrollbar styles */
 .create-vehicle-container .vehicle-form::-webkit-scrollbar {
-    width: 12px;
+  width: 12px;
 }
 
 .create-vehicle-container .vehicle-form::-webkit-scrollbar-track {
-    background: var(--scrollbar-track-bg);
+  background: var(--scrollbar-track-bg);
 }
 
 .create-vehicle-container .vehicle-form::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb-bg);
-    border-radius: 6px;
+  background: var(--scrollbar-thumb-bg);
+  border-radius: 6px;
 }
 
 .create-vehicle-container .vehicle-form::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-thumb-hover-bg);
+  background: var(--scrollbar-thumb-hover-bg);
 }

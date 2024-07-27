@@ -1,5 +1,5 @@
-import React, { useState, useContext, createContext } from 'react';
-import { createPortal } from 'react-dom';
+import React, { useState, useContext, createContext } from "react";
+import { createPortal } from "react-dom";
 
 const MensajesContext = createContext();
 
@@ -11,12 +11,12 @@ export const MensajesProvider = ({ children }) => {
   const [mensaje, setMensaje] = useState(null);
 
   const mensajeExito = (mensaje) => {
-    setMensaje({ tipo: 'exito', texto: mensaje });
+    setMensaje({ tipo: "exito", texto: mensaje });
     setTimeout(() => setMensaje(null), 3000);
   };
 
   const mensajeError = (mensaje) => {
-    setMensaje({ tipo: 'error', texto: mensaje });
+    setMensaje({ tipo: "error", texto: mensaje });
     setTimeout(() => setMensaje(null), 3000);
   };
 
@@ -27,12 +27,12 @@ export const MensajesProvider = ({ children }) => {
         createPortal(
           <div
             className={`fixed bottom-4 right-4 px-4 py-2 rounded-md text-white ${
-              mensaje.tipo === 'exito' ? 'bg-green-500' : 'bg-red-500'
+              mensaje.tipo === "exito" ? "bg-green-500" : "bg-red-500"
             }`}
           >
             {mensaje.texto}
           </div>,
-          document.body
+          document.body,
         )}
     </MensajesContext.Provider>
   );

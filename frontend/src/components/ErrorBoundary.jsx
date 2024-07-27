@@ -1,5 +1,5 @@
 // frontend/src/components/ErrorBoundary.jsx
-import React, { Component } from 'react';
+import React, { Component } from "react";
 
 class ErrorBoundary extends Component {
   constructor(props) {
@@ -14,7 +14,7 @@ class ErrorBoundary extends Component {
 
   componentDidCatch(error, errorInfo) {
     // Puedes registrar el error en un servicio de reporte de errores
-    console.error('Error capturado por ErrorBoundary:', error, errorInfo);
+    console.error("Error capturado por ErrorBoundary:", error, errorInfo);
   }
 
   render() {
@@ -23,7 +23,7 @@ class ErrorBoundary extends Component {
       return <h1>Algo salió mal. Por favor, inténtelo de nuevo más tarde.</h1>;
     }
 
-    return this.props.children; 
+    return this.props.children;
   }
 }
 

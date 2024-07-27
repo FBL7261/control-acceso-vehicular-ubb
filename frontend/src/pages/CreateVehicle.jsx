@@ -1,11 +1,11 @@
-import React from 'react';
-import VehicleForm from '../components/VehicleForm';
-import '../styles/CreateVehicle.css'; // Asegúrate de que la ruta sea correcta
+import React from "react";
+import VehicleForm from "../components/VehicleForm";
+import "../styles/CreateVehicle.css"; // Asegúrate de que la ruta sea correcta
 
 const CreateVehicle = () => {
   const handleVehicleCreated = () => {
     // Redirigir o mostrar un mensaje de éxito
-    alert('Vehículo creado con éxito!');
+    alert("Vehículo creado con éxito!");
   };
 
   return (

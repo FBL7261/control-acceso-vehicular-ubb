@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { getUserVehicles } from '../services/vehicle.service';
-import Modal from '../components/Modal'; // Import the Modal component
-import '../styles/UserVehicles.css'; // Import the CSS file
+import React, { useEffect, useState } from "react";
+import { getUserVehicles } from "../services/vehicle.service";
+import Modal from "../components/Modal"; // Import the Modal component
+import "../styles/UserVehicles.css"; // Import the CSS file
 
 const UserVehicles = () => {
   const [vehicles, setVehicles] = useState([]);
@@ -10,7 +10,7 @@ const UserVehicles = () => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {
-    const userIdFromSession = sessionStorage.getItem('userId');
+    const userIdFromSession = sessionStorage.getItem("userId");
     setUserId(userIdFromSession);
   }, []);
 
@@ -21,7 +21,7 @@ const UserVehicles = () => {
         const response = await getUserVehicles(userId);
         setVehicles(response.data);
       } catch (error) {
-        console.error('Error al obtener los vehÃ­culos:', error);
+        console.error("Error al obtener los vehÃ­culos:", error);
       }
     };
 
@@ -45,28 +45,42 @@ const UserVehicles = () => {
         <p>Actualmente no posees vehiculos registrados</p>
       ) : (
         <div className="vehicle-grid">
-          {vehicles.map(vehicle => (
+          {vehicles.map((vehicle) => (
             <div key={vehicle._id} className="vehicle-card">
               {vehicle.foto && (
                 <img
                   src={`http://localhost:3000/upload/${vehicle.foto}`}
                   alt={`${vehicle.marca} ${vehicle.modelo}`}
-                  onClick={() => handleImageClick(`http://localhost:3000/upload/${vehicle.foto}`)}
+                  onClick={() =>
+                    handleImageClick(
+                      `http://localhost:3000/upload/${vehicle.foto}`,
+                    )
+                  }
                 />
               )}
-              <p><strong>Matri­cula</strong> {vehicle.matricula}</p>
-              <p><strong>Modelo</strong> {vehicle.modelo}</p>
-              <p><strong>Marc:</strong> {vehicle.marca}</p>
-              <p><strong>Colo:</strong> {vehicle.color}</p>
+              <p>
+                <strong>Matri­cula</strong> {vehicle.matricula}
+              </p>
+              <p>
+                <strong>Modelo</strong> {vehicle.modelo}
+              </p>
+              <p>
+                <strong>Marc:</strong> {vehicle.marca}
+              </p>
+              <p>
+                <strong>Colo:</strong> {vehicle.color}
+              </p>
             </div>
           ))}
         </div>
       )}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        {selectedImage && <img src={selectedImage} alt="Vehicle" style={{ maxWidth: '100%' }} />}
+        {selectedImage && (
+          <img src={selectedImage} alt="Vehicle" style={{ maxWidth: "100%" }} />
+        )}
       </Modal>
     </div>
   );
-}
+};
 
 export default UserVehicles;
