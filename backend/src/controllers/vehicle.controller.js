@@ -14,15 +14,12 @@ async function createVehicle(req, res) {
     const currentUserEmail = req.email;
     const isAdmin = req.roles.includes("admin");
 
-    // Validar los datos del vehículo con el esquema
     const { error: bodyError } = vehicleSchema.validate(body);
     if (bodyError) {
       return respondError(req, res, 400, bodyError.message);
     }
 
-    // Verificar si se ha subido una foto
     if (req.files && req.files.foto) {
-      // Guardar solo el nombre del archivo
       body.foto = req.files.foto[0].filename;
     }
 
@@ -39,21 +36,17 @@ async function createVehicle(req, res) {
   }
 }
 
-
-// Obtener vehículos del usuario actual mediante su propio ID
 async function getVehiclesByUser(req, res) {
   try {
-    const { userId } = req.params; // El ID que viene en la solicitud
-    const currentUserEmail = req.email; // Correo del usuario autenticado
+    const { userId } = req.params;
+    const currentUserEmail = req.email;
 
-    // Buscar el usuario autenticado para obtener su ID
     const currentUser = await User.findOne({ email: currentUserEmail });
 
     if (!currentUser) {
       return respondError(req, res, 404, "Usuario autenticado no encontrado");
     }
 
-    // Asegurarse de que el usuario autenticado solo pueda acceder a sus propios vehículos
     if (currentUser._id.toString() !== userId) {
       return respondError(req, res, 403, "No tienes permiso para ver vehículos de otros usuarios");
     }
@@ -61,47 +54,41 @@ async function getVehiclesByUser(req, res) {
     const [vehicles, vehicleError] = await VehicleService.getVehiclesByUserId(userId);
 
     if (vehicleError) {
-      return respondError(req, res, 404, vehicleError); // Manejo de errores al obtener vehículos
+      return respondError(req, res, 404, vehicleError);
     }
 
-    // Asegurarse de que cada vehículo tenga la propiedad foto
     const vehiclesWithPhoto = vehicles.map(vehicle => ({
       ...vehicle._doc,
-      foto: vehicle.foto || null // Asegúrate de devolver null si la foto no está definida
+      foto: vehicle.foto || null,
     }));
 
-    respondSuccess(req, res, 200, vehiclesWithPhoto); // Vehículos obtenidos con éxito
+    respondSuccess(req, res, 200, vehiclesWithPhoto);
   } catch (error) {
     handleError(error, "vehicle.controller -> getVehiclesByUser");
     respondError(req, res, 500, "Error al obtener vehículos del usuario");
   }
 }
 
-// Eliminar un vehículo por su ID
 async function deleteVehicle(req, res) {
   try {
     const { vehicleId } = req.params;
     const currentUserEmail = req.email;
 
-    // Validar el ID del vehículo
     if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
       return respondError(req, res, 400, "El ID del vehículo no es válido");
     }
 
-    // Buscar el vehículo
     const vehicle = await Vehicle.findById(vehicleId);
     if (!vehicle) {
       return respondError(req, res, 404, "El vehículo no se encontró");
     }
 
-    // Verificar que el usuario actual sea el propietario
     const propietario = await User.findById(vehicle.propietario);
     if (!propietario || propietario.email !== currentUserEmail) {
       return respondError(req, res, 403, "No tienes permiso para eliminar este vehículo");
     }
 
-    // Eliminar el vehículo
-    await Vehicle.findByIdAndDelete(vehicleId); // Usar findByIdAndDelete para eliminar
+    await Vehicle.findByIdAndDelete(vehicleId);
     respondSuccess(req, res, 200, "Vehículo eliminado con éxito");
   } catch (error) {
     handleError(error, "vehicle.controller -> deleteVehicle");
@@ -109,14 +96,17 @@ async function deleteVehicle(req, res) {
   }
 }
 
-// Actualizar un vehículo por su ID
 async function updateVehicle(req, res) {
   try {
     const { vehicleId } = req.params;
     const vehicleData = req.body;
     const currentUserEmail = req.email;
 
-    const { error: bodyError } = vehicleSchema.validate(vehicleData);
+    if (req.files && req.files.foto) {
+      vehicleData.foto = req.files.foto[0].filename;
+    }
+
+    const { error: bodyError } = vehicleSchema.validate(vehicleData, { context: { isUpdate: true } });
     if (bodyError) {
       return respondError(req, res, 400, bodyError.message);
     }
@@ -134,31 +124,21 @@ async function updateVehicle(req, res) {
 }
 
 async function getVehicleById(req, res) {
-
   try {
-
     const { vehicleId } = req.params;
-
 
     const [vehicle, vehicleError] = await VehicleService.getVehicleById(vehicleId);
 
     if (vehicleError) {
-
       return respondError(req, res, 404, vehicleError);
-
     }
 
-
     respondSuccess(req, res, 200, vehicle);
-
   } catch (error) {
-
     handleError(error, "vehicle.controller -> getVehicleById");
 
     respondError(req, res, 500, "Error al obtener el vehículo");
-
   }
-
 }
 
 export default {

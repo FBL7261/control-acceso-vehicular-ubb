@@ -80,12 +80,6 @@ async function updateVehicle(vehicleId, vehicleData, currentUserEmail) {
       return [null, "El ID del vehículo no es válido"];
     }
 
-    // Validar los datos del vehículo con el esquema
-    const { error: bodyError } = vehicleSchema.validate(vehicleData);
-    if (bodyError) {
-      return [null, bodyError.message];
-    }
-
     const vehicle = await Vehicle.findById(vehicleId);
     if (!vehicle) {
       return [null, "El vehículo no se encontró"];
@@ -96,7 +90,15 @@ async function updateVehicle(vehicleId, vehicleData, currentUserEmail) {
       return [null, "No tienes permiso para editar este vehículo"];
     }
 
-    // Actualizar el vehículo con todos los datos
+    const { error: bodyError } = vehicleSchema.validate(vehicleData, { context: { isUpdate: true } });
+    if (bodyError) {
+      return [null, bodyError.message];
+    }
+
+    if (vehicleData.foto) {
+      vehicleData.foto = vehicleData.foto[0].filename;
+    }
+
     Object.assign(vehicle, vehicleData);
     await vehicle.save();
 
@@ -108,35 +110,21 @@ async function updateVehicle(vehicleId, vehicleData, currentUserEmail) {
 }
 
 async function getVehicleById(vehicleId) {
-
   try {
-
     if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
-
       return [null, "El ID del vehículo no es válido"];
-
     }
-
 
     const vehicle = await Vehicle.findById(vehicleId);
-
     if (!vehicle) {
-
       return [null, "El vehículo no se encontró"];
-
     }
 
-
     return [vehicle, null];
-
   } catch (error) {
-
     handleError(error, "vehicle.service -> getVehicleById");
-
     return [null, "Error al obtener el vehículo"];
-
   }
-
 }
 
 export default {

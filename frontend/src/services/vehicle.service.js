@@ -57,36 +57,25 @@ export const deleteVehicle = async (vehicleId) => {
 };
 
 export const updateVehicle = async (vehicleId, vehicleData) => {
-
   try {
+    const formData = new FormData();
+    for (const key in vehicleData) {
+      formData.append(key, vehicleData[key]);
+    }
 
-    // Eliminar el campo 'modelo' de los datos de actualización
-
-    const { modelo, ...updateData } = vehicleData;
-
-
-    const response = await axios.put(`${API_URL}/${vehicleId}`, updateData, {
-
+    const response = await axios.put(`${API_URL}/${vehicleId}`, formData, {
       headers: {
-
+        'Content-Type': 'multipart/form-data',
         'Authorization': `Bearer ${getAuthToken()}`
-
       },
-
       withCredentials: true
-
     });
 
     return response.data;
-
   } catch (error) {
-
     console.error('Error actualizando vehiculo:', error.response ? error.response.data : error.message);
-
     throw error;
-
   }
-
 };
 
 export const getVehicleById = async (vehicleId) => {
