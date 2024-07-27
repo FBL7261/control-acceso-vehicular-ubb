@@ -2,10 +2,10 @@ import Joi from "joi";
 
 const vehicleSchema = Joi.object({
   matricula: Joi.string()
-    .when('$isUpdate', {
+    .when("$isUpdate", {
       is: true,
       then: Joi.optional(),
-      otherwise: Joi.required()
+      otherwise: Joi.required(),
     })
     .regex(/^[A-Z0-9]{6}$/)
     .messages({
@@ -14,10 +14,10 @@ const vehicleSchema = Joi.object({
     }),
 
   modelo: Joi.string()
-    .when('$isUpdate', {
+    .when("$isUpdate", {
       is: true,
       then: Joi.optional(),
-      otherwise: Joi.required()
+      otherwise: Joi.required(),
     })
     .min(1)
     .max(60)
@@ -30,10 +30,10 @@ const vehicleSchema = Joi.object({
     }),
 
   marca: Joi.string()
-    .when('$isUpdate', {
+    .when("$isUpdate", {
       is: true,
       then: Joi.optional(),
-      otherwise: Joi.required()
+      otherwise: Joi.required(),
     })
     .min(1)
     .max(60)
@@ -46,10 +46,10 @@ const vehicleSchema = Joi.object({
     }),
 
   color: Joi.string()
-    .when('$isUpdate', {
+    .when("$isUpdate", {
       is: true,
       then: Joi.optional(),
-      otherwise: Joi.required()
+      otherwise: Joi.required(),
     })
     .regex(/^[a-zA-Z\s]+$/)
     .min(1)

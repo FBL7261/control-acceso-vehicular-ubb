@@ -39,6 +39,24 @@ async function getVehiclesByUserId(userId) {
   }
 }
 
+async function updateVehicle(vehicleId, updates) {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
+      return [null, "El ID del vehículo no es válido"];
+    }
+
+    const updatedVehicle = await Vehicle.findByIdAndUpdate(vehicleId, updates, { new: true });
+    if (!updatedVehicle) {
+      return [null, "El vehículo no se encontró"];
+    }
+
+    return [updatedVehicle, null];
+  } catch (error) {
+    handleError(error, "vehicle.service -> updateVehicle");
+    return [null, "Error al actualizar el vehículo"];
+  }
+}
+
 async function deleteVehicle(vehicleId, currentUserEmail) {
   try {
     if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
@@ -70,83 +88,57 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
 }
 
 const getVehicleByModel = async (modelName) => {
-
   try {
-
     const response = await axios.get(`${API_URL}/model/${modelName}`, {
 
       headers: {
 
-        'Authorization': `Bearer ${getAuthToken()}`
-
+        "Authorization": `Bearer ${getAuthToken()}`,
       },
 
-      withCredentials: true
-
+      withCredentials: true,
     });
 
     return response.data;
-
   } catch (error) {
-
-    console.error('Error fetching vehicle by model:', error);
+    console.error("Error fetching vehicle by model:", error);
 
     throw error;
-
   }
-
 };
 
 async function updateVehicleByModel(modelName, vehicleData, currentUserEmail) {
-
   try {
-
-    // Find the vehicle by model name
-
     const vehicle = await Vehicle.findOne({ modelo: modelName });
 
     if (!vehicle) {
-
-      return [null, "Vehicle not found"];
-
+      return [null, "Vehiculo no encontrado"];
     }
-
-
-    // Verify if the current user is the owner of the vehicle
 
     const propietario = await User.findById(vehicle.propietario);
 
     if (!propietario || propietario.email !== currentUserEmail) {
-
       return [null, "You do not have permission to edit this vehicle"];
-
     }
 
+    Object.assign(vehicle, vehicleData);
 
-    // Update the vehicle information
-
-    Object.assign(vehicle, vehicleData); // Assign new data to the vehicle
-
-    await vehicle.save(); // Save the changes
+    await vehicle.save();
 
 
-    return [vehicle, null]; // Vehicle updated successfully
-
+    return [vehicle, null];
   } catch (error) {
-
     handleError(error, "vehicle.service -> updateVehicleByModel");
 
     return [null, "Error updating the vehicle"];
-
   }
-
 }
-
 
 export default {
   createVehicle,
   getVehiclesByUserId,
   deleteVehicle,
+  updateVehicle,
   getVehiclesByUserId,
   getVehicleByModel,
   updateVehicleByModel,
