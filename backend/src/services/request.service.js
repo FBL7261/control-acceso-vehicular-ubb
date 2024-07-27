@@ -20,7 +20,7 @@ async function createRequest(email, requestData, file) {
         if (user.email !== requestData.email) {
             return [null, "El email no coincide con la persona autenticada"];
         }
-        // Verificar si el usuario tiene una solicitud previa
+
         const previousRequest = await Request.findOne({
             email: requestData.email,
             status: { $ne: 'Rechazada' },

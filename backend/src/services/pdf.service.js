@@ -61,7 +61,6 @@ async function getPDFsForPerson(userId) {
 
 }
 
-// Obtener PDFs asociados a una solicitud específica
 export const getPDFsForRequest = async (req, res) => {
   try {
     const { requestId } = req.params;
@@ -76,7 +75,6 @@ export const getPDFsForRequest = async (req, res) => {
   }
 };
 
-// Eliminar un PDF específico
 export const deletePDF = async (req, res) => {
   try {
     const { id } = req.params;

@@ -5,7 +5,7 @@ import user from "../models/user.model.js";
 const storage = multer.diskStorage({
   destination: async (req, file, cb) => {
     try {
-      const email = req.email;  // Suponiendo que el email del usuario autenticado está en req.email
+      const email = req.email;
       const userFound = await user.findOne({ email }).exec();
       if (!userFound) {
         return cb(new Error("No se encontro la persona"), null);

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import requestService from '../services/request.service';
-import '../styles/UserRequests.css'; // Importar el archivo CSS
+import '../styles/UserRequests.css';
 
 const UserRequests = () => {
   const [requests, setRequests] = useState([]);
@@ -12,10 +12,8 @@ const UserRequests = () => {
   useEffect(() => {
     const fetchRequests = async () => {
       try {
-        console.log('Iniciando fetch de solicitudes...');
         const response = await requestService.getRequestsByUserEmail();
         const requests = response.data;
-        console.log('Solicitudes recibidas:', requests);
         if (Array.isArray(requests)) {
           setRequests(requests);
         } else {

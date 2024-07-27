@@ -16,7 +16,7 @@ const RequestList = () => {
     const [pdfs, setPdfs] = useState({});
     const pdfjsDistVersion = '3.1.81';
     const navigate = useNavigate();
-    const { user } = useContext(AuthContext); // Obtener el usuario del contexto
+    const { user } = useContext(AuthContext);
 
     useEffect(() => {
         const fetchRequests = async () => {
@@ -27,7 +27,7 @@ const RequestList = () => {
                     if (response.data && Array.isArray(response.data.data)) {
                         const pendingRequests = response.data.data.filter(request => request.status === 'Pendiente');
                         setRequests(pendingRequests);
-                        pendingRequests.forEach(request => fetchPDFs(request._id)); // Llamamos a fetchPDFs para cada solicitud
+                        pendingRequests.forEach(request => fetchPDFs(request._id)); 
                     } else {
                         setError('La respuesta del servidor no es un array.');
                     }
@@ -48,7 +48,7 @@ const RequestList = () => {
     const fetchPDFs = async (requestId) => {
         try {
             const pdfsData = await requestService.getPDFsByRequestId(requestId);
-            setPdfs((prevPdfs) => ({ ...prevPdfs, [requestId]: pdfsData.data })); // Ajuste aquí para obtener los datos correctamente
+            setPdfs((prevPdfs) => ({ ...prevPdfs, [requestId]: pdfsData.data }));
         } catch (error) {
             console.error('Error fetching PDFs:', error.message);
         }

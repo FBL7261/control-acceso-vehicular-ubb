@@ -7,7 +7,7 @@ const Navbar = () => {
     const navigate = useNavigate();
 
     const storedUser = getCurrentUser();
-    const userRole = storedUser?.roles?.[0]; // Ajusta según la estructura de tu objeto de usuario
+    const userRole = storedUser?.roles?.[0];
 
     const logoutSubmit = async () => {
         try {

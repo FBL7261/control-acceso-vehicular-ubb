@@ -38,6 +38,7 @@ router.get('/user', getRequestsByUserEmail);
 // Ruta para obtener una solicitud específica por ID
 router.get('/:id', getRequestById);
 
+// Ruta para obtener los PDFs de una solicitud específica
 router.get('/pdfs/:requestId', getPDFsByRequestId);
 
 export default router;

@@ -12,7 +12,7 @@ import path from 'path';
 // CREATE
 export async function createRequest(req, res) {
   try {
-    const email = req.email;  // Obteniendo el email del usuario autenticado
+    const email = req.email;
     const requestData = req.body;
     const { file } = req;
 
@@ -60,7 +60,6 @@ export async function updateRequest(req, res) {
       return res.status(404).send({ message: 'Solicitud no encontrada' });
     }
 
-    // Eliminar PDF existente si hay un nuevo PDF
     if (req.file) {
       if (request.pdf) {
         await deletePDF(request.pdf);
@@ -71,7 +70,7 @@ export async function updateRequest(req, res) {
         user: req.user._id,
       });
       await pdf.save();
-      updateData.pdf = pdf._id; // Actualiza el campo PDF en la solicitud
+      updateData.pdf = pdf._id;
     }
 
     const updatedRequest = await Request.findByIdAndUpdate(requestId, updateData, { new: true }).populate('pdfs');
@@ -161,15 +160,13 @@ export async function getRequestsByUserEmail(req, res) {
 
 export async function getRequestById(req, res) {
   try {
-    console.log('Recibiendo solicitud para ID:', req.params.id);
+
     const request = await Request.findById(req.params.id).populate('pdfs');
     if (!request) {
       return res.status(404).send({ message: 'Solicitud no encontrada' });
     }
-    console.log('Solicitud encontrada:', request);
     res.send(request);
   } catch (error) {
-    console.error('Error al obtener solicitud por ID:', error);
     res.status(500).send({ message: 'Error al obtener solicitud Controlador', error });
   }
 }
@@ -194,9 +191,9 @@ export async function getPDFsByRequestId(req, res) {
 async function deletePDF(pdfId) {
   const pdf = await PDF.findById(pdfId);
   if (pdf) {
-    // Eliminar el archivo físicamente
+
     fs.unlinkSync(path.resolve(pdf.filePath));
-    // Eliminar la entrada en la base de datos
+
     await PDF.findByIdAndDelete(pdfId);
   }
 }

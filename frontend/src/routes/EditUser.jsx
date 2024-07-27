@@ -12,7 +12,6 @@ const EditUser = () => {
 	const modUser = (data) => {
         updateUser(data, user.Rut)
             .then(response => {
-                console.log("User updated successfully:", response);
 				navigate('/users');
             })
             .catch(error => {
