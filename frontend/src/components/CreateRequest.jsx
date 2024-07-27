@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { createRequest } from '../services/request.service';
-import { useNavigate } from 'react-router-dom';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../styles/CreateRequest.css';
 
 const CreateRequest = () => {
   const [username, setUsername] = useState('');
@@ -8,7 +10,6 @@ const CreateRequest = () => {
   const [email, setEmail] = useState('');
   const [description, setDescription] = useState('');
   const [pdfFile, setPdfFile] = useState(null);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -22,19 +23,31 @@ const CreateRequest = () => {
 
     try {
       await createRequest(formData);
-      console.log('Request created');
-      navigate('/home');
+      toast.success('Solicitud enviada correctamente');
     } catch (error) {
-      console.error('Error creating request:', error);
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.message || 'No puedes enviar más de una solicitud';
+        toast.error(errorMessage);
+      } else {
+        console.error('Error creating request:', error);
+        toast.error('Error al enviar la solicitud');
+      }
     }
   };
 
   return (
-    <div>
-      <h2>Create Request</h2>
+    <div className="create-request">
+      <ToastContainer />
+      <a href="#" className="back-button" onClick={() => window.history.back()}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+        </svg>
+        <span className="ml-1 font-bold text-lg">Volver</span>
+      </a>
+      <h2>Crear Solicitud</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label>Username:</label>
+          <label>Nombre:</label>
           <input
             type="text"
             value={username}
@@ -43,7 +56,7 @@ const CreateRequest = () => {
           />
         </div>
         <div>
-          <label>RUT:</label>
+          <label>Rut:</label>
           <input
             type="text"
             value={rut}
@@ -52,7 +65,7 @@ const CreateRequest = () => {
           />
         </div>
         <div>
-          <label>Email:</label>
+          <label>Correo Electrónico:</label>
           <input
             type="email"
             value={email}
@@ -61,7 +74,7 @@ const CreateRequest = () => {
           />
         </div>
         <div>
-          <label>Description:</label>
+          <label>Descripcion:</label>
           <input
             type="text"
             value={description}
@@ -70,7 +83,7 @@ const CreateRequest = () => {
           />
         </div>
         <div>
-          <label>Upload PDF:</label>
+          <label>Seleccionar PDF:</label>
           <input
             type="file"
             accept="application/pdf"
@@ -78,7 +91,7 @@ const CreateRequest = () => {
             required
           />
         </div>
-        <button type="submit">Create Request</button>
+        <button type="submit">Enviar</button>
       </form>
     </div>
   );

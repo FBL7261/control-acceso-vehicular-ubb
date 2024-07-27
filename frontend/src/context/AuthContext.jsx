@@ -1,4 +1,3 @@
-// frontend/src/context/AuthContext.jsx
 import { createContext, useContext, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -11,7 +10,7 @@ export function AuthProvider({ children }) {
   const location = useLocation();
   const user = typeof window !== "undefined" ? JSON.parse(localStorage.getItem("user")) || "" : "";
   const isAuthenticated = !!user;
-  
+
   useEffect(() => {
     const allowedRoutes = ['/auth/register', '/', '/auth/login'];
     if (!isAuthenticated && !allowedRoutes.includes(location.pathname)) {
@@ -28,3 +27,5 @@ export function AuthProvider({ children }) {
     </AuthContext.Provider>
   );
 }
+
+export default AuthContext;

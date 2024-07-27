@@ -2,6 +2,8 @@
 .env
 #Node
 node_modules
+#Uploads de Archivos
+uploads
 
 # Logs
 logs
@@ -45,6 +47,7 @@ build/Release
 
 # Dependency directories
 backend/node_modules/
+backend/upload/
 frontend/node_modules/
 jspm_packages/
 
@@ -160,7 +163,7 @@ frontend/.env*.local
 # vercel
 frontend/.vercel
 
-# Ignorar todos los archivos de imagen en backend/src/upload
+#evitar fotos autos al git
 /src/upload/*.jpg
 /src/upload/*.jpeg
 /src/upload/*.png

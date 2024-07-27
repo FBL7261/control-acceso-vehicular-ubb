@@ -3,22 +3,62 @@
 import Joi from "joi";
 
 const requestBodySchema = Joi.object({
+    username: Joi.string()
+        .required()
+        .regex(/^[a-zA-Z\s]+$/)
+        .messages({
+            "string.empty": "El nombre de usuario no puede quedar vacío",
+            "any.required": "El nombre de usuario es requerido",
+            "string.pattern.base": "El nombre de usuario no puede contener números"
+        }),
 
-    user: Joi.string().required().messages({
-        "string.empty": "El usuario no puede quedar vacia",
-        "any.required": "El usuario se requiere",
-    }),
-    document: Joi.array().items(Joi.string()).required().messages({
-        "string.empty": "El documento no puede quedar vacio",
-        "any.required": "El documento es requerido",
-    }),
+    rut: Joi.string()
+        .required()
+        .pattern(/^[0-9]{7,8}-[0-9kK]{1}$/)
+        .messages({
+            "string.empty": "El rut no puede quedar vacío",
+            "any.required": "El rut es requerido",
+            "string.base": "El rut debe ser de tipo string",
+            "string.pattern.base": "El rut debe tener el formato 1234567-8 o 12345678-9"
+        }),
+
+    email: Joi.string().email()
+        .required()
+        .pattern(/^[a-zA-Z0-9._%+-]+@email\.com$/)
+        .messages({
+            "string.empty": "El email no puede quedar vacío",
+            "any.required": "El email es requerido",
+            "string.email": "El email debe ser un correo válido",
+            "string.pattern.base": "El email debe terminar con @email.com"
+        }),
+
+    description: Joi.string()
+        .required()
+        .min(1)
+        .max(255)
+        .messages({
+            "string.empty": "La descripción no puede quedar vacía",
+            "any.required": "La descripción es requerida",
+            "string.min": "La descripción debe tener al menos 1 carácter",
+        }),
+
+    status: Joi.string()
+        .optional()
+        .messages({
+            "string.empty": "El estado no puede quedar vacío"
+        })
 });
 
 const requestIdSchema = Joi.object({
-    id: Joi.string().guid().required().messages({
-        "string.empty": "El id no puede quedar vacio",
-        "any.required": "El id es requerido",
-    }),
+    id: Joi.string()
+        .required()
+        .pattern(/^(?:[0-9a-fA-F]{24}|[0-9a-fA-F]{12})$/)
+        .messages({
+            "string.empty": "El id no puede estar vacío.",
+            "any.required": "El id es obligatorio.",
+            "string.base": "El id debe ser de tipo string.",
+            "string.pattern.base": "El id proporcionado no es un ObjectId válido.",
+        }),
 });
 
 export { requestBodySchema, requestIdSchema };

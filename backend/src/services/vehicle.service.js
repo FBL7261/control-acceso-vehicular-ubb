@@ -16,7 +16,6 @@ async function createVehicle(vehicleData, currentUserEmail, isAdmin) {
     }
 
     const newVehicle = new Vehicle(vehicleData);
-
     const savedVehicle = await newVehicle.save();
 
     return [savedVehicle, null];
@@ -74,7 +73,6 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
     }
 
     const vehicleDeleted = await vehicle.remove();
-
     if (propietario) {
       propietario.vehicles.pull(vehicleId);
       await propietario.save();
@@ -90,19 +88,15 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
 const getVehicleByModel = async (modelName) => {
   try {
     const response = await axios.get(`${API_URL}/model/${modelName}`, {
-
       headers: {
-
         "Authorization": `Bearer ${getAuthToken()}`,
       },
-
       withCredentials: true,
     });
 
     return response.data;
   } catch (error) {
     console.error("Error fetching vehicle by model:", error);
-
     throw error;
   }
 };
@@ -116,21 +110,17 @@ async function updateVehicleByModel(modelName, vehicleData, currentUserEmail) {
     }
 
     const propietario = await User.findById(vehicle.propietario);
-
     if (!propietario || propietario.email !== currentUserEmail) {
-      return [null, "You do not have permission to edit this vehicle"];
+      return [null, "No tienes permiso para editar este vehículo"];
     }
 
     Object.assign(vehicle, vehicleData);
-
     await vehicle.save();
-
 
     return [vehicle, null];
   } catch (error) {
     handleError(error, "vehicle.service -> updateVehicleByModel");
-
-    return [null, "Error updating the vehicle"];
+    return [null, "Error al actualizar el vehículo"];
   }
 }
 
@@ -139,7 +129,6 @@ export default {
   getVehiclesByUserId,
   deleteVehicle,
   updateVehicle,
-  getVehiclesByUserId,
   getVehicleByModel,
   updateVehicleByModel,
 };

@@ -61,27 +61,38 @@ async function getPDFsForPerson(userId) {
 
 }
 
-async function deletePDF(id) {
-
+export const getPDFsForRequest = async (req, res) => {
   try {
-
-    const pdf = await PDFModel.findByIdAndDelete(id);
-
-    if (!pdf) {
-      return [null, "No se encontro el pdf"];
+    const { requestId } = req.params;
+    const pdfs = await PDFModel.find({ requestId: requestId });
+    if (!pdfs || pdfs.length === 0) {
+      return respondError(req, res, 404, 'No PDFs found for this request');
     }
-
-    return [pdf, null];
-
+    respondSuccess(req, res, 200, pdfs);
   } catch (error) {
-    handleError(error, "pdfService -> deletePDF");
+    handleError(error, 'pdf.controller -> getPDFsForRequest');
+    respondError(req, res, 500, 'Server error');
   }
-  
-}
+};
+
+export const deletePDF = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const pdf = await PDFModel.findByIdAndDelete(id);
+    if (!pdf) {
+      return respondError(req, res, 404, 'PDF not found');
+    }
+    respondSuccess(req, res, 200, 'PDF deleted successfully');
+  } catch (error) {
+    handleError(error, 'pdf.controller -> deletePDF');
+    respondError(req, res, 500, 'Server error');
+  }
+};
 
 export default { 
     createPDF, 
     getPDF, 
     getPDFsForPerson, 
     deletePDF ,
+    getPDFsForRequest,
 };

@@ -1,19 +1,26 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../services/auth.service';
+import { login, getCurrentUser } from '../services/auth.service';
+import '../styles/Login.css';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
-
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await login({ email, password });
       if (response.status === 200) {
-        navigate('/home');
+        const storedUser = getCurrentUser();
+        const userRole = storedUser?.roles?.[0];
+        if(userRole === 'guardia') {
+          navigate('/guard-home');
+        } else {
+          navigate('/home');
+        }
       }
     } catch (error) {
       setError('Credenciales incorrectas');
@@ -22,29 +29,43 @@ const LoginForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
-        <label>Email:</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
+    <div className="login-container">
+      <div className="left-container">
+        <div className="title-box">
+          <h1>Estacionamiento UBB</h1>
+        </div>
       </div>
-      <div>
-        <label>Contraseña:</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
+      <div className="right-container">
+        <div className="login-box">
+          <h1>Iniciar Sesión</h1>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder='@email.com'
+                required
+              />
+            </div>
+            <div className="form-group">
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder='Password'
+                required
+              />
+            </div>
+            {error && <div className="error">{error}</div>}
+            <div className="button-container">
+              <button type="submit" className="login-button">Ingresar</button>
+            </div>
+          </form>
+        </div>
       </div>
-      {error && <div style={{ color: 'red' }}>{error}</div>}
-      <button type="submit">Iniciar Sesión</button>
-    </form>
-  );
+    </div>
+  );  
 };
 
 export default LoginForm;

@@ -1,74 +1,55 @@
-// Importa el archivo 'configEnv.js' para cargar las variables de entorno
-import { PORT, HOST } from "./config/configEnv.js";
-// Importa el módulo 'cors' para agregar los cors
-import cors from "cors";
-// Importa el módulo 'express' para crear la aplicacion web
-import express, { urlencoded, json } from "express";
-// Importamos morgan para ver las peticiones que se hacen al servidor
-import morgan from "morgan";
-// Importa el módulo 'cookie-parser' para manejar las cookies
-import cookieParser from "cookie-parser";
-import path from 'path';  // Importa el módulo path
-/** El enrutador principal */
-import indexRoutes from "./routes/index.routes.js";
-// Importa el archivo 'configDB.js' para crear la conexión a la base de datos
-import { setupDB } from "./config/configDB.js";
-// Importa el handler de errores
-import { handleFatalError, handleError } from "./utils/errorHandler.js";
-import { createRoles, createUsers } from "./config/initialSetup.js";
+import express, { urlencoded } from 'express';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import cors from 'cors';
+import morgan from 'morgan';
+import cookieParser from 'cookie-parser';
+import indexRoutes from './routes/index.routes.js';
+import { setupDB } from './config/configDB.js';
+import { createRoles, createUsers } from './config/initialSetup.js';
+import { handleFatalError, handleError } from './utils/errorHandler.js';
+import { PORT, HOST } from './config/configEnv.js';
+import { url } from 'inspector';
 
-/**
- * Inicia el servidor web
- */
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 async function setupServer() {
   try {
-    /** Instancia de la aplicacion */
     const server = express();
     server.disable("x-powered-by");
-    // Agregamos los cors
-    server.use(cors({ credentials: true, origin: true }));
-    // Agrega el middleware para el manejo de datos en formato URL
-    server.use(urlencoded({ extended: true }));
-    // Agrega el middleware para el manejo de datos en formato JSON
-    server.use(json());
-    // Agregamos el middleware para el manejo de cookies
-    server.use(cookieParser());
-    // Agregamos morgan para ver las peticiones que se hacen al servidor
-    server.use(morgan("dev"));
-    // Agrega el enrutador principal al servidor
-    server.use("/api", indexRoutes);
-    // Agrega el middleware para servir archivos estáticos desde la carpeta 'upload'
-    server.use('/upload', express.static(path.join(path.resolve(), 'src', 'upload')));
-    
 
-    // Inicia el servidor en el puerto especificado
+    server.use(cors({ credentials: true, origin: true }));
+    server.use(express.urlencoded({ extended: true }));
+    server.use(express.json());
+    server.use(cookieParser());
+    server.use(morgan("dev"));
+
+    server.use('/uploads', express.static(path.join(__dirname, 'src/uploads')));
+    //Usado en el autos si no funciona quedaria unirlo con uploads o algo asi
+    server.use('/upload', express.static(path.join(path.resolve(), 'src', 'upload')));
+
+    server.use("/api", indexRoutes);
+
     server.listen(PORT, () => {
-      console.log(`Servidor corriendo en ${HOST}:${PORT}/api`);
-  });
+      console.log(`=> Servidor corriendo en ${HOST}:${PORT}/api`);
+    });
   } catch (err) {
     handleError(err, "/server.js -> setupServer");
   }
 }
 
-/**
- * Inicia la API
- */
 async function setupAPI() {
   try {
-    // Inicia la conexión a la base de datos
     await setupDB();
-    // Inicia el servidor web
     await setupServer();
-    // Inicia la creación de los roles
     await createRoles();
-    // Inicia la creación del usuario admin y user
     await createUsers();
   } catch (err) {
     handleFatalError(err, "/server.js -> setupAPI");
   }
 }
 
-// Inicia la API
 setupAPI()
   .then(() => console.log("=> API Iniciada exitosamente"))
   .catch((err) => handleFatalError(err, "/server.js -> setupAPI"));

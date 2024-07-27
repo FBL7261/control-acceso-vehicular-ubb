@@ -109,9 +109,7 @@ export const getVehicleModels = async (req, res) => {
 async function updateVehicleByModel(req, res) {
   try {
     const { modelName } = req.params;
-
     const vehicleData = req.body;
-
     const currentUserEmail = req.email;
 
     const [updatedVehicle, updateError] = await VehicleService.updateVehicleByModel(modelName, vehicleData, currentUserEmail);
@@ -123,7 +121,6 @@ async function updateVehicleByModel(req, res) {
     respondSuccess(req, res, 200, updatedVehicle);
   } catch (error) {
     handleError(error, "vehicle.controller -> updateVehicleByModel");
-
     respondError(req, res, 500, "Error updating the vehicle");
   }
 }

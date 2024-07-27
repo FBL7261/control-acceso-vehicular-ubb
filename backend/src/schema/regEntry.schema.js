@@ -10,10 +10,11 @@ const regEntryBodySchema = joi.object({
         "string.max": "El rut debe tener al menos 10 caracteres.",
         "string.pattern.base": "El rut tiene el formato XXXXXXXX-X, ejemplo: 12345678-9.",
     }),
-    plate: joi.string().required().messages({
+    plate: joi.string().required().min(8).max(8).pattern(/^[A-Z0-9]{2}\.[A-Z0-9]{2}\.[A-Z0-9]{2}$/).messages({
         "string.empty": "La patente no puede estar vacía.",
         "any.required": "La patente es obligatoria.",
         "string.base": "La patente debe ser de tipo string.",
+        "string.pattern.base": "La patente tiene el formato XX.XX.XX, ejemplo: AB.12.CD.",
     }),
     name: joi.string().required().messages({
         "string.empty": "El nombre no puede estar vacío.",

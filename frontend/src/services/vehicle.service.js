@@ -68,8 +68,6 @@ export const createVehicle = async (vehicleData) => {
     console.error('Error creando vehiculo:', error.response ? error.response.data : error.message);
     throw error;
   }
-
-
 };
 
 export const deleteVehicle = async (vehicleId) => {

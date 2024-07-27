@@ -1,37 +1,37 @@
 .user-vehicles-page {
-  background-color: #100e17;
-  font-family: 'Open Sans', sans-serif;
-  padding: 20px;
-  color: white;
-}
-
-.vehicle-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.vehicle-card {
-  background-color: #17141d;
-  border-radius: 10px;
-  box-shadow: -1rem 0 3rem #000;
-  padding: 20px;
-  box-sizing: border-box;
-  transition: transform 0.3s ease;
-}
-
-.vehicle-card:hover {
-  transform: translateY(-10px);
-}
-
-.vehicle-card img {
-  max-width: 100%;
-  max-height: 150px; /* Set a maximum height for the images */
-  border-radius: 4px;
-  margin-bottom: 10px;
-  object-fit: cover; /* Ensure the image covers the area without distortion */
-}
-
-.vehicle-card p {
-  margin: 5px 0;
-}
+    background-color: #100e17;
+    font-family: 'Open Sans', sans-serif;
+    padding: 20px;
+    color: white;
+  }
+  
+  .vehicle-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .vehicle-card {
+    background-color: #17141d;
+    border-radius: 10px;
+    box-shadow: -1rem 0 3rem #000;
+    padding: 20px;
+    box-sizing: border-box;
+    transition: transform 0.3s ease;
+  }
+  
+  .vehicle-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .vehicle-card img {
+    max-width: 100%;
+    max-height: 150px; /* Set a maximum height for the images */
+    border-radius: 4px;
+    margin-bottom: 10px;
+    object-fit: cover; /* Ensure the image covers the area without distortion */
+  }
+  
+  .vehicle-card p {
+    margin: 5px 0;
+  }
