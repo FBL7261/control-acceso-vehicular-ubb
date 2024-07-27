@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { createRequest } from '../services/request.service';
-import { useNavigate } from 'react-router-dom';
-import '../styles/CreateRequest.css'; // Importar el archivo CSS
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import '../styles/CreateRequest.css';
 
 const CreateRequest = () => {
   const [username, setUsername] = useState('');
@@ -9,12 +10,10 @@ const CreateRequest = () => {
   const [email, setEmail] = useState('');
   const [description, setDescription] = useState('');
   const [pdfFile, setPdfFile] = useState(null);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Crear un objeto FormData para enviar los datos del formulario
     const formData = new FormData();
     formData.append('username', username);
     formData.append('rut', rut);
@@ -23,18 +22,28 @@ const CreateRequest = () => {
     formData.append('pdf', pdfFile);
 
     try {
-      // Llamar a la función de servicio para crear la solicitud
       await createRequest(formData);
-      console.log('Request created');
-      navigate('/home'); // Redirigir a /home después de crear la solicitud
+      toast.success('Solicitud enviada correctamente');
     } catch (error) {
-      console.error('Error creating request:', error);
+      if (error.response && error.response.status === 400) {
+        const errorMessage = error.response.data.message || 'No puedes enviar más de una solicitud';
+        toast.error(errorMessage);
+      } else {
+        console.error('Error creating request:', error);
+        toast.error('Error al enviar la solicitud');
+      }
     }
   };
 
   return (
     <div className="create-request">
-      <button className="back-button" onClick={() => navigate(-1)}>Volver</button>
+      <ToastContainer />
+      <a href="#" className="back-button" onClick={() => window.history.back()}>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="h-6 w-6">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+        </svg>
+        <span className="ml-1 font-bold text-lg">Volver</span>
+      </a>
       <h2>Crear Solicitud</h2>
       <form onSubmit={handleSubmit}>
         <div>

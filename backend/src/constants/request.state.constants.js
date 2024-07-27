@@ -1,4 +1,2 @@
-//Estado solicitud registro 
-const STATES = ['Pendiente', 'Aprobado', 'Rechazado'];
-
+const STATES = ["Pendiente", "Aprobada", "Rechazada"];
 export default STATES;

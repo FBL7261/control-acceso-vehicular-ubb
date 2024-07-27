@@ -19,8 +19,13 @@ const pdfSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        request: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "Request",
+            required: true,
+        },
     }
-)
+);
 
 const PDF = mongoose.model("PDF", pdfSchema);
 

@@ -20,11 +20,13 @@ async function createRequest(email, requestData, file) {
         if (user.email !== requestData.email) {
             return [null, "El email no coincide con la persona autenticada"];
         }
-        const requestExistente = await Request.findOne({
+        // Verificar si el usuario tiene una solicitud previa
+        const previousRequest = await Request.findOne({
             email: requestData.email,
+            status: { $ne: 'Rechazada' },
         });
-        if (requestExistente) {
-            return [null, "Ya existe una solicitud para esta persona"];
+        if (previousRequest) {
+            return [null, "Ya existe una solicitud pendiente o aprobada para esta persona"];
         }
 
         const newRequest = new Request({
@@ -32,7 +34,7 @@ async function createRequest(email, requestData, file) {
             rut: requestData.rut,
             email: requestData.email,
             description: requestData.description,
-            status: requestData.status || 'Pendiente', // Proporcionar un valor por defecto si no se proporciona
+            status: requestData.status || 'Pendiente',
         });
 
         await newRequest.save();
@@ -43,19 +45,19 @@ async function createRequest(email, requestData, file) {
                 filePath: file.path,
                 user: user._id,
                 nombre: user.username,
+                request: newRequest._id,
             });
 
             await newPDF.save();
         }
 
-        return [newRequest, null];  // Asegúrate de devolver el objeto de la solicitud creada
+        return [newRequest, null];
 
     } catch (error) {
         handleError(error, "request.service -> createRequest");
         return [null, "Error al crear la solicitud en servicio"];
     }
 }
-
 // DELETE
 async function deleteRequest(requestId) {
     try {
@@ -157,6 +159,19 @@ async function getRequestsByUserEmail(email) {
     }
 }
 
+async function getPDFsByRequestId(requestId) {
+    try {
+        const pdfs = await PDFModel.find({ request: requestId });
+        if (!pdfs || pdfs.length === 0) {
+            return [[], "No hay PDFs para esta solicitud"];
+        }
+        return [pdfs, null];
+    } catch (error) {
+        handleError(error, "request.service -> getPDFsByRequestId");
+        console.error("Error al obtener los PDFs en el servicio", error);
+        return [[], "Error al obtener los PDFs en el servicio"];
+    }
+}
 
 export default {
     createRequest,
@@ -166,4 +181,6 @@ export default {
     updateRequestStatus,
     getPDFsForUser,
     getPDFsByUserId,
+    updateRequest,
+    getPDFsByRequestId,
 };

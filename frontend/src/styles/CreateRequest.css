@@ -1,61 +1,70 @@
 /* Estilos para CreateRequest */
 .create-request {
-    margin: 20px;
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    position: relative; /* Para posicionar el botón */
-  }
-  
-  .create-request h2 {
-    text-align: center;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .create-request form {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-  }
-  
-  .create-request input, .create-request textarea {
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-  }
-  
-  .create-request button {
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-align: center;
-    text-decoration: none;
-  }
-  
-  .create-request button:hover {
-    background-color: #0056b3;
-  }
-  
-  .back-button {
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    padding: 10px 20px;
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    text-decoration: none;
-  }
-  
-  .back-button:hover {
-    background-color: #0056b3;
-  }
-  
+  margin: 20px;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative; /* Para posicionar el botón */
+}
+
+.create-request h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+.create-request form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.create-request input, .create-request textarea {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+.create-request button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+}
+
+.create-request button:hover {
+  background-color: #0056b3;
+}
+
+.back-button {
+  display: inline-flex;
+  align-items: center;
+  border: 1px solid #6366F1;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.375rem;
+  color: #fff;
+  background-color: #6366F1;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-bottom: 20px;
+}
+
+.back-button svg {
+  margin-right: 0.5rem;
+}
+
+.back-button:hover {
+  background-color: #4f46e5;
+}
+
+.back-button .font-bold {
+  font-size: 1.125rem;
+  font-weight: bold;
+}

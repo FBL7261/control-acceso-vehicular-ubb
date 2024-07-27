@@ -1,4 +1,4 @@
-import express from 'express';
+import express, { urlencoded } from 'express';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import cors from 'cors';
@@ -9,6 +9,7 @@ import { setupDB } from './config/configDB.js';
 import { createRoles, createUsers } from './config/initialSetup.js';
 import { handleFatalError, handleError } from './utils/errorHandler.js';
 import { PORT, HOST } from './config/configEnv.js';
+import { url } from 'inspector';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -24,8 +25,8 @@ async function setupServer() {
     server.use(cookieParser());
     server.use(morgan("dev"));
 
-    // Configuración para servir archivos estáticos
     server.use('/uploads', express.static(path.join(__dirname, 'src/uploads')));
+    
 
     server.use("/api", indexRoutes);
 
