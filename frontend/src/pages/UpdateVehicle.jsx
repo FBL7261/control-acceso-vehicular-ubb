@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import vehicleService from '../services/vehicle.service';
-import { useAuth } from '../context/AuthContext';
 
 const UpdateVehicle = () => {
   const [models, setModels] = useState([]);
@@ -12,28 +11,32 @@ const UpdateVehicle = () => {
     color: '',
     foto: ''
   });
-  const { currentUser } = useAuth();
 
   useEffect(() => {
+    // Fetch vehicle models
     const fetchModels = async () => {
       try {
-        const modelsData = await vehicleService.getVehicleModels();
-        setModels(modelsData);
+        const response = await vehicleService.getVehicleModels();
+        setModels(response);
       } catch (error) {
-        console.error('Error al obtener modelos de vehículos', error);
+        console.error('Error fetching vehicle models', error);
       }
     };
     fetchModels();
   }, []);
 
   const handleModelChange = async (event) => {
-    const vehicleId = event.target.value;
-    setSelectedModel(vehicleId);
+    const modelName = event.target.value;
+    setSelectedModel(modelName);
+    if (!modelName) {
+      console.error('Model name is not valid');
+      return;
+    }
     try {
-      const response = await vehicleService.getVehicle(vehicleId);
+      const response = await vehicleService.getVehicleByModel(modelName);
       setFormData(response);
     } catch (error) {
-      console.error('Error al obtener los detalles del vehículo', error);
+      console.error(`Error fetching vehicle details for model ${modelName}`, error);
     }
   };
 
@@ -45,20 +48,20 @@ const UpdateVehicle = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await vehicleService.updateVehicle(selectedModel, formData);
-      alert('Vehículo actualizado exitosamente');
+      await vehicleService.updateVehicleByModel(selectedModel, formData);
+      alert('Vehicle updated successfully');
     } catch (error) {
-      console.error('Error al actualizar el vehículo', error);
+      console.error('Error updating vehicle', error);
     }
   };
 
   return (
     <div>
-      <h2>Editar Vehículo</h2>
+      <h2>Update Vehicle</h2>
       <select onChange={handleModelChange}>
-        <option value="">Selecciona un modelo</option>
+        <option value="">Select a model</option>
         {models.map(model => (
-          <option key={model.id} value={model.id}>{model.modelo}</option>
+          <option key={model.id} value={model.modelo}>{model.modelo}</option>
         ))}
       </select>
 
@@ -67,7 +70,7 @@ const UpdateVehicle = () => {
           <input
             type="text"
             name="matricula"
-            placeholder="Matrícula"
+            placeholder="Matricula"
             value={formData.matricula || ''}
             onChange={handleChange}
           />
@@ -95,11 +98,11 @@ const UpdateVehicle = () => {
           <input
             type="text"
             name="foto"
-            placeholder="URL de la foto"
+            placeholder="Foto URL"
             value={formData.foto || ''}
             onChange={handleChange}
           />
-          <button type="submit">Actualizar Vehículo</button>
+          <button type="submit">Update Vehicle</button>
         </form>
       )}
     </div>

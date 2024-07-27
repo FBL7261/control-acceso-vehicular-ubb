@@ -101,7 +101,61 @@ const getVehicle = async (vehicleId) => {
   }
 };
 
+export const updateVehicleByModel = async (modelName, vehicleData) => {
 
+  try {
+
+    const response = await axios.put(`${API_URL}/model/${modelName}`, vehicleData, {
+
+      headers: {
+
+        'Authorization': `Bearer ${getAuthToken()}`
+
+      },
+
+      withCredentials: true
+
+    });
+
+    return response.data;
+
+  } catch (error) {
+
+    console.error('Error updating vehicle by model:', error);
+
+    throw error;
+
+  }
+
+};
+
+ const getVehicleByModel = async (modelName) => {
+
+  try {
+
+    const response = await axios.get(`${API_URL}/model/${modelName}`, {
+
+      headers: {
+
+        'Authorization': `Bearer ${getAuthToken()}`
+
+      },
+
+      withCredentials: true
+
+    });
+
+    return response.data;
+
+  } catch (error) {
+
+    console.error('Error fetching vehicle by model:', error);
+
+    throw error;
+
+  }
+
+};
 
 export default {
   getUserVehicles,
@@ -109,5 +163,7 @@ export default {
   deleteVehicle,
   getVehicleModels,
   updateVehicle,
-  getVehicle
+  getVehicle,
+  getVehicleByModel,
+  updateVehicleByModel
 };

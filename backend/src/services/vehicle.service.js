@@ -87,10 +87,86 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
   }
 }
 
+const getVehicleByModel = async (modelName) => {
+
+  try {
+
+    const response = await axios.get(`${API_URL}/model/${modelName}`, {
+
+      headers: {
+
+        'Authorization': `Bearer ${getAuthToken()}`
+
+      },
+
+      withCredentials: true
+
+    });
+
+    return response.data;
+
+  } catch (error) {
+
+    console.error('Error fetching vehicle by model:', error);
+
+    throw error;
+
+  }
+
+};
+
+async function updateVehicleByModel(modelName, vehicleData, currentUserEmail) {
+
+  try {
+
+    // Find the vehicle by model name
+
+    const vehicle = await Vehicle.findOne({ modelo: modelName });
+
+    if (!vehicle) {
+
+      return [null, "Vehicle not found"];
+
+    }
+
+
+    // Verify if the current user is the owner of the vehicle
+
+    const propietario = await User.findById(vehicle.propietario);
+
+    if (!propietario || propietario.email !== currentUserEmail) {
+
+      return [null, "You do not have permission to edit this vehicle"];
+
+    }
+
+
+    // Update the vehicle information
+
+    Object.assign(vehicle, vehicleData); // Assign new data to the vehicle
+
+    await vehicle.save(); // Save the changes
+
+
+    return [vehicle, null]; // Vehicle updated successfully
+
+  } catch (error) {
+
+    handleError(error, "vehicle.service -> updateVehicleByModel");
+
+    return [null, "Error updating the vehicle"];
+
+  }
+
+}
+
+
 export default {
   createVehicle,
   getVehiclesByUserId,
   deleteVehicle,
   updateVehicle,
   getVehiclesByUserId,
+  getVehicleByModel,
+  updateVehicleByModel,
 };

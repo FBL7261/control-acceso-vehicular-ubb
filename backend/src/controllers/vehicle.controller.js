@@ -106,6 +106,63 @@ export const getVehicleModels = async (req, res) => {
   }
 };
 
+async function updateVehicleByModel(req, res) {
+
+  try {
+
+    const { modelName } = req.params; // Model name of the vehicle to update
+
+    const vehicleData = req.body; // Data for the update
+
+    const currentUserEmail = req.email; // Authenticated user's email
+
+
+    const [updatedVehicle, updateError] = await VehicleService.updateVehicleByModel(modelName, vehicleData, currentUserEmail);
+
+
+    if (updateError) {
+
+      return respondError(req, res, 403, updateError); // Error handling
+
+    }
+
+
+    respondSuccess(req, res, 200, updatedVehicle); // Vehicle updated successfully
+
+  } catch (error) {
+
+    handleError(error, "vehicle.controller -> updateVehicleByModel");
+
+    respondError(req, res, 500, "Error updating the vehicle");
+
+  }
+
+}
+
+
+const getVehicleByModel = async (req, res) => {
+
+  try {
+
+    const { modelName } = req.params;
+
+    const vehicle = await Vehicle.findOne({ modelo: modelName });
+
+    if (!vehicle) {
+
+      return res.status(404).json({ message: 'Vehicle not found' });
+
+    }
+
+    res.json(vehicle);
+
+  } catch (error) {
+
+    res.status(500).json({ message: 'Error fetching vehicle', error });
+
+  }
+
+};
 
 async function updateVehicle(req, res) {
   try {
@@ -130,4 +187,6 @@ export default {
   deleteVehicle,
   getVehicleModels,
   updateVehicle,
+  getVehicleByModel,
+  updateVehicleByModel,
 };
