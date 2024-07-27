@@ -10,6 +10,7 @@ import { AuthProvider } from '../context/AuthContext';
 import CreateVehicle from '../pages/CreateVehicle'; 
 import DeleteVehiclePage from '../pages/DeleteVehiclePage';
 import UserVehicles from '../pages/UserVehicles';
+import UpdateVehicle from '../pages/UpdateVehicle';
 import Error404 from './Error404';
 import Profile from './Profile';
 import VehiclesPage from '../pages/VehiclesPage';
@@ -27,6 +28,7 @@ const App = () => {
           <Route path="/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />
           <Route path="/vehicles/delete-vehicle" element={<ProtectedRoute><DeleteVehiclePage /></ProtectedRoute>} />
           <Route path="/vehicles/my-vehicles" element={<ProtectedRoute><UserVehicles /></ProtectedRoute>} />
+          <Route path="/vehicles/update-vehicle" element={<ProtectedRoute><UpdateVehicle /></ProtectedRoute>} />
           <Route path="/requests" element={<ProtectedRoute><UserRequests /></ProtectedRoute>} />
           <Route path="/admin/requests" element={<ProtectedRoute allowedRoles={['admin']}><RequestList /></ProtectedRoute>} />
           <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

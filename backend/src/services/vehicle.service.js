@@ -31,16 +31,29 @@ async function createVehicle(vehicleData, currentUserEmail, isAdmin) {
 
 async function getVehiclesByUserId(userId) {
   try {
-    if (!mongoose.Types.ObjectId.isValid(userId)) {
-      return [null, "El ID del usuario no es válido"];
-    }
-
     const vehicles = await Vehicle.find({ propietario: userId });
-
     return [vehicles, null];
   } catch (error) {
     handleError(error, "vehicle.service -> getVehiclesByUserId");
-    return [null, "Error al obtener vehículos del usuario"];
+    return [null, "Error al obtener los vehículos"];
+  }
+}
+
+async function updateVehicle(vehicleId, updates) {
+  try {
+    if (!mongoose.Types.ObjectId.isValid(vehicleId)) {
+      return [null, "El ID del vehículo no es válido"];
+    }
+
+    const updatedVehicle = await Vehicle.findByIdAndUpdate(vehicleId, updates, { new: true });
+    if (!updatedVehicle) {
+      return [null, "El vehículo no se encontró"];
+    }
+
+    return [updatedVehicle, null];
+  } catch (error) {
+    handleError(error, "vehicle.service -> updateVehicle");
+    return [null, "Error al actualizar el vehículo"];
   }
 }
 
@@ -79,4 +92,5 @@ export default {
   getVehiclesByUserId,
   deleteVehicle,
   updateVehicle,
+  getVehiclesByUserId,
 };

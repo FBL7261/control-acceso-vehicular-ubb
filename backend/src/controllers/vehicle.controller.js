@@ -96,52 +96,31 @@ async function deleteVehicle(req, res) {
   }
 }
 
-async function updateVehicle(req, res) {
-
+export const getVehicleModels = async (req, res) => {
   try {
-
-    const vehicleId = req.params.id;
-
-    const vehicleData = req.body;
-
-
-    const [updatedVehicle, updateError] = await VehicleService.updateVehicle(vehicleId, vehicleData);
-
-
-    if (updateError) {
-
-      return respondError(req, res, 400, updateError);
-
-    }
-
-
-    respondSuccess(req, res, 200, updatedVehicle);
-
+    const models = await Vehicle.find({}, 'modelo');
+    res.status(200).json(models);
   } catch (error) {
-
-    handleError(error, "vehicle.controller -> updateVehicle");
-
-    respondError(req, res, 500, "Error al actualizar el vehículo");
-
+    handleError(error, "vehicle.controller -> getVehicleModels");
+    res.status(500).json({ error: 'Error al obtener los modelos de vehículos' });
   }
+};
 
-}
 
-async function getVehicleById(req, res) {
+async function updateVehicle(req, res) {
   try {
     const { vehicleId } = req.params;
+    const updates = req.body;
 
-    const [vehicle, vehicleError] = await VehicleService.getVehicleById(vehicleId);
-
-    if (vehicleError) {
-      return respondError(req, res, 404, vehicleError);
+    const [updatedVehicle, updateError] = await VehicleService.updateVehicle(vehicleId, updates);
+    if (updateError) {
+      return respondError(req, res, 400, updateError);
     }
 
-    respondSuccess(req, res, 200, vehicle);
+    respondSuccess(req, res, 200, updatedVehicle);
   } catch (error) {
-    handleError(error, "vehicle.controller -> getVehicleById");
-
-    respondError(req, res, 500, "Error al obtener el vehículo");
+    handleError(error, "vehicle.controller -> updateVehicle");
+    respondError(req, res, 500, "Error al actualizar el vehículo");
   }
 }
 
@@ -149,6 +128,6 @@ export default {
   createVehicle,
   getVehiclesByUser,
   deleteVehicle,
+  getVehicleModels,
   updateVehicle,
-  getVehicleById,
 };

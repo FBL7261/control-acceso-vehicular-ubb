@@ -19,6 +19,37 @@ export const getUserVehicles = async (userId) => {
   }
 };
 
+export const getVehicleModels = async () => {
+  try {
+    const response = await axios.get(`${API_URL}/models`, {
+      headers: {
+        'Authorization': `Bearer ${getAuthToken()}`
+      },
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching vehicle models:', error);
+    throw error;
+  }
+};
+
+// Nueva función para actualizar los detalles de un vehículo
+export const updateVehicle = async (vehicleId, vehicleData) => {
+  try {
+    const response = await axios.put(`${API_URL}/${vehicleId}`, vehicleData, {
+      headers: {
+        'Authorization': `Bearer ${getAuthToken()}`
+      },
+      withCredentials: true
+    });
+    return response.data;
+  } catch (error) {
+    console.error('Error actualizando vehículo:', error);
+    throw error;
+  }
+};
+
 export const createVehicle = async (vehicleData) => {
   try {
     const formData = new FormData();
@@ -55,39 +86,28 @@ export const deleteVehicle = async (vehicleId) => {
     throw error;
   }
 };
-
-export const getVehicleById = async (vehicleId) => {
-
+const getVehicle = async (vehicleId) => {
   try {
-
     const response = await axios.get(`${API_URL}/${vehicleId}`, {
-
       headers: {
-
         'Authorization': `Bearer ${getAuthToken()}`
-
       },
-
-      withCredentials: true
-
+      withCredentials: true // Asegúrate de que esto esté habilitado si tu API lo requiere
     });
-
     return response.data;
-
   } catch (error) {
-
-    console.error('Error fetching vehicle by ID:', error);
-
+    console.error('Error fetching vehicle:', error);
     throw error;
-
   }
-
 };
+
+
 
 export default {
   getUserVehicles,
   createVehicle,
   deleteVehicle,
+  getVehicleModels,
   updateVehicle,
-  getVehicleById
+  getVehicle
 };
