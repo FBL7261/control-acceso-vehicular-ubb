@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import vehicleService from '../services/vehicle.service';
+import '../styles/VehicleEditor.css'; // Import the new CSS file
 
 const VehicleEditor = () => {
   const [models, setModels] = useState([]);
@@ -77,7 +78,7 @@ const VehicleEditor = () => {
   };
 
   return (
-    <div>
+    <div className="vehicle-editor-page">
       <h2>Editar Vehículo</h2>
       <select onChange={handleModelChange}>
         <option value="">Selecciona un modelo</option>
