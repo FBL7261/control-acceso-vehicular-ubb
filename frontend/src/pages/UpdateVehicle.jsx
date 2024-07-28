@@ -8,8 +8,7 @@ const UpdateVehicle = () => {
     matricula: '',
     modelo: '',
     marca: '',
-    color: '',
-    foto: ''
+    color: ''
   });
 
   useEffect(() => {
@@ -45,6 +44,14 @@ const UpdateVehicle = () => {
     setFormData(prevData => ({ ...prevData, [name]: value }));
   };
 
+  const handleFocus = (event) => {
+    const { name } = event.target;
+    if (name === 'matricula') {
+      console.log('Clearing matricula field'); // Debugging line
+      setFormData(prevData => ({ ...prevData, [name]: '' }));
+    }
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
@@ -73,6 +80,7 @@ const UpdateVehicle = () => {
             placeholder="Matricula"
             value={formData.matricula || ''}
             onChange={handleChange}
+            onFocus={handleFocus}
           />
           <input
             type="text"
@@ -93,13 +101,6 @@ const UpdateVehicle = () => {
             name="color"
             placeholder="Color"
             value={formData.color || ''}
-            onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="foto"
-            placeholder="Foto URL"
-            value={formData.foto || ''}
             onChange={handleChange}
           />
           <button type="submit">Actualizar vehiculo</button>

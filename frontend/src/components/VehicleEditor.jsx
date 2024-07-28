@@ -8,8 +8,7 @@ const VehicleEditor = () => {
     matricula: '',
     modelo: '',
     marca: '',
-    color: '',
-    foto: ''
+    color: ''
   });
   const [userId, setUserId] = useState(null);
 
@@ -48,7 +47,23 @@ const VehicleEditor = () => {
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
+    let formattedValue = value;
+
+    if (name === 'matricula') {
+      formattedValue = value.replace(/[^A-Z0-9]/g, '').toUpperCase().slice(0, 6);
+    } else if (name === 'color') {
+      formattedValue = value.replace(/[^a-zA-Z\s]/g, '');
+    }
+
+    setFormData(prevData => ({ ...prevData, [name]: formattedValue }));
+  };
+
+  const handleFocus = (event) => {
+    const { name } = event.target;
+    if (name === 'matricula') {
+      console.log('Clearing matricula field'); // Debugging line
+      setFormData(prevData => ({ ...prevData, [name]: '' }));
+    }
   };
 
   const handleSubmit = async (event) => {
@@ -79,6 +94,9 @@ const VehicleEditor = () => {
             placeholder="Matrícula"
             value={formData.matricula || ''}
             onChange={handleChange}
+            onFocus={handleFocus}
+            maxLength={6}
+            required
           />
           <input
             type="text"
@@ -86,6 +104,7 @@ const VehicleEditor = () => {
             placeholder="Modelo"
             value={formData.modelo || ''}
             onChange={handleChange}
+            required
           />
           <input
             type="text"
@@ -93,6 +112,7 @@ const VehicleEditor = () => {
             placeholder="Marca"
             value={formData.marca || ''}
             onChange={handleChange}
+            required
           />
           <input
             type="text"
@@ -100,13 +120,7 @@ const VehicleEditor = () => {
             placeholder="Color"
             value={formData.color || ''}
             onChange={handleChange}
-          />
-          <input
-            type="text"
-            name="foto"
-            placeholder="URL de la foto"
-            value={formData.foto || ''}
-            onChange={handleChange}
+            required
           />
           <button type="submit">Actualizar Vehículo</button>
         </form>

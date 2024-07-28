@@ -148,39 +148,24 @@ async function updateVehicleByModel(req, res) {
 }
 
 const getVehicleByModel = async (req, res) => {
-
   try {
-
     const { modelName } = req.params;
-
     const currentUserEmail = req.email;
 
-
-    const vehicle = await Vehicle.findOne({ modelo: modelName }).populate('propietario');
-
+    const vehicle = await Vehicle.findOne({ modelo: modelName }).select('-foto').populate('propietario');
 
     if (!vehicle) {
-
       return res.status(404).json({ message: "Vehicle not found" });
-
     }
-
 
     if (vehicle.propietario.email !== currentUserEmail) {
-
       return res.status(403).json({ message: "You do not have permission to view this vehicle" });
-
     }
 
-
     res.json(vehicle);
-
   } catch (error) {
-
     res.status(500).json({ message: "Error obteniendo vehiculo", error });
-
   }
-
 };
 
 async function updateVehicle(req, res) {
