@@ -34,21 +34,6 @@ export const getVehicleModels = async () => {
   }
 };
 
-// Nueva función para actualizar los detalles de un vehículo
-export const updateVehicle = async (vehicleId, vehicleData) => {
-  try {
-    const response = await axios.put(`${API_URL}/${vehicleId}`, vehicleData, {
-      headers: {
-        'Authorization': `Bearer ${getAuthToken()}`
-      },
-      withCredentials: true
-    });
-    return response.data;
-  } catch (error) {
-    console.error('Error actualizando vehículo:', error);
-    throw error;
-  }
-};
 
 export const createVehicle = async (vehicleData) => {
   try {
@@ -160,7 +145,6 @@ export default {
   createVehicle,
   deleteVehicle,
   getVehicleModels,
-  updateVehicle,
   getVehicle,
   getVehicleByModel,
   updateVehicleByModel
