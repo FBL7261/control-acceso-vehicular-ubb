@@ -24,7 +24,7 @@ const DeleteVehiclePage = () => {
       if (!userId) return;
       try {
         const response = await getUserVehicles(userId);
-        console.log('Fetched vehicles:', response); // Debug log
+        console.log('Vehiculos obtenidos:', response); // Debug log
         setVehicles(response.data); // Access the data property
       } catch (error) {
         console.error('Error al obtener los vehículos:', error);

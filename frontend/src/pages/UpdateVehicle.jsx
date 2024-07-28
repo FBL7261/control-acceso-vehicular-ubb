@@ -19,7 +19,7 @@ const UpdateVehicle = () => {
         const response = await vehicleService.getVehicleModels();
         setModels(response);
       } catch (error) {
-        console.error('Error fetching vehicle models', error);
+        console.error('Error obteniendo modelos de vehiculos', error);
       }
     };
     fetchModels();
@@ -29,14 +29,14 @@ const UpdateVehicle = () => {
     const modelName = event.target.value;
     setSelectedModel(modelName);
     if (!modelName) {
-      console.error('Model name is not valid');
+      console.error('Nombre de modelo no es valido');
       return;
     }
     try {
       const response = await vehicleService.getVehicleByModel(modelName);
       setFormData(response);
     } catch (error) {
-      console.error(`Error fetching vehicle details for model ${modelName}`, error);
+      console.error(`Error obteniendo datos de vehiculo por modelo ${modelName}`, error);
     }
   };
 
@@ -49,17 +49,17 @@ const UpdateVehicle = () => {
     event.preventDefault();
     try {
       await vehicleService.updateVehicleByModel(selectedModel, formData);
-      alert('Vehicle updated successfully');
+      alert('Vehiculo actualizado con exito');
     } catch (error) {
-      console.error('Error updating vehicle', error);
+      console.error('Error actualizando vehiculo', error);
     }
   };
 
   return (
     <div>
-      <h2>Update Vehicle</h2>
+      <h2>Actualizar vehiculo</h2>
       <select onChange={handleModelChange}>
-        <option value="">Select a model</option>
+        <option value="">Seleccionar modelo</option>
         {models.map(model => (
           <option key={model.id} value={model.modelo}>{model.modelo}</option>
         ))}
@@ -102,7 +102,7 @@ const UpdateVehicle = () => {
             value={formData.foto || ''}
             onChange={handleChange}
           />
-          <button type="submit">Update Vehicle</button>
+          <button type="submit">Actualizar vehiculo</button>
         </form>
       )}
     </div>
