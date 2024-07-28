@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { createRegEntryUser } from '../services/regEntry.service';
 import { useNavigate } from 'react-router-dom';
-import { toast, ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { showSuccessAlert, showErrorAlert } from './Alertmsg.jsx';
+import '../styles/Alertmsg.css';
 import '../styles/CreateRegEntry.css';
 
 const formatRut = (rut) => {
@@ -21,7 +21,6 @@ const formatPlate = (plate) => {
 const CreateRegEntryUser = () => {
   const [entry, setEntry] = useState({ rut: '', plate: '' });
 
-  // Función para manejar el cambio en los inputs
   const handleChange = (e) => {
     const { name, value } = e.target;
     let formattedValue = value;
@@ -39,18 +38,17 @@ const CreateRegEntryUser = () => {
     e.preventDefault();
     try {
       await createRegEntryUser(entry);
-      toast.success('Se ha registrado el ingreso con éxito');
-      setEntry({ rut: '', plate: '' }); // Limpiar el formulario
-      navigate('/guard-home'); // Redirigir a la página de inicio del guardia
+      showSuccessAlert('Entrada registrada con éxito');
+      setEntry({ rut: '', plate: '' });
+      navigate('/guard-home');
     } catch (error) {
-      toast.error('Error al registrar la entrada');
+      showErrorAlert('Error al registrar la entrada. El RUT y la patente no coinciden con el usuario.');
       console.log('Error al registrar la entrada', error);
     }
   };
 
   return (
     <div className="create-entry-container">
-      <ToastContainer />
       <form className="create-entry-form" onSubmit={handleSubmit}>
         <h2>Registrar Entrada Usuario</h2>
         <div className="form-group">
