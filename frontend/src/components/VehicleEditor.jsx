@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import vehicleService from '../services/vehicle.service';
 
 const VehicleEditor = () => {
@@ -12,19 +11,25 @@ const VehicleEditor = () => {
     color: '',
     foto: ''
   });
+  const [userId, setUserId] = useState(null);
 
   useEffect(() => {
-    // Obtener los modelos de vehículos del usuario
+    const userIdFromSession = sessionStorage.getItem('userId');
+    setUserId(userIdFromSession);
+  }, []);
+
+  useEffect(() => {
     const fetchModels = async () => {
+      if (!userId) return;
       try {
-        const response = await vehicleService.getVehicleModels();
-        setModels(response);
+        const response = await vehicleService.getUserVehicles(userId);
+        setModels(response.data); // Ensure response.data is used if the response is wrapped in a data object
       } catch (error) {
         console.error('Error al obtener modelos de vehículos', error);
       }
     };
     fetchModels();
-  }, []);
+  }, [userId]);
 
   const handleModelChange = async (event) => {
     const modelName = event.target.value;
@@ -35,7 +40,7 @@ const VehicleEditor = () => {
     }
     try {
       const response = await vehicleService.getVehicleByModel(modelName);
-      setFormData(response);
+      setFormData(response.data); // Ensure response.data is used if the response is wrapped in a data object
     } catch (error) {
       console.error(`Error al obtener los detalles del vehículo con modelo ${modelName}`, error);
     }
@@ -49,7 +54,7 @@ const VehicleEditor = () => {
   const handleSubmit = async (event) => {
     event.preventDefault();
     try {
-      await vehicleService.updateVehicle(selectedModel, formData);
+      await vehicleService.updateVehicleByModel(selectedModel, formData);
       alert('Vehículo actualizado exitosamente');
     } catch (error) {
       console.error('Error al actualizar el vehículo', error);
@@ -62,7 +67,7 @@ const VehicleEditor = () => {
       <select onChange={handleModelChange}>
         <option value="">Selecciona un modelo</option>
         {models.map(model => (
-          <option key={model.id} value={model.modelo}>{model.modelo}</option>
+          <option key={model._id} value={model.modelo}>{model.modelo}</option>
         ))}
       </select>
 

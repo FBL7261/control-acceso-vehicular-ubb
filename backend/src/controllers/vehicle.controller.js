@@ -97,13 +97,35 @@ async function deleteVehicle(req, res) {
 }
 
 export const getVehicleModels = async (req, res) => {
+
   try {
-    const models = await Vehicle.find({}, "modelo");
+
+    const currentUserEmail = req.email;
+
+
+    const currentUser = await User.findOne({ email: currentUserEmail });
+
+
+    if (!currentUser) {
+
+      return res.status(404).json({ message: "Authenticated user not found" });
+
+    }
+
+
+    const models = await Vehicle.find({ propietario: currentUser._id }, "modelo");
+
+
     res.status(200).json(models);
+
   } catch (error) {
+
     handleError(error, "vehicle.controller -> getVehicleModels");
+
     res.status(500).json({ error: "Error al obtener los modelos de vehículos" });
+
   }
+
 };
 
 async function updateVehicleByModel(req, res) {
@@ -126,19 +148,39 @@ async function updateVehicleByModel(req, res) {
 }
 
 const getVehicleByModel = async (req, res) => {
+
   try {
+
     const { modelName } = req.params;
 
-    const vehicle = await Vehicle.findOne({ modelo: modelName });
+    const currentUserEmail = req.email;
+
+
+    const vehicle = await Vehicle.findOne({ modelo: modelName }).populate('propietario');
+
 
     if (!vehicle) {
+
       return res.status(404).json({ message: "Vehicle not found" });
+
     }
 
+
+    if (vehicle.propietario.email !== currentUserEmail) {
+
+      return res.status(403).json({ message: "You do not have permission to view this vehicle" });
+
+    }
+
+
     res.json(vehicle);
+
   } catch (error) {
+
     res.status(500).json({ message: "Error obteniendo vehiculo", error });
+
   }
+
 };
 
 async function updateVehicle(req, res) {
