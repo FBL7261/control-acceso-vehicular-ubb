@@ -127,8 +127,8 @@ async function getEntryByDate(date) {
 // busca una entrada registrada solo por su placa.
 async function getRegEntryByPlate(plate) {
     try {
-        const regEntry = await RegEntry.findOne({ plate });
-        if (!regEntry) {
+        const regEntry = await RegEntry.find({ plate });
+        if (regEntry.length === 0) {
             return [null, 'No se ha encontrado registro de entrada'];
         }
         return [regEntry, null];
@@ -138,19 +138,6 @@ async function getRegEntryByPlate(plate) {
     }
 }
 
-async function getRegEntryByRut(rut) {
-    try {
-        const entries = await RegEntry.find({ rut });
-
-        if (!entries || entries.length === 0) {
-            return [null, "No se ha encontrado registro de entrada"];
-        }
-        return [entries, null];
-    } catch (error) {
-        handleError(error, "regEntry.controller -> getRegEntryByRut");
-        respondError(req, res, 400, error.message);
-    }
-}
 
 /**
  * 
@@ -221,7 +208,6 @@ export default {
     getEntryByDate, 
     getRegEntryByPlate,
     getRegEntryById,
-    getRegEntryByRut, 
     deleteRegEntryById,
     //updateRegEntryById
 };

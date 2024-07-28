@@ -28,6 +28,9 @@ const NavbarGuard = () => {
                 <li className={location.pathname === "/guard-home" ? "active" : ""}>
                     <NavLink to="/guard-home">Panel de Guardia</NavLink>
                 </li>
+                <li className={location.pathname === "/search" ? "active" : ""}>
+                    <NavLink to="/search">Registros</NavLink>
+                </li>
                 <li className={location.pathname === "/" ? "active" : ""}>
                     <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
                 </li>

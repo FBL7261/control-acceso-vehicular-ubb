@@ -46,3 +46,20 @@
   padding: 5px;
   margin-left: 10px;
 }
+
+.back-buttonn {
+  background-color: #0077d1;
+  border: 1px solid #b0bec5;
+  color: #ffffff;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.back-buttonn:hover {
+  background-color: #01579b;
+  color: white;
+  border-color: #01579b;
+}

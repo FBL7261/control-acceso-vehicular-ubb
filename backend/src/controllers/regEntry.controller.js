@@ -162,25 +162,6 @@ async function getRegEntryById(req, res) {
     }
 }
 
-async function getRegEntryByRut(req, res) {
-    try {
-        const { rut } = req.params;
-        const [regEntry, regEntryError] = await regEntryService.getRegEntryByRut(rut);
-        if (regEntryError) { 
-            return respondError(req, res, 400, regEntryError);
-        }
-        if (!regEntry || regEntry.length === 0) {
-            return respondError(req, res, 404, "No se ha encontrado registro de entrada");
-        }
-        respondSuccess(req, res, 200, {
-            message: "Entradas encontradas con éxito",
-            regEntry: regEntry});
-    } catch (error) {
-        handleError(error, "regEntry.controller -> getRegEntryByRut");
-        respondError(req, res, 400, error.message);
-    }
-}
-
 
 /**
  * @name deleteRegEntryById
@@ -238,7 +219,6 @@ export default {
     getEntryByDate,
     getRegEntryByPlate,
     getRegEntryById,
-    getRegEntryByRut,
     deleteRegEntryById,
     //updateRegEntryById
 }

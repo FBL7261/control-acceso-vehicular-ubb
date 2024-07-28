@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { deleteRegEntry, getRegEntry, getEntryByDate, getRegEntryByPlate, getRegEntryByRut } from '../services/regEntry.service';
+import { deleteRegEntry, getRegEntry, getEntryByDate, getRegEntryByPlate } from '../services/regEntry.service';
 import { showSuccessAlert, showErrorAlert } from './Alertmsg';
 import SearchEntry from './SearchEntry'; 
 import '../styles/RegList.css';
@@ -19,35 +19,32 @@ const RegEntryList = () => {
   const fetchEntries = async () => {
     const query = new URLSearchParams(location.search);
     const date = query.get('date');
-    const rut = query.get('rut');
     const plate = query.get('plate');
 
     try {
       let response;
       if (date) {
         response = await getEntryByDate(date);
-      } else if (rut) {
-        response = await getRegEntryByRut(rut);
       } else if (plate) {
         response = await getRegEntryByPlate(plate);
       } else {
         response = await getRegEntry();
       }
 
-      if (response.data && Array.isArray(response.data.data)) {
-        let data = response.data.data;
+      console.log('API response:', response); // Debugging response
+
+      if (response.data && (Array.isArray(response.data.data) || Array.isArray(response.data))) {
+        let data = response.data.data || response.data;
         data = sortEntries(data, sortOrder);
-        console.log('Entries from server:', data);
+        console.log('Entries from server:', data); // Debugging entries
         setEntries(data);
         showSuccessAlert('Registros encontrados con éxito');
       } else {
-        setError('La respuesta del servidor no es un array.');
         showErrorAlert('No se encontraron registros.');
       }
     } catch (error) {
-      setError(error.message);
       showErrorAlert('Error al buscar registros');
-      console.error('Error fetching entries:', error);
+      console.error('Error fetching entries:', error); // Debugging error
     }
   };
 
@@ -83,13 +80,13 @@ const RegEntryList = () => {
 
   return (
     <div className="container-entry-list">
-      <button className="back-button" onClick={() => navigate("/guard-home")}>Volver</button>
+      <button className="back-buttonn" onClick={() => navigate("/guard-home")}>Volver</button>
       <h2>Lista de Registros de Entrada</h2>
       <SearchEntry />
       <div className="filters">
         <select value={sortOrder} onChange={handleSortOrderChange} className="sort-order">
-          <option value="fechaAsc">Fecha ascendente</option>
-          <option value="fechaDesc">Fecha descendente</option>
+          <option value="fechaAsc">Ascendente</option>
+          <option value="fechaDesc">Descendente</option>
         </select>
         <button onClick={handleTodaySearch} className="today-button">Buscar hoy</button>
       </div>

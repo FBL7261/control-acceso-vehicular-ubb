@@ -12,9 +12,6 @@ import CreateRegEntry from "../components/CreateRegEntry.jsx";
 import RegEntryList from '../components/RegEntryList';
 import CreateRegEntryUser from '../components/CreateREUser.jsx';
 import SearchEntry from '../components/SearchEntry.jsx';
-import SearchRegByDate from '../components/SearchRegByDate.jsx';
-import SearchRegByPlate from '../components/SearchRegByPlate.jsx';
-import SearchRegByRut from '../components/SearchRegByRut.jsx';
 //imports Cristopher
 import VehiclesPage from '../pages/VehiclesPage';
 import CreateVehicle from '../pages/CreateVehicle'; 
@@ -25,7 +22,6 @@ import UpdateVehicle from '../pages/UpdateVehicle'
 import ProtectedRoute from '../components/ProtectedRoute';
 import { AuthProvider } from '../context/AuthContext';
 
-import Search from '../components/Search.jsx';
 
 function App() {
   return (
@@ -43,12 +39,7 @@ function App() {
           <Route path="/search" element={<ProtectedRoute allowedRoles={['guardia']}><RegEntryList /></ProtectedRoute>} />
           <Route path="/create-reg-entry-user" element={<ProtectedRoute allowedRoles={['guardia']}><CreateRegEntryUser /></ProtectedRoute>} />
           <Route path='/search-reg-by-date' element={<ProtectedRoute allowedRoles={['guardia']}><SearchEntry /></ProtectedRoute>} />
-          <Route path='/search-reg-by-rut' element={<ProtectedRoute allowedRoles={['guardia']}><SearchEntry /></ProtectedRoute>} />
           <Route path='/search-reg-by-plate' element={<ProtectedRoute allowedRoles={['guardia']}><SearchEntry /></ProtectedRoute>} />
-          <Route path='/search-by-date' element={<ProtectedRoute allowedRoles={['guardia']}><SearchRegByDate /></ProtectedRoute>} />
-          <Route path='/search-by-plate' element={<ProtectedRoute allowedRoles={['guardia']}><SearchRegByPlate /></ProtectedRoute>} />
-          <Route path='/search-by-rut' element={<ProtectedRoute allowedRoles={['guardia']}><SearchRegByRut /></ProtectedRoute>} />
-          <Route path='/search-totally' element={<ProtectedRoute allowedRoles={['guardia']}><Search /></ProtectedRoute>} />
           {/* rutas Cristopher */}
           <Route path="/vehicles" element={<VehiclesPage />} />
           <Route path="/vehicles/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />

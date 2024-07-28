@@ -19,7 +19,7 @@
     outline: none;
     border: none;
     line-height: 1.15;
-    box-shadow: 0px 10px 20px -18px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 10px 20px -18px rgba(0, 0, 0, 0.048);
   }
   
   .search-bar input:focus {

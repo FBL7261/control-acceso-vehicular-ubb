@@ -6,10 +6,6 @@ const getToken = () => sessionStorage.getItem('token');
 
 export const createRegEntry = async (data) => {
   try {
-    const token = getToken();
-    if (!token) {
-      throw new Error('No hay un token de autenticación');
-    }
     const response = await axios.post(API_URL, data, {
       headers: {
         Authorization: `Bearer ${getToken()}`
@@ -23,10 +19,6 @@ export const createRegEntry = async (data) => {
 
 export const createRegEntryUser = async (data) => {
   try {
-    const token = getToken();
-    if (!token) {
-      throw new Error('No hay un token de autenticación');
-    }
     const response = await axios.post(`${API_URL}/regEntryUser`, data, {
       headers: {
         Authorization: `Bearer ${getToken()}`
@@ -40,10 +32,6 @@ export const createRegEntryUser = async (data) => {
 
 export const getRegEntry = async () => {
   try {
-    const token = getToken();
-    if(!token) {
-      throw new Error('No hay un token de autenticación');
-    }
     const response = await axios.get(API_URL, {
       headers: {
         Authorization: `Bearer ${getToken()}`
@@ -55,29 +43,9 @@ export const getRegEntry = async () => {
   }
 };
 
-export const getRegEntryByRut = async (rut) => {  
-  try {
-    const token = getToken();
-    if(!token) {
-      throw new Error('No hay un token de autenticación');
-    }
-    const response = await axios.get(`${API_URL}/rut/${rut}`, {
-      headers: {
-        Authorization: `Bearer ${getToken()}`
-      }
-    });
-    return response.data;
-  } catch (error) {
-    throw error.response.data;
-  }
-};
 
 export const getRegEntryByPlate = async (plate) => {
   try {
-    const token = getToken();
-    if(!token) {
-      throw new Error('No hay un token de autenticación');
-    }
     const response = await axios.get(`${API_URL}/plate/${plate}`, {
       headers: {
         Authorization: `Bearer ${getToken()}`
@@ -104,10 +72,6 @@ export const getEntryByDate = async (date) => {
 
 export const deleteRegEntry = async (id) => {
   try {
-    const token = getToken();
-    if (!token) {
-      throw new Error('No hay un token de autenticación');
-    }
     const response = await axios.delete(`${API_URL}/delete/${id}`, {
       headers: {
         Authorization: `Bearer ${getToken()}`
@@ -119,24 +83,31 @@ export const deleteRegEntry = async (id) => {
   }
 };
 
-export const searchEntries = async ({ date, rut, plate }) => {
+export const getRegEntryById = async (id) => {
   try {
-    const token = getToken();
-    if (!token) {
-      throw new Error('No hay un token de autenticación');
-    }
-    let endpoint = `${API_URL}/search?`;
-    if (date) endpoint += `date=${date}&`;
-    if (rut) endpoint += `rut=${rut}&`;
-    if (plate) endpoint += `plate=${plate}`;
-
-    const response = await axios.get(endpoint, {
+    const response = await axios.get(`${API_URL}/${id}`, {
       headers: {
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${getToken()}`
       }
     });
     return response.data;
   } catch (error) {
-    throw error.response ? error.response.data : error;
+    throw error.response.data;
+  }
+}
+
+export const getEntriesByFilters = async ({ date, rut, plate }) => {
+  try {
+
+    const requests = [];
+    if (date) requests.push(axios.get(`${API_URL}/date/${date}`, { headers: { Authorization: `Bearer ${getToken()}` } }));
+    if (plate) requests.push(axios.get(`${API_URL}/plate/${plate}`, { headers: { Authorization: `Bearer ${getToken()}` } }));
+
+    const responses = await Promise.all(requests);
+    const results = responses.flatMap(response => response.data);
+
+    return results;
+  } catch (error) {
+    throw error.response.data;
   }
 };
