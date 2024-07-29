@@ -47,7 +47,7 @@ const SearchEntry = () => {
 
   return (
     <form className="search-bar-entry" onSubmit={handleSubmit}>
-      <select name="date" value={searchParams.date} onChange={handleChange}>
+      <select value={searchParams.date} onChange={handleChange} className='search-date-order'>
         <option value="">Seleccionar Fecha</option>
         {dates.map((date) => (
           <option key={date} value={date}>

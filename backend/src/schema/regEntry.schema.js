@@ -1,7 +1,7 @@
 import joi from "joi";
 
 const regEntryBodySchema = joi.object({
-    rut: joi.string().required().min(9).max(10)
+    rut: joi.string().required().min(10).max(10)
     .pattern(/^[0-9]+[-|‐]{1}[0-9kK]{1}$/).messages({
         "string.empty": "El rut no puede estar vacío.",
         "any.required": "El rut es obligatorio.",

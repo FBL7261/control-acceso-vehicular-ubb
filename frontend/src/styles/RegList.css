@@ -46,7 +46,7 @@
 
 .deletereg-button {
   color: #fff;
-  background-color: #ff4d4d;
+  background-color: #c30000;
   border: none;
   padding: 5px 10px;
   border-radius: 4px;
@@ -55,12 +55,12 @@
 }
 
 .deletereg-button:hover {
-  background-color: #cc0000;
+  background-color: #9a0101;
 }
 
 .filters {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-end;
   margin-top: -20px;
   align-items: center;
 }
@@ -76,18 +76,18 @@
 }
 
 .today-button {
-  background-color: #4CAF50;
+  background-color: #0077d1;
   color: #ffffff;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .today-button:hover {
-  background-color: #45a049;
+  background-color: #005fa8;
 }
 
 .back-buttonn {
-  display: block;
+  display: flex;
   background-color: #0077d1;
   border: 1px solid #b0bec5;
   color: #ffffff;
@@ -96,7 +96,9 @@
   transition: all 0.3s ease;
   font-size: 1rem;
   font-weight: 600;
+  margin-left: 10px;
   margin-bottom: 20px;
+  align-items: start;
 }
 
 .back-buttonn:hover {

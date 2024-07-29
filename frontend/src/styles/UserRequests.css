@@ -32,8 +32,8 @@ body {
 
 .user-requests {
   width: 100%;
-  max-width: 1200px;
-  margin: 20px 0;
+  max-width: 1000px;
+  margin: 30px 0;
   padding: 20px;
   background-color: #f9f9f9;
   border-radius: 8px;

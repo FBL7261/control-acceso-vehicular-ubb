@@ -9,7 +9,7 @@ const Home = () => {
   return (
     <>
       <Navbar />
-      <div>
+      <div className='container'>
         { user ? (
           <>
             <h1>Bienvenido a la página principal</h1>
