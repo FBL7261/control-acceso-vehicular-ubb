@@ -1,5 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import '../styles/VehiclesPage.css'; // Import the CSS file
 
 function VehiclesPage() {
   const navigate = useNavigate();
@@ -10,6 +11,7 @@ function VehiclesPage() {
 
   return (
     <div className="vehicles-page">
+      <a href="/home" className="go-back">←</a>
       <h1>Vehículos</h1>
       <div className="button-container">
         <button 

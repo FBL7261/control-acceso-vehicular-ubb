@@ -4,7 +4,7 @@ body {
   padding: 0px;
   min-height: 100vh;
   background: #f0f2f5;
-  overflow: visible ;
+  overflow : scroll ;
 }
 
 .root-container {

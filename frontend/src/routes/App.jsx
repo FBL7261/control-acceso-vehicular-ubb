@@ -8,17 +8,16 @@ import CreateRequest from '../components/CreateRequest';
 import UserRequests from '../components/UserRequests';
 import RequestList from '../components/RequestList';
 //imports johan
-import GuardHome from './HomeGuard';
+import GuardHome from './HomeGuard.jsx';
 import CreateRegEntry from "../components/CreateRegEntry.jsx";
 import RegEntryList from '../components/RegEntryList';
-import CreateRegEntryUser from '../components/CreateREUser.jsx';
 import SearchEntry from '../components/SearchEntry.jsx';
 //imports Cristopher
-import VehiclesPage from '../pages/VehiclesPage';
-import CreateVehicle from '../pages/CreateVehicle'; 
-import DeleteVehiclePage from '../pages/DeleteVehiclePage';
-import UserVehicles from '../pages/UserVehicles';
-import UpdateVehicle from '../pages/UpdateVehicle'
+import VehiclesPage from '../Pages/VehiclesPage';
+import CreateVehicle from '../Pages/CreateVehicle'; 
+import DeleteVehiclePage from '../Pages/DeleteVehiclePage';
+import UserVehicles from '../Pages/UserVehicles';
+import UpdateVehicle from '../Pages/UpdateVehicle'
 
 import ProtectedRoute from '../components/ProtectedRoute';
 import { AuthProvider } from '../context/AuthContext';
@@ -37,17 +36,15 @@ const App = () => {
           <Route path="/guard-home" element={<ProtectedRoute allowedRoles={['guardia']}><GuardHome /></ProtectedRoute>} />
           <Route path="/create-reg-entry" element={<ProtectedRoute allowedRoles={['guardia']}><CreateRegEntry /></ProtectedRoute>} />
           <Route path="/search" element={<ProtectedRoute allowedRoles={['guardia']}><RegEntryList /></ProtectedRoute>} />
-          <Route path="/create-reg-entry-user" element={<ProtectedRoute allowedRoles={['guardia']}><CreateRegEntryUser /></ProtectedRoute>} />
           <Route path='/search-reg-by-date' element={<ProtectedRoute allowedRoles={['guardia']}><SearchEntry /></ProtectedRoute>} />
-          <Route path='/search-reg-by-rut' element={<ProtectedRoute allowedRoles={['guardia']}><SearchEntry /></ProtectedRoute>} />
           <Route path='/search-reg-by-plate' element={<ProtectedRoute allowedRoles={['guardia']}><SearchEntry /></ProtectedRoute>} />
           {/* rutas Cristopher */}
           <Route path="/vehicles" element={<VehiclesPage />} />
-          <Route path="/vehicles/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />
-          <Route path="/create-vehicle" element={<ProtectedRoute><CreateVehicle /></ProtectedRoute>} />
-          <Route path="/vehicles/delete-vehicle" element={<ProtectedRoute><DeleteVehiclePage /></ProtectedRoute>} />
-          <Route path="/vehicles/my-vehicles" element={<ProtectedRoute><UserVehicles /></ProtectedRoute>} />
-          <Route path="/vehicles/update-vehicle" element={<ProtectedRoute><UpdateVehicle /></ProtectedRoute>} />
+          <Route path="/vehicles/create-vehicle" element={<ProtectedRoute allowedRoles={['user']}><CreateVehicle /></ProtectedRoute>} />
+          <Route path="/create-vehicle" element={<ProtectedRoute allowedRoles={['user']}><CreateVehicle /></ProtectedRoute>} />
+          <Route path="/vehicles/delete-vehicle" element={<ProtectedRoute allowedRoles={['user']}><DeleteVehiclePage /></ProtectedRoute>} />
+          <Route path="/vehicles/my-vehicles" element={<ProtectedRoute allowedRoles={['user']}><UserVehicles /></ProtectedRoute>} />
+          <Route path="/vehicles/update-vehicle" element={<ProtectedRoute allowedRoles={['user']}><UpdateVehicle /></ProtectedRoute>} />
           <Route path="/" element={<Login />} />
           <Route path="*" element={<Navigate to="/home" replace />} />
         </Routes>

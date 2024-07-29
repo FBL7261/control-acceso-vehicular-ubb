@@ -1,14 +1,16 @@
-/* CreateVehicle.css */
 .create-vehicle-container {
     background-color: var(--page-background);
     padding: 20px;
     border-radius: 8px;
     box-shadow: none;
     border: none;
+    position: relative;
+    overflow-y: auto;
 }
 
 .create-vehicle-container h1 {
-    color: #000000; /* Color del texto del encabezado */
+    color: #ffffff;
+    margin-left: 40px;
 }
 
 .create-vehicle-container .vehicle-form-container {
@@ -40,7 +42,7 @@
     display: block;
     margin-bottom: 5px;
     font-weight: bold;
-    color: #000000; /* Color del texto en los labels */
+    color: #ffffff;
 }
 
 .create-vehicle-container .vehicle-form input[type="text"],
@@ -55,7 +57,7 @@
 
 .create-vehicle-container .vehicle-form button {
     background-color: var(--form-button-bg);
-    color: #000000; /* Color del texto del botón */
+    color: #ffffff;
     border: none;
     padding: var(--button-padding);
     border-radius: var(--button-border-radius);
@@ -79,14 +81,13 @@
     display: flex;
     align-items: center;
     margin-right: 10px;
-    color: #000000; /* Color del texto en el contenedor del checkbox */
+    color: #ffffff;
 }
 
 .create-vehicle-container .vehicle-form .checkbox-container input[type="checkbox"] {
     margin-right: 10px;
 }
 
-/* Scrollbar styles */
 .create-vehicle-container .vehicle-form::-webkit-scrollbar {
     width: 12px;
 }
@@ -102,4 +103,20 @@
 
 .create-vehicle-container .vehicle-form::-webkit-scrollbar-thumb:hover {
     background: var(--scrollbar-thumb-hover-bg);
+}
+
+.create-vehicle-container .go-back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 2em;
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+    -webkit-transition: color 0.3s ease;
+    transition: color 0.3s ease;
+}
+
+.create-vehicle-container .go-back:hover {
+    color: #fddb3a;
 }

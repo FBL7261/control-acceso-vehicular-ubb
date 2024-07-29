@@ -1,38 +1,36 @@
 :root {
-    --form-background: #77a165; /* Fondo del formulario */
+    --form-background: #3d8aad;
     --form-border: transparent;
-    --form-button-bg: #5ab0ed; /* Fondo del botón */
-    --form-button-hover-bg: #0056b3; /* Fondo del botón al pasar el ratón */
-    --checkbox-container-bg: #77a165; /* Fondo del contenedor del checkbox */
-    --text-color: #ffffff; /* Color del texto */
-    --input-text-color: #000000; /* Color del texto en los inputs */
+    --form-button-bg: #32708e;
+    --form-button-hover-bg: #0056b3;
+    --checkbox-container-bg: #32708e; 
+    --text-color: #ffffff;
+    --input-text-color: #000000; 
     --form-border-radius: 8px;
     --button-border-radius: 4px;
     --checkbox-container-padding: 10px;
     --input-padding: 8px;
     --button-padding: 10px 20px;
-    --page-background: #77a165; /* Fondo de la página */
-    --scrollbar-track-bg: #77a165; /* Fondo del track del scrollbar */
-    --scrollbar-thumb-bg: #ffffff; /* Fondo del thumb del scrollbar */
-    --scrollbar-thumb-hover-bg: #cccccc; /* Fondo del thumb del scrollbar al pasar el ratón */
-    --input-border-color: #77a165; /* Color del borde del input */
-    --button-hover-bg: #0056b3; /* Color de fondo del botón al pasar el ratón */
-    --checkbox-bg: #77a165; /* Fondo del contenedor del checkbox */
+    --page-background: #007BA7;
+    --input-border-color: #3d8aad;
+    --button-hover-bg: #0056b3; 
+    --checkbox-bg: #3d8aad;
 }
 
+
 .vehicle-form-body {
-    background-color: var(--page-background); /* Fondo de la página */
-    min-height: 100vh; /* Asegura que el contenedor principal cubra toda la altura de la página */
-    padding: 20px; /* Añade algo de espacio alrededor del formulario */
+    background-color: var(--page-background);
+    min-height: 100vh;
+    padding: 20px;
 }
 
 .vehicle-form-container {
-    background-color: var(--page-background); /* Fondo del contenedor del formulario */
+    background-color: var(--page-background); 
     padding: 20px;
     border-radius: var(--form-border-radius);
     box-shadow: none;
     border: none;
-    overflow-y: auto; /* Asegura que aparezcan las barras de desplazamiento si es necesario */
+    overflow: hidden;
 }
 
 .vehicle-form {
@@ -41,7 +39,7 @@
     max-width: 500px;
     margin: auto;
     padding: 20px;
-    background-color: var(--form-background); /* Fondo del formulario */
+    background-color: var(--form-background); 
     border-radius: var(--form-border-radius);
     box-shadow: none;
     border: none;
@@ -62,14 +60,14 @@
 .vehicle-form input[type="file"] {
     width: 100%;
     padding: var(--input-padding);
-    border: 1px solid var(--input-border-color); /* Fondo del input */
+    border: 1px solid var(--input-border-color);
     border-radius: 4px;
-    background-color: var(--text-color); /* Fondo del input */
+    background-color: var(--text-color);
     color: var(--input-text-color);
 }
 
 .vehicle-form button {
-    background-color: var(--form-button-bg); /* Fondo del botón */
+    background-color: var(--form-button-bg);
     color: var(--text-color);
     border: none;
     padding: var(--button-padding);
@@ -79,13 +77,13 @@
 }
 
 .vehicle-form button:hover {
-    background-color: var(--button-hover-bg); /* Fondo del botón al pasar el ratón */
+    background-color: var(--button-hover-bg); 
 }
 
 .vehicle-form .checkbox-container {
     display: flex;
     align-items: center;
-    background-color: var(--checkbox-bg); /* Fondo del contenedor del checkbox */
+    background-color: var(--checkbox-bg); 
     padding: var(--checkbox-container-padding);
     border-radius: 4px;
 }
@@ -94,26 +92,9 @@
     display: flex;
     align-items: center;
     margin-right: 10px;
+    color: var(--text-color); 
 }
 
 .vehicle-form .checkbox-container input[type="checkbox"] {
     margin-right: 10px;
-}
-
-/* Scrollbar styles */
-.vehicle-form::-webkit-scrollbar {
-    width: 12px;
-}
-
-.vehicle-form::-webkit-scrollbar-track {
-    background: var(--scrollbar-track-bg); /* Fondo del track del scrollbar */
-}
-
-.vehicle-form::-webkit-scrollbar-thumb {
-    background: var(--scrollbar-thumb-bg); /* Fondo del thumb del scrollbar */
-    border-radius: 6px;
-}
-
-.vehicle-form::-webkit-scrollbar-thumb:hover {
-    background: var(--scrollbar-thumb-hover-bg); /* Fondo del thumb del scrollbar al pasar el ratón */
 }

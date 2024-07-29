@@ -1,49 +1,50 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { deleteRegEntry, getRegEntry, getEntryByDate, getRegEntryByPlate, getRegEntryByRut } from '../services/regEntry.service';
-import SearchEntry from './SearchEntry'; // Importa el componente de búsqueda
+import { deleteRegEntry, getRegEntry, getEntryByDate, getRegEntryByPlate } from '../services/regEntry.service';
+import { showSuccessAlert, showErrorAlert } from './Alertmsg';
+import SearchEntry from './SearchEntry'; 
 import '../styles/RegList.css';
 
 const RegEntryList = () => {
   const [entries, setEntries] = useState([]);
   const [error, setError] = useState(null);
-  const [sortOrder, setSortOrder] = useState('fechaAsc'); // Estado para el orden de clasificación
+  const [sortOrder, setSortOrder] = useState('fechaAsc'); 
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     fetchEntries();
-  }, [location, sortOrder]); // Añadir sortOrder como dependencia
+  }, [location, sortOrder]);
 
   const fetchEntries = async () => {
     const query = new URLSearchParams(location.search);
     const date = query.get('date');
-    const rut = query.get('rut');
     const plate = query.get('plate');
 
     try {
       let response;
       if (date) {
         response = await getEntryByDate(date);
-      } else if (rut) {
-        response = await getRegEntryByRut(rut);
       } else if (plate) {
         response = await getRegEntryByPlate(plate);
       } else {
         response = await getRegEntry();
       }
 
-      if (response.data && Array.isArray(response.data.data)) {
-        let data = response.data.data;
-        data = sortEntries(data, sortOrder); // Ordenar los datos según el orden seleccionado
-        console.log('Entries from server:', data);
+      console.log('API response:', response); // Debugging response
+
+      if (response.data && (Array.isArray(response.data.data) || Array.isArray(response.data))) {
+        let data = response.data.data || response.data;
+        data = sortEntries(data, sortOrder);
+        console.log('Entries from server:', data); // Debugging entries
         setEntries(data);
+        showSuccessAlert('Registros encontrados con éxito');
       } else {
-        setError('La respuesta del servidor no es un array.');
+        showErrorAlert('No se encontraron registros.');
       }
     } catch (error) {
-      setError(error.message);
-      console.error('Error fetching entries:', error); // depuración
+      showErrorAlert('No se han encontrado registros.');
+      console.error('Error fetching entries:', error); // Debugging error
     }
   };
 
@@ -78,32 +79,44 @@ const RegEntryList = () => {
   };
 
   return (
-    <div className="container">
-      <button className="back-button" onClick={() => navigate("/guard-home")}>Volver</button>
+    <div className="container-entry-list">
+      <button className="back-buttonn" onClick={() => navigate("/guard-home")}>Volver</button>
       <h2>Lista de Registros de Entrada</h2>
-      <SearchEntry /> {/* Añade el componente de búsqueda */}
+      <SearchEntry />
       <div className="filters">
         <select value={sortOrder} onChange={handleSortOrderChange} className="sort-order">
-          <option value="fechaAsc">Fecha ascendente</option>
-          <option value="fechaDesc">Fecha descendente</option>
+          <option value="fechaAsc">Ascendente</option>
+          <option value="fechaDesc">Descendente</option>
         </select>
         <button onClick={handleTodaySearch} className="today-button">Buscar hoy</button>
       </div>
       {error && <div className="error">Error: {error}</div>}
-      <div className="entry-list">
-        <div className="entry-regs">
+      <table className="entry-table">
+        <thead>
+          <tr>
+            <th>RUT</th>
+            <th>Patente</th>
+            <th>Nombre</th>
+            <th>Razón</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
           {entries.map((entry) => (
-            <div key={entry._id} className="entry-reg">
-              <button className="deletereg-button" onClick={() => handleDelete(entry._id)}>Eliminar</button>
-              <strong>RUT:</strong> {entry.rut}<br />
-              <strong>Patente:</strong> {entry.plate}<br />
-              <strong>Nombre:</strong> {entry.name}<br />
-              <strong>Razón:</strong> {entry.reason}<br />
-              <strong>Fecha:</strong> {new Date(entry.date).toLocaleString()}<br />
-            </div>
+            <tr key={entry._id}>
+              <td>{entry.rut}</td>
+              <td>{entry.plate}</td>
+              <td>{entry.name}</td>
+              <td>{entry.reason}</td>
+              <td>{new Date(entry.date).toLocaleString()}</td>
+              <td>
+                <button className="deletereg-button" onClick={() => handleDelete(entry._id)}>Eliminar</button>
+              </td>
+            </tr>
           ))}
-        </div>
-      </div>
+        </tbody>
+      </table>
     </div>
   );
 };

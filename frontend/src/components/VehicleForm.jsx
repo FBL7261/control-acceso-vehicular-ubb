@@ -39,8 +39,8 @@ function VehicleForm({ onSubmit, initialData = {} }) {
       await vehicleService.createVehicle(vehicleData);
       if (onSubmit) onSubmit();
     } catch (error) {
-      setError("Error submitting vehicle. Please try again.");
-      console.error("Error submitting vehicle:", error);
+      setError("Error en subir vehiculo.");
+      console.error("Error en subir vehiculo:", error);
     } finally {
       setLoading(false);
     }

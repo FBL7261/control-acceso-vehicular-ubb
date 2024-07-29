@@ -1,0 +1,76 @@
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
+
+.vehicle-editor-page {
+    background-color: var(--page-background);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: none;
+    border: none;
+    position: relative;
+    font-family: "Montserrat", sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: white;
+}
+
+.vehicle-editor-page h2 {
+    color: #ffffff;
+    margin-bottom: 20px;
+}
+
+.vehicle-editor-page form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    width: 300px;
+    background-color: var(--form-background);
+    padding: 20px;
+    border-radius: var(--form-border-radius);
+    box-shadow: none;
+    border: none;
+}
+
+.vehicle-editor-page input,
+.vehicle-editor-page select {
+    padding: var(--input-padding);
+    border: 1px solid var(--input-border-color);
+    border-radius: 4px;
+    font-size: 1em;
+    background-color: var(--text-color);
+    color: var(--input-text-color);
+}
+
+.vehicle-editor-page button {
+    background-color: var(--form-button-bg);
+    color: #ffffff; 
+    padding: var(--button-padding);
+    font-size: 1.2em;
+    border: none;
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    text-transform: uppercase;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.vehicle-editor-page button:hover {
+    background-color: var(--button-hover-bg);
+}
+
+.vehicle-editor-page .go-back {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    font-size: 2em;
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.vehicle-editor-page .go-back:hover {
+    color: #fddb3a;
+}

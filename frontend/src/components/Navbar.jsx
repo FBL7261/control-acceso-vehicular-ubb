@@ -32,7 +32,20 @@ const Navbar = () => {
                         </li>
                     </>
                 )}
-                
+                {userRole === 'guardia' && (
+                    <>  
+                        <li className={location.pathname === "/guard-home" ? "active" : ""}>
+                            <NavLink to="/guard-home">Panel de Guardia</NavLink>
+                        </li>
+                    </>
+                )}
+                {userRole === 'guardia' && (
+                    <>
+                        <li className={location.pathname === "/search" ? "active" : ""}>
+                            <NavLink to="/search">Registros</NavLink>
+                        </li>
+                    </>
+                )}
                 {userRole === 'user' && (
                     <>
                         <li className={location.pathname === "/create-request" ? "active" : ""}>

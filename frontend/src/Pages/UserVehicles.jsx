@@ -21,7 +21,7 @@ const UserVehicles = () => {
         const response = await getUserVehicles(userId);
         setVehicles(response.data);
       } catch (error) {
-        console.error('Error al obtener los vehÃ­culos:', error);
+        console.error('Error al obtener los vehículos:', error);
       }
     };
 
@@ -40,9 +40,10 @@ const UserVehicles = () => {
 
   return (
     <div className="user-vehicles-page">
-      <h1>Mis Vehi­culos</h1>
+      <a href="/vehicles" className="go-back">←</a>
+      <h1>Mis Vehículos</h1>
       {vehicles.length === 0 ? (
-        <p>Actualmente no posees vehiculos registrados</p>
+        <p>Actualmente no posees vehículos registrados</p>
       ) : (
         <div className="vehicle-grid">
           {vehicles.map(vehicle => (
@@ -54,10 +55,10 @@ const UserVehicles = () => {
                   onClick={() => handleImageClick(`http://localhost:3000/upload/${vehicle.foto}`)}
                 />
               )}
-              <p><strong>Matri­cula</strong> {vehicle.matricula}</p>
+              <p><strong>Matrícula</strong> {vehicle.matricula}</p>
               <p><strong>Modelo</strong> {vehicle.modelo}</p>
-              <p><strong>Marc:</strong> {vehicle.marca}</p>
-              <p><strong>Colo:</strong> {vehicle.color}</p>
+              <p><strong>Marca</strong> {vehicle.marca}</p>
+              <p><strong>Color</strong> {vehicle.color}</p>
             </div>
           ))}
         </div>

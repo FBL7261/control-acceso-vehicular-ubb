@@ -141,22 +141,17 @@ async function getRegEntryByPlate(req, res) {
 async function getRegEntryById(req, res) {
     try {
         const { id } = req.params;
-
         // Validar formato del ID
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return respondError(req, res, 400, 'ID inválido');
         }
-
         const [regEntry, regEntryError] = await regEntryService.getRegEntryById(id);
-
         if (regEntryError) {
             return respondError(req, res, 400, regEntryError);
         }
-
         if (!regEntry) {
             return respondError(req, res, 404, 'No se ha encontrado registro de entrada');
         }
-
         return respondSuccess(req, res, 200, {
             message: 'Entrada encontrada con éxito',
             data: regEntry
@@ -167,24 +162,6 @@ async function getRegEntryById(req, res) {
     }
 }
 
-async function getRegEntryByRut(req, res) {
-    try {
-        const { rut } = req.params;
-        const [regEntry, regEntryError] = await regEntryService.getRegEntryByRut(rut);
-        if (regEntryError) { 
-            return respondError(req, res, 400, regEntryError);
-        }
-        if (!regEntry || regEntry.length === 0) {
-            return respondError(req, res, 404, "No se ha encontrado registro de entrada");
-        }
-        respondSuccess(req, res, 200, {
-            message: "Entradas encontradas con éxito",
-            regEntry: regEntry});
-    } catch (error) {
-        handleError(error, "regEntry.controller -> getRegEntryByRut");
-        respondError(req, res, 400, error.message);
-    }
-}
 
 /**
  * @name deleteRegEntryById
@@ -242,7 +219,6 @@ export default {
     getEntryByDate,
     getRegEntryByPlate,
     getRegEntryById,
-    getRegEntryByRut,
     deleteRegEntryById,
     //updateRegEntryById
 }

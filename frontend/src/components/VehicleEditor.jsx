@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import vehicleService from '../services/vehicle.service';
+import '../styles/VehicleEditor.css'; // Ensure you import the CSS file
 
 const VehicleEditor = () => {
   const [models, setModels] = useState([]);
-  const [selectedModel, setSelectedModel] = useState(null);
+  const [selectedModel, setSelectedModel] = useState('');
   const [formData, setFormData] = useState({
     matricula: '',
     modelo: '',
@@ -14,55 +14,38 @@ const VehicleEditor = () => {
   });
 
   useEffect(() => {
-    // Obtener los modelos de vehículos del usuario
-    const fetchModels = async () => {
-      try {
-        const response = await vehicleService.getVehicleModels();
-        setModels(response);
-      } catch (error) {
-        console.error('Error al obtener modelos de vehículos', error);
-      }
-    };
-    fetchModels();
+    vehicleService.getModels().then(response => {
+      setModels(response.data);
+    });
   }, []);
 
-  const handleModelChange = async (event) => {
-    const modelName = event.target.value;
-    setSelectedModel(modelName);
-    if (!modelName) {
-      console.error('Model name is not valid');
-      return;
-    }
-    try {
-      const response = await vehicleService.getVehicleByModel(modelName);
-      setFormData(response);
-    } catch (error) {
-      console.error(`Error al obtener los detalles del vehículo con modelo ${modelName}`, error);
-    }
+  const handleModelChange = (event) => {
+    setSelectedModel(event.target.value);
   };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-    setFormData(prevData => ({ ...prevData, [name]: value }));
+    setFormData(prevState => ({
+      ...prevState,
+      [name]: value
+    }));
   };
 
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault();
-    try {
-      await vehicleService.updateVehicle(selectedModel, formData);
-      alert('Vehículo actualizado exitosamente');
-    } catch (error) {
-      console.error('Error al actualizar el vehículo', error);
-    }
+    vehicleService.updateVehicle(formData).then(response => {
+      console.log('Vehicle updated:', response.data);
+    });
   };
 
   return (
-    <div>
+    <div className="vehicle-editor-page">
+      <a href="/vehicles" className="go-back">←</a>
       <h2>Editar Vehículo</h2>
       <select onChange={handleModelChange}>
         <option value="">Selecciona un modelo</option>
         {models.map(model => (
-          <option key={model.id} value={model.modelo}>{model.modelo}</option>
+          <option key={model._id} value={model.modelo}>{model.modelo}</option>
         ))}
       </select>
 

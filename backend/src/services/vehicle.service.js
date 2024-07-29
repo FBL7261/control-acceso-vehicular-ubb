@@ -87,14 +87,13 @@ async function deleteVehicle(vehicleId, currentUserEmail) {
 
 const getVehicleByModel = async (modelName) => {
   try {
-    const response = await axios.get(`${API_URL}/model/${modelName}`, {
-      headers: {
-        "Authorization": `Bearer ${getAuthToken()}`,
-      },
-      withCredentials: true,
-    });
+    const vehicle = await Vehicle.findOne({ modelo: modelName }).select('-foto').populate('propietario');
 
-    return response.data;
+    if (!vehicle) {
+      return [null, "Vehículo no encontrado"];
+    }
+
+    return [vehicle, null];
   } catch (error) {
     console.error("Error fetching vehicle by model:", error);
     throw error;

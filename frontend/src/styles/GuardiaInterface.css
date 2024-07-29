@@ -1,8 +1,6 @@
-/*estilo interface guardia*/
 .guard-interface {
-    margin: 0 auto;
-    max-width: 800px;
-
+    margin-top: -180px;
+    padding-top: 180px;
 }
 .navbar-guard{
     background-color: #005295;
@@ -16,20 +14,20 @@
     display: flex;
     justify-content: space-around;
 }
-  
+
 .navbar-guard li {
     display: inline;
-    border-right: 1px solid #fff; /*fbfff1 Línea de separación blanca */
-    padding: 0 10px; /* Espaciado alrededor de los enlaces */
-}
-  
+    border-right: 1px solid #fff;
+    padding: 0 10px; ;
+    padding: 0 10px;
+} 
 .navbar-guard li:last-child {
-    border-right: none; /* Elimina la línea de separación del último elemento */
+    border-right: none; 
 }
   
 .navbar-guard a {
     text-decoration: none;
-    color: #fff; /* Color del texto */
+    color: #fff;
     font-weight: bold;
 }
   
@@ -37,14 +35,14 @@
   text-decoration: underline;
 }
   
-/* Contenedor para los formularios de la interfaz de guardia */
+
 .guard-container {
     max-width: 600px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: #DCDCDC; /* Fondo gris claro */
+    background-color: #DCDCDC;
 }
   
 h2 {
