@@ -1,4 +1,3 @@
-// pdf.controller.js
 import { respondSuccess, respondError } from "../utils/resHandler.js";
 import  {handleError}  from "../utils/errorHandler.js";
 import  PDFService from '../services/pdf.service.js';

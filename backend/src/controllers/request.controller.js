@@ -1,4 +1,3 @@
-// request.controller.js
 import { respondSuccess, respondError } from "../utils/resHandler.js";
 import { handleError } from "../utils/errorHandler.js";
 import requestService from '../services/request.service.js';
