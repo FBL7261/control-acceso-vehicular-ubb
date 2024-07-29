@@ -1,5 +1,8 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 
+body { 
+  margin: 0;
+}
 .vehicles-page * {
   margin: 0;
   padding: 0;
@@ -8,7 +11,7 @@
 }
 
 .vehicles-page {
-  background: #272727;
+  background: #007BA7; /* Cerulean background color */
   font-family: "Montserrat", sans-serif;
   display: flex;
   flex-direction: column;
@@ -29,8 +32,8 @@
 }
 
 .vehicles-page .button-green {
-  background-color: #4CAF50;
-  color: white;
+  background-color: #E0FFFF; /* Pale Cyan color */
+  color: #007BA7; /* Cerulean color for text */
   padding: 15px 30px;
   font-size: 1.2em;
   border: none;
@@ -43,7 +46,7 @@
 }
 
 .vehicles-page .button-green:hover {
-  background-color: #45a049;
+  background-color: #b2d8d8; /* Slightly darker shade of Pale Cyan */
 }
 
 .vehicles-page .go-back {
