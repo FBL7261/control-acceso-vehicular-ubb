@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getUserVehicles } from '../services/vehicle.service';
-import Modal from '../components/Modal'; // Import the Modal component
-import '../styles/UserVehicles.css'; // Import the CSS file
+import Modal from '../components/Modal';
+import '../styles/UserVehicles.css';
 
 const UserVehicles = () => {
   const [vehicles, setVehicles] = useState([]);

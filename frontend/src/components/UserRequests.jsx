@@ -58,7 +58,7 @@ const UserRequests = () => {
                 {request.pdfs && request.pdfs.length > 0 ? (
                   request.pdfs.map(pdf => (
                     <li key={pdf._id}>
-                      <a href={`http://localhost:3000/uploads/${pdf.filePath}`} target="_blank" rel="noopener noreferrer">
+                      <a href={`http://146.83.198.35:1211/backend/${pdf.filePath}`} target="_blank" rel="noopener noreferrer">
                         {pdf.name}
                       </a>
                     </li>
