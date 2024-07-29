@@ -1,0 +1,99 @@
+.user-vehicles-page {
+  font-family: 'Open Sans', sans-serif;
+  padding: 20px;
+  color: white;
+  position: relative;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background-color: #007BA7;
+}
+
+.user-vehicles-page h1 {
+  margin-left: 40px;
+}
+
+.vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.vehicle-card {
+  background-color: #1d92c7;
+  border-radius: 10px;
+  box-shadow: -1rem 0 3rem #000;
+  padding: 20px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease;
+}
+
+.vehicle-card:hover {
+  transform: translateY(-10px);
+}
+
+.vehicle-card img {
+  max-width: 100%;
+  max-height: 150px;
+  border-radius: 4px;
+  margin-bottom: 10px;
+  object-fit: cover; 
+}
+
+.vehicle-card p {
+  margin: 5px 0;
+}
+
+.user-vehicles-page .go-back {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  font-size: 2em;
+  color: white;
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.user-vehicles-page .go-back:hover {
+  color: #fddb3a;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #22aceb;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  color: white;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none !important;
+  border: none !important;
+  font-size: 20px;
+  color: white !important;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+  color: #fddb3a !important; 
+  outline: none !important; 
+  background: none !important;
+  border: none !important;
+}

@@ -1,0 +1,65 @@
+.container-entry-list {
+  width: 90%;
+  margin: auto;
+}
+
+.entry-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.entry-table th, .entry-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.entry-table th {
+  background-color: #f2f2f2;
+  color: #333;
+}
+
+.entry-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.entry-table tr:hover {
+  background-color: #ddd;
+}
+
+.deletereg-button {
+  color: #fff;
+  background-color: #ff4d4d;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.filters {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.sort-order, .today-button {
+  padding: 5px;
+  margin-left: 10px;
+}
+
+.back-buttonn {
+  background-color: #0077d1;
+  border: 1px solid #b0bec5;
+  color: #ffffff;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.back-buttonn:hover {
+  background-color: #01579b;
+  color: white;
+  border-color: #01579b;
+}

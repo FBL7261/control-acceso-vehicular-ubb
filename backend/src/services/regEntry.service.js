@@ -34,17 +34,16 @@ async function createRegEntry(regEntry) {
  */
 
 // registra una nueva entrada para un usuario que ya se encuentra registrado en el sistema
-async function createRegEntryUser({ userID, reason }) {
+async function createRegEntryUser({ rut, plate }) {
     try {
-        // Buscar el usuario por su id 
-        const user = await User.findById(userID);
+        // Buscar el usuario por su id de propietario
+        const user = await User.findOne({rut});
         // Si no se encuentra el usuario, se responde con un error
         if (!user) {
             return [null, 'No se ha encontrado registro de usuario en el sistema'];
         }
-
         // busca el vehículo del usuario
-        const vehicle = await Vehicle.findOne({propietario: userID});
+        const vehicle = await Vehicle.findOne({propietario: user._id, matricula: plate});
         // Si no se encuentra el vehículo, se responde con un error
         if (!vehicle) {
             return [null, 'No se ha encontrado registro de vohiculo en el sistema'];
@@ -55,9 +54,8 @@ async function createRegEntryUser({ userID, reason }) {
             plate: vehicle.matricula,
             name: user.username,
             date: new Date(), // La fecha actual
-            reason,
+            //reason,
         });
-
         await newRegEntry.save();
         return [newRegEntry, null];
     } catch (error) {
@@ -129,8 +127,8 @@ async function getEntryByDate(date) {
 // busca una entrada registrada solo por su placa.
 async function getRegEntryByPlate(plate) {
     try {
-        const regEntry = await RegEntry.findOne({ plate });
-        if (!regEntry) {
+        const regEntry = await RegEntry.find({ plate });
+        if (regEntry.length === 0) {
             return [null, 'No se ha encontrado registro de entrada'];
         }
         return [regEntry, null];
@@ -139,6 +137,7 @@ async function getRegEntryByPlate(plate) {
         return [null, 'Error al buscar registro de entrada'];
     }
 }
+
 
 /**
  * 
@@ -161,8 +160,6 @@ async function getRegEntryById(id) {
         return [null, 'Error al buscar registro de entrada por ID'];
     }
 }
-
-
 
 
 /**
@@ -210,7 +207,7 @@ export default {
     getRegEntry,
     getEntryByDate, 
     getRegEntryByPlate,
-    getRegEntryById, 
+    getRegEntryById,
     deleteRegEntryById,
     //updateRegEntryById
 };

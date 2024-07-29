@@ -1,0 +1,100 @@
+:root {
+    --form-background: #3d8aad;
+    --form-border: transparent;
+    --form-button-bg: #32708e;
+    --form-button-hover-bg: #0056b3;
+    --checkbox-container-bg: #32708e; 
+    --text-color: #ffffff;
+    --input-text-color: #000000; 
+    --form-border-radius: 8px;
+    --button-border-radius: 4px;
+    --checkbox-container-padding: 10px;
+    --input-padding: 8px;
+    --button-padding: 10px 20px;
+    --page-background: #007BA7;
+    --input-border-color: #3d8aad;
+    --button-hover-bg: #0056b3; 
+    --checkbox-bg: #3d8aad;
+}
+
+
+.vehicle-form-body {
+    background-color: var(--page-background);
+    min-height: 100vh;
+    padding: 20px;
+}
+
+.vehicle-form-container {
+    background-color: var(--page-background); 
+    padding: 20px;
+    border-radius: var(--form-border-radius);
+    box-shadow: none;
+    border: none;
+    overflow: hidden;
+}
+
+.vehicle-form {
+    display: flex;
+    flex-direction: column;
+    max-width: 500px;
+    margin: auto;
+    padding: 20px;
+    background-color: var(--form-background); 
+    border-radius: var(--form-border-radius);
+    box-shadow: none;
+    border: none;
+}
+
+.vehicle-form div {
+    margin-bottom: 15px;
+}
+
+.vehicle-form label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: var(--text-color);
+}
+
+.vehicle-form input[type="text"],
+.vehicle-form input[type="file"] {
+    width: 100%;
+    padding: var(--input-padding);
+    border: 1px solid var(--input-border-color);
+    border-radius: 4px;
+    background-color: var(--text-color);
+    color: var(--input-text-color);
+}
+
+.vehicle-form button {
+    background-color: var(--form-button-bg);
+    color: var(--text-color);
+    border: none;
+    padding: var(--button-padding);
+    border-radius: var(--button-border-radius);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.vehicle-form button:hover {
+    background-color: var(--button-hover-bg); 
+}
+
+.vehicle-form .checkbox-container {
+    display: flex;
+    align-items: center;
+    background-color: var(--checkbox-bg); 
+    padding: var(--checkbox-container-padding);
+    border-radius: 4px;
+}
+
+.vehicle-form .checkbox-container label {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+    color: var(--text-color); 
+}
+
+.vehicle-form .checkbox-container input[type="checkbox"] {
+    margin-right: 10px;
+}

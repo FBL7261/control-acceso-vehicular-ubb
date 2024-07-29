@@ -39,10 +39,9 @@ async function createRegEntry(req, res) {
 // registro de entrada que valida si el usuario ya se encuentra registrado en el sistema
 async function createRegEntryUser(req, res) {
     try {
-        const { userID, reason } = req.body;
-
+        const { rut, plate } = req.body;
         // servicio para crear el registro de entrada
-        const [newRegEntry, error] = await regEntryService.createRegEntryUser({ userID, reason });
+        const [newRegEntry, error] = await regEntryService.createRegEntryUser({  rut, plate });
         if (error) {
             return respondError(req, res, 400, error);
         }
@@ -142,22 +141,17 @@ async function getRegEntryByPlate(req, res) {
 async function getRegEntryById(req, res) {
     try {
         const { id } = req.params;
-
         // Validar formato del ID
         if (!mongoose.Types.ObjectId.isValid(id)) {
             return respondError(req, res, 400, 'ID inválido');
         }
-
         const [regEntry, regEntryError] = await regEntryService.getRegEntryById(id);
-
         if (regEntryError) {
             return respondError(req, res, 400, regEntryError);
         }
-
         if (!regEntry) {
             return respondError(req, res, 404, 'No se ha encontrado registro de entrada');
         }
-
         return respondSuccess(req, res, 200, {
             message: 'Entrada encontrada con éxito',
             data: regEntry

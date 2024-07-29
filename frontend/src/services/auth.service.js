@@ -4,20 +4,23 @@ import jwtDecode from 'jwt-decode';
 
 export const login = async ({ email, password }) => {
   try {
-    const response = await axios.post('auth/login', {
+    const response = await axios.post('http://localhost:3000/api/auth/login', {
       email,
       password,
     });
     const { status, data } = response;
     if (status === 200) {
-      const { email, roles } = await jwtDecode(data.data.accessToken);
-      localStorage.setItem('user', JSON.stringify({ email, roles }));
-      axios.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${data.data.accessToken}`;
+      const decodedToken = jwtDecode(data.data.accessToken);
+      localStorage.setItem('user', JSON.stringify(decodedToken));
+      sessionStorage.setItem('token', data.data.accessToken);
+      sessionStorage.setItem('userId', decodedToken.userId);
+
+      axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.accessToken}`;
     }
+    return response;
   } catch (error) {
-    console.log(error);
+    console.error('Error al iniciar sesión:', error);
+    throw new Error(error);
   }
 };
 
@@ -25,16 +28,9 @@ export const logout = () => {
   localStorage.removeItem('user');
   delete axios.defaults.headers.common['Authorization'];
   cookies.remove('jwt');
+  sessionStorage.removeItem('token');
 };
 
-export const test = async () => {
-  try {
-    const response = await axios.get('/users');
-    const { status, data } = response;
-    if (status === 200) {
-      console.log(data.data);
-    }
-  } catch (error) {
-    console.log(error);
-  }
+export const getCurrentUser = () => {
+  return JSON.parse(localStorage.getItem('user'));
 };

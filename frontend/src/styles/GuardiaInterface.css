@@ -1,0 +1,82 @@
+.guard-interface {
+    margin-top: -180px;
+    padding-top: 180px;
+}
+.navbar-guard{
+    background-color: #005295;
+    padding: 1px;
+    border-radius: 5px;
+}
+
+.navbar-guard ul {
+    list-style-type: none;
+    padding: 0;
+    display: flex;
+    justify-content: space-around;
+}
+
+.navbar-guard li {
+    display: inline;
+    border-right: 1px solid #fff;
+    padding: 0 10px; ;
+    padding: 0 10px;
+} 
+.navbar-guard li:last-child {
+    border-right: none; 
+}
+  
+.navbar-guard a {
+    text-decoration: none;
+    color: #fff;
+    font-weight: bold;
+}
+  
+.navbar-guard a.active {
+  text-decoration: underline;
+}
+  
+
+.guard-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #DCDCDC;
+}
+  
+h2 {
+    text-align: center;
+}
+  
+.form-group {
+    margin-bottom: 15px;
+}
+  
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+  
+input,
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+  
+.guard-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    background-color: #0060c0;  
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+  
+ .guard-button:hover {
+    background-color: #006ad4; 
+}
