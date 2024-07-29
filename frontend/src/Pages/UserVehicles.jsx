@@ -50,9 +50,9 @@ const UserVehicles = () => {
             <div key={vehicle._id} className="vehicle-card">
               {vehicle.foto && (
                 <img
-                  src={`http://localhost:3000/upload/${vehicle.foto}`}
+                  src={`http://146.83.198.35:1211/upload/${vehicle.foto}`}
                   alt={`${vehicle.marca} ${vehicle.modelo}`}
-                  onClick={() => handleImageClick(`http://localhost:3000/upload/${vehicle.foto}`)}
+                  onClick={() => handleImageClick(`http://146.83.198.35:1211/upload/${vehicle.foto}`)}
                 />
               )}
               <p><strong>Matrícula:</strong> {vehicle.matricula}</p>

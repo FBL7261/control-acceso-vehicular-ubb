@@ -1,13 +1,12 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import VehicleForm from '../components/VehicleForm';
-import '../styles/CreateVehicle.css'; // Asegúrate de que la ruta sea correcta
+import '../styles/CreateVehicle.css';
 
 const CreateVehicle = () => {
   const navigate = useNavigate();
 
   const handleVehicleCreated = () => {
-    // Redirigir o mostrar un mensaje de éxito
     alert('Vehículo creado con éxito!');
   };
 

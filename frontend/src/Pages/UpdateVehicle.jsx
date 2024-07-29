@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import vehicleService from '../services/vehicle.service';
-import '../styles/VehicleEditor.css'; // Import the new CSS file
+import '../styles/VehicleEditor.css';
 
 const UpdateVehicle = () => {
   const [models, setModels] = useState([]);
@@ -13,7 +13,7 @@ const UpdateVehicle = () => {
   });
 
   useEffect(() => {
-    // Fetch vehicle models
+
     const fetchModels = async () => {
       try {
         const response = await vehicleService.getVehicleModels();
@@ -48,7 +48,6 @@ const UpdateVehicle = () => {
   const handleFocus = (event) => {
     const { name } = event.target;
     if (name === 'matricula') {
-      console.log('Clearing matricula field'); // Debugging line
       setFormData(prevData => ({ ...prevData, [name]: '' }));
     }
   };

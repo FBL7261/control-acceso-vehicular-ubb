@@ -75,7 +75,7 @@ const getVehicle = async (vehicleId) => {
       headers: {
         'Authorization': `Bearer ${getAuthToken()}`
       },
-      withCredentials: true // Asegúrate de que esto esté habilitado si tu API lo requiere
+      withCredentials: true
     });
     return response.data;
   } catch (error) {

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import vehicleService from '../services/vehicle.service';
-import '../styles/VehicleEditor.css'; // Ensure you import the CSS file
+import '../styles/VehicleEditor.css';
 
 const VehicleEditor = () => {
   const [models, setModels] = useState([]);
