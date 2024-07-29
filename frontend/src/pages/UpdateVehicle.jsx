@@ -65,6 +65,7 @@ const UpdateVehicle = () => {
 
   return (
     <div className="vehicle-editor-page">
+      <a href="/vehicles" className="go-back">←</a>
       <h2>Actualizar vehiculo</h2>
       <select onChange={handleModelChange}>
         <option value="">Seleccionar modelo</option>

@@ -17,7 +17,7 @@
 }
 
 .vehicle-editor-page h2 {
-    color: #000000; /* Color del texto del encabezado */
+    color: #ffffff; /* Color del texto del encabezado */
     margin-bottom: 20px;
 }
 
@@ -45,7 +45,7 @@
 
 .vehicle-editor-page button {
     background-color: var(--form-button-bg);
-    color: #000000; /* Color del texto del botón */
+    color: #ffffff; /* Color del texto del botón */
     padding: var(--button-padding);
     font-size: 1.2em;
     border: none;
