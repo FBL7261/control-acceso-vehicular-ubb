@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import requestService from '../services/request.service';
 import '../styles/UserRequests.css';
 
+const API_URL = `${import.meta.env.VITE_BASE_URL}`;
+
 const UserRequests = () => {
   const [requests, setRequests] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -58,7 +60,7 @@ const UserRequests = () => {
                 {request.pdfs && request.pdfs.length > 0 ? (
                   request.pdfs.map(pdf => (
                     <li key={pdf._id}>
-                      <a href={`http://146.83.198.35:1211/backend/${pdf.filePath}`} target="_blank" rel="noopener noreferrer">
+                      <a href={`${API_URL}/${pdf.filePath}`} target="_blank" rel="noopener noreferrer">
                         {pdf.name}
                       </a>
                     </li>
