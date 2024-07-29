@@ -105,10 +105,10 @@ const RequestList = () => {
                                 {pdfs[request._id] && pdfs[request._id].length > 0 ? (
                                     pdfs[request._id].map(pdf => (
                                         <li key={pdf._id}>
-                                            <button onClick={() => setSelectedPdf(`http://localhost:3000/uploads/${pdf.filePath}`)}>
+                                            <button onClick={() => setSelectedPdf(`http://146.83.198.35:1211/uploads/${pdf.filePath}`)}>
                                                 Ver {pdf.name}
                                             </button>
-                                            {selectedPdf === `http://localhost:3000/uploads/${pdf.filePath}` && (
+                                            {selectedPdf === `http://146.83.198.35:1211/uploads/${pdf.filePath}` && (
                                                 <div className="pdf-viewer">
                                                     <Worker workerUrl={`https://unpkg.com/pdfjs-dist@${pdfjsDistVersion}/build/pdf.worker.min.js`}>
                                                         <Viewer fileUrl={selectedPdf} />

@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://localhost:3000/api/vehicles';
+const API_URL = `${import.meta.env.VITE_BASE_URL}/api/vehicles`;
 
 const getAuthToken = () => sessionStorage.getItem('token');
 

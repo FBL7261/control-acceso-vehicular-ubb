@@ -1,7 +1,6 @@
 import axios from 'axios';
-
-const API_URL = 'http://localhost:3000/api/requests';
-const PDF_API_URL = 'http://localhost:3000/api/pdf';
+const API_URL = `${import.meta.env.VITE_BASE_URL}/api/requests`;
+const PDF_API_URL = `${import.meta.env.VITE_BASE_URL}/api/pdf`;
 
 const getAuthToken = () => sessionStorage.getItem('token');
 
