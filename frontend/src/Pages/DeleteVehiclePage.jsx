@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserVehicles, deleteVehicle } from '../services/vehicle.service';
-import Modal from '../components/Modal'; // Import the Modal component
-import '../styles/DeleteVehiclePage.css'; // Import the CSS file
+import Modal from '../components/Modal';
+import '../styles/DeleteVehiclePage.css'; 
 
 const DeleteVehiclePage = () => {
-  const navigate = useNavigate(); // For redirection after deletion
+  const navigate = useNavigate();
   const [vehicles, setVehicles] = useState([]);
   const [userId, setUserId] = useState(null);
   const [error, setError] = useState(null);
@@ -15,7 +15,7 @@ const DeleteVehiclePage = () => {
 
   useEffect(() => {
     const userIdFromSession = sessionStorage.getItem('userId');
-    console.log('User ID from session:', userIdFromSession); // Debug log
+    console.log('User ID from session:', userIdFromSession);
     setUserId(userIdFromSession);
   }, []);
 
@@ -24,8 +24,8 @@ const DeleteVehiclePage = () => {
       if (!userId) return;
       try {
         const response = await getUserVehicles(userId);
-        console.log('Vehiculos obtenidos:', response); // Debug log
-        setVehicles(response.data); // Access the data property
+        console.log('Vehiculos obtenidos:', response);
+        setVehicles(response.data); 
       } catch (error) {
         console.error('Error al obtener los vehículos:', error);
         setError('Error al cargar los datos de los vehículos.');
@@ -69,12 +69,12 @@ const DeleteVehiclePage = () => {
   return (
     <div className="delete-vehicle-page">
       <a href="/vehicles" className="go-back">←</a>
-      <h1 style={{ color: 'white' }}>Eliminar Vehículo</h1>
+      <h1>Eliminar Vehículo</h1>
       {error && <p className="error">{error}</p>}
-      <ul className="vehicle-list">
+      <div className="vehicle-grid">
         {vehicles.length > 0 ? (
           vehicles.map((vehicle) => (
-            <li key={vehicle._id} className="vehicle-card">
+            <div key={vehicle._id} className="vehicle-card">
               {vehicle.foto && (
                 <img
                   src={`http://localhost:3000/upload/${vehicle.foto}`}
@@ -87,12 +87,12 @@ const DeleteVehiclePage = () => {
               <p><strong>Marca:</strong> {vehicle.marca}</p>
               <p><strong>Color:</strong> {vehicle.color}</p>
               <button onClick={() => handleDelete(vehicle._id)}>Eliminar</button>
-            </li>
+            </div>
           ))
         ) : (
-          <p style={{ color: 'white' }}>No hay vehículos disponibles.</p>
+          <p>No hay vehículos disponibles.</p>
         )}
-      </ul>
+      </div>
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         {selectedImage && <img src={selectedImage} alt="Vehicle" style={{ maxWidth: '100%' }} />}
       </Modal>

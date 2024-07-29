@@ -3,7 +3,7 @@ import '../styles/Alertmsg.css';
 
 export const showSuccessAlert = (message) => {
   Swal.fire({
-    position: 'top-end',
+    position: 'bottom-end',
     icon: 'success',
     title: message,
     showConfirmButton: false,

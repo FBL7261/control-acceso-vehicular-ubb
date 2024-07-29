@@ -1,33 +1,41 @@
-.delete-vehicle-page {
+@import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap");
+
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
   font-family: 'Open Sans', sans-serif;
-  padding: 20px;
+}
+
+.delete-vehicle-page {
+  background-color: #007BA7; /* Fondo específico para esta página */
   color: white;
-  position: relative;
-  min-height: 100vh;
-  box-sizing: border-box;
-  background-color: #007BA7;
-  overflow-x: auto;
-  overflow-y: auto;
+  height: 100vh; 
+  display: flex; 
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  position: relative; /* Para posicionar el botón de retroceso correctamente */
 }
 
 .delete-vehicle-page h1 {
-  margin-left: 40px;
+  margin-bottom: 20px;
+  color: #f6f4e6;
 }
 
-.vehicle-list {
-  list-style-type: none;
-  padding: 0;
+.vehicle-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
 }
 
 .vehicle-card {
-  background-color: #17141d;
+  background-color: #0076a1;
   border-radius: 10px;
   box-shadow: -1rem 0 3rem #000;
   padding: 20px;
   box-sizing: border-box;
-  margin-bottom: 20px;
   transition: transform 0.3s ease;
-  min-width: 300px;
 }
 
 .vehicle-card:hover {
@@ -73,10 +81,49 @@
   color: white;
   text-decoration: none;
   cursor: pointer;
-  -webkit-transition: color 0.3s ease;
   transition: color 0.3s ease;
 }
 
 .delete-vehicle-page .go-back:hover {
   color: #fddb3a;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background: #22aceb;
+  padding: 20px;
+  border-radius: 10px;
+  position: relative;
+  color: white;
+}
+
+.modal-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none !important;
+  border: none !important;
+  font-size: 20px;
+  color: white !important;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.modal-close:hover,
+.modal-close:focus {
+  color: #fddb3a !important; 
+  outline: none !important; 
+  background: none !important;
+  border: none !important;
 }

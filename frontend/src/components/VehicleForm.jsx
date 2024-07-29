@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import vehicleService from '../services/vehicle.service';
 import '../styles/VehicleForm.css';
 
 function VehicleForm({ onSubmit, initialData = {} }) {
+  const navigate = useNavigate();
   const [vehicle, setVehicle] = useState({
     matricula: initialData.matricula || '',
     modelo: initialData.modelo || '',
@@ -47,48 +49,53 @@ function VehicleForm({ onSubmit, initialData = {} }) {
   };
 
   return (
-    <div className="vehicle-form-body">
-      <div className="vehicle-form-container">
-        {error && <div className="error-message">{error}</div>}
-        <form onSubmit={handleSubmit} className="vehicle-form">
-          <div>
-            <label>Matrícula</label>
-            <input
-            placeholder='Ej: ZK32T2'
-             type="text" name="matricula" value={vehicle.matricula} onChange={handleChange} required />
-          </div>
-          <div>
-            <label>Modelo</label>
-            <input
-            placeholder='Ford Focus'
-             type="text" name="modelo" value={vehicle.modelo} onChange={handleChange} required />
-          </div>
-          <div>
-            <label>Marca:</label>
-            <input
-            placeholder='Toyota, etc'
-             type="text" name="marca" value={vehicle.marca} onChange={handleChange} required />
-          </div>
-          <div>
-            <label>Color:</label>
-            <input
-            placeholder='Rojo' 
-            type="text" name="color" value={vehicle.color} onChange={handleChange} required />
-          </div>
-          <div className="checkbox-container">
-            <label>
-              <input type="checkbox" checked={addPhoto} onChange={(e) => setAddPhoto(e.target.checked)} />
-              Añadir Foto
-            </label>
-            {addPhoto && (
+    <div className="vehicle-form-background">
+      <div className="vehicle-form-wrapper">
+        <div className="vehicle-form-body">
+          <div className="vehicle-form-container">
+            <a href="/vehicles" className="go-back">← Volver</a> {/* Go back arrow */}
+            {error && <div className="error-message">{error}</div>}
+            <form onSubmit={handleSubmit} className="vehicle-form">
               <div>
-                <label>Subir Foto Vehículo:</label>
-                <input type="file" name="foto" onChange={handleFileChange} />
+                <label>Matrícula</label>
+                <input
+                  placeholder='Ej: ZK32T2'
+                  type="text" name="matricula" value={vehicle.matricula} onChange={handleChange} required />
               </div>
-            )}
+              <div>
+                <label>Modelo</label>
+                <input
+                  placeholder='Ford Focus'
+                  type="text" name="modelo" value={vehicle.modelo} onChange={handleChange} required />
+              </div>
+              <div>
+                <label>Marca:</label>
+                <input
+                  placeholder='Toyota, etc'
+                  type="text" name="marca" value={vehicle.marca} onChange={handleChange} required />
+              </div>
+              <div>
+                <label>Color:</label>
+                <input
+                  placeholder='Rojo' 
+                  type="text" name="color" value={vehicle.color} onChange={handleChange} required />
+              </div>
+              <div className="checkbox-container">
+                <label>
+                  <input type="checkbox" checked={addPhoto} onChange={(e) => setAddPhoto(e.target.checked)} />
+                  Añadir Foto
+                </label>
+                {addPhoto && (
+                  <div>
+                    <label>Subir Foto Vehículo:</label>
+                    <input type="file" name="foto" onChange={handleFileChange} />
+                  </div>
+                )}
+              </div>
+              <button type="submit" disabled={loading}>{loading ? 'Guardando...' : 'Guardar'}</button>
+            </form>
           </div>
-          <button type="submit" disabled={loading}>{loading ? 'Guardando...' : 'Guardar'}</button>
-        </form>
+        </div>
       </div>
     </div>
   );

@@ -32,7 +32,7 @@ const NavbarGuard = () => {
                     <NavLink to="/search">Registros</NavLink>
                 </li>
                 <li className={location.pathname === "/" ? "active" : ""}>
-                    <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
+                    <NavLink to="/" onClick={logoutSubmit}>Cerrar Sesión</NavLink>
                 </li>
             </ul>
         </nav>

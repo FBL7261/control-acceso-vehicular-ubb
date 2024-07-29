@@ -1,5 +1,5 @@
 .create-vehicle-container {
-    background-color: var(--page-background);
+    background-color: #084ba8;
     padding: 20px;
     border-radius: 8px;
     box-shadow: none;
@@ -9,10 +9,10 @@
 }
 
 .create-vehicle-container h1 {
-    color: #ffffff;
+    color: #f1f7ff;
     margin-left: 40px;
+    margin-top: 120px; /* Add this line to lower the heading */
 }
-
 .create-vehicle-container .vehicle-form-container {
     background-color: var(--page-background);
     padding: 20px;

@@ -1,100 +1,132 @@
-:root {
-    --form-background: #3d8aad;
-    --form-border: transparent;
-    --form-button-bg: #32708e;
-    --form-button-hover-bg: #0056b3;
-    --checkbox-container-bg: #32708e; 
-    --text-color: #ffffff;
-    --input-text-color: #000000; 
-    --form-border-radius: 8px;
-    --button-border-radius: 4px;
-    --checkbox-container-padding: 10px;
-    --input-padding: 8px;
-    --button-padding: 10px 20px;
-    --page-background: #007BA7;
-    --input-border-color: #3d8aad;
-    --button-hover-bg: #0056b3; 
-    --checkbox-bg: #3d8aad;
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
+
+/* Apply background to the specific vehicle-form container */
+.vehicle-form-background {
+  background: #007BA7; /* Cerulean color */
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Hide any overflow */
 }
 
-
-.vehicle-form-body {
-    background-color: var(--page-background);
-    min-height: 100vh;
-    padding: 20px;
+/* Ensure the form wrapper and its children have consistent background */
+.vehicle-form-wrapper {
+  font-family: "Montserrat", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #f6f4e6;
+  position: relative;
 }
 
-.vehicle-form-container {
-    background-color: var(--page-background); 
-    padding: 20px;
-    border-radius: var(--form-border-radius);
-    box-shadow: none;
-    border: none;
-    overflow: hidden;
+.vehicle-form-wrapper .vehicle-form-body {
+  background-color: #018ec1;
+  min-height: 100vh;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-.vehicle-form {
-    display: flex;
-    flex-direction: column;
-    max-width: 500px;
-    margin: auto;
-    padding: 20px;
-    background-color: var(--form-background); 
-    border-radius: var(--form-border-radius);
-    box-shadow: none;
-    border: none;
+.vehicle-form-wrapper .vehicle-form-container {
+  background-color: #007BA7;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: none;
+  border: none;
+  overflow: hidden;
+  width: 100%;
+  max-width: 600px;
 }
 
-.vehicle-form div {
-    margin-bottom: 15px;
+.vehicle-form-wrapper .vehicle-form {
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  padding: 20px;
+  background-color: #3d8aad;
+  border-radius: 8px;
+  box-shadow: none;
+  border: none;
+  width: 100%;
 }
 
-.vehicle-form label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: var(--text-color);
+.vehicle-form-wrapper .vehicle-form div {
+    background-color: #2e7494;
+  margin-bottom: 15px;
 }
 
-.vehicle-form input[type="text"],
-.vehicle-form input[type="file"] {
-    width: 100%;
-    padding: var(--input-padding);
-    border: 1px solid var(--input-border-color);
-    border-radius: 4px;
-    background-color: var(--text-color);
-    color: var(--input-text-color);
+.vehicle-form-wrapper .vehicle-form label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+  color: #ffffff;
 }
 
-.vehicle-form button {
-    background-color: var(--form-button-bg);
-    color: var(--text-color);
-    border: none;
-    padding: var(--button-padding);
-    border-radius: var(--button-border-radius);
-    cursor: pointer;
+.vehicle-form-wrapper .vehicle-form input[type="text"],
+.vehicle-form-wrapper .vehicle-form input[type="file"] {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #3d8aad;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.vehicle-form-wrapper .vehicle-form input[type="text"]:focus,
+.vehicle-form-wrapper .vehicle-form input[type="file"]:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px #3d8aad;
+}
+
+.vehicle-form-wrapper .vehicle-form button {
+  background-color: #32708e;
+  color: #ffffff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  text-transform: uppercase;
+  font-weight: 600;
+  -webkit-transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease;
+}
+
+.vehicle-form-wrapper .vehicle-form button:hover {
+  background-color: #0056b3;
+}
+
+.go-back {
+    display: inline-block;
+    margin-bottom: 20px;
+    color: #084ba8;
+    text-decoration: none;
     font-size: 16px;
+  }
+  
+  .go-back:hover {
+    text-decoration: underline;
+  }
+
+.vehicle-form-wrapper .vehicle-form .checkbox-container {
+  display: flex;
+  align-items: center;
+  background-color: #3d8aad;
+  padding: 10px;
+  border-radius: 4px;
 }
 
-.vehicle-form button:hover {
-    background-color: var(--button-hover-bg); 
+.vehicle-form-wrapper .vehicle-form .checkbox-container label {
+  display: flex;
+  align-items: center;
+  margin-right: 10px;
+  color: #ffffff;
 }
 
-.vehicle-form .checkbox-container {
-    display: flex;
-    align-items: center;
-    background-color: var(--checkbox-bg); 
-    padding: var(--checkbox-container-padding);
-    border-radius: 4px;
-}
-
-.vehicle-form .checkbox-container label {
-    display: flex;
-    align-items: center;
-    margin-right: 10px;
-    color: var(--text-color); 
-}
-
-.vehicle-form .checkbox-container input[type="checkbox"] {
-    margin-right: 10px;
+.vehicle-form-wrapper .vehicle-form .checkbox-container input[type="checkbox"] {
+  margin-right: 10px;
 }

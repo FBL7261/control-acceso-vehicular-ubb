@@ -57,7 +57,9 @@ const CreateRegEntry = () => {
 
   return (
     <div className="create-entry-container">
-      
+      <h2>Instrucciones de uso</h2>
+        <p>Para ingresar rut: solo debe ingresar los números y el dígito de final sea k o algún número. Se formateará automáticamente.</p>
+        <p>Para ingresar patente: solo debe ingresar las letras y números. Se formateará automáticamente.</p> 
       <form className="create-entry-form" onSubmit={handleSubmit}>
       <div className="button-group-regs">
         <button onClick={() => setFormType('user')} className={formType === 'user' ? 'active' : ''}>Usuario</button>

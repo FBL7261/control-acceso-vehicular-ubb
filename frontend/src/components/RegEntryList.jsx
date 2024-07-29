@@ -80,8 +80,9 @@ const RegEntryList = () => {
 
   return (
     <div className="container-entry-list">
-      <button className="back-buttonn" onClick={() => navigate("/guard-home")}>Volver</button>
-      <h2>Lista de Registros de Entrada</h2>
+        <button className="back-buttonn" onClick={() => navigate("/guard-home")}>Volver</button>
+        <h2>Lista de Registros de Entrada</h2>
+
       <SearchEntry />
       <div className="filters">
         <select value={sortOrder} onChange={handleSortOrderChange} className="sort-order">
@@ -91,6 +92,7 @@ const RegEntryList = () => {
         <button onClick={handleTodaySearch} className="today-button">Buscar hoy</button>
       </div>
       {error && <div className="error">Error: {error}</div>}
+      <div className="entry-table-box">
       <table className="entry-table">
         <thead>
           <tr>
@@ -117,6 +119,7 @@ const RegEntryList = () => {
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   );
 };

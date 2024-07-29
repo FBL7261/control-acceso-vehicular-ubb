@@ -1,7 +1,7 @@
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap");
 
 .vehicle-editor-page {
-    background-color: var(--page-background);
+    background-color: #007BA7;
     padding: 20px;
     border-radius: 8px;
     box-shadow: none;
@@ -26,30 +26,30 @@
     flex-direction: column;
     gap: 15px;
     width: 300px;
-    background-color: var(--form-background);
+    background-color: #084ba8;
     padding: 20px;
-    border-radius: var(--form-border-radius);
+    border-radius: 8px;
     box-shadow: none;
     border: none;
 }
 
 .vehicle-editor-page input,
 .vehicle-editor-page select {
-    padding: var(--input-padding);
-    border: 1px solid var(--input-border-color);
+    padding: 10px;
+    border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 1em;
-    background-color: var(--text-color);
-    color: var(--input-text-color);
+    background-color: #084ba8;
+    color: #ffffff;
 }
 
 .vehicle-editor-page button {
-    background-color: var(--form-button-bg);
+    background-color: #22aceb;
     color: #ffffff; 
-    padding: var(--button-padding);
+    padding: 10px 20px;
     font-size: 1.2em;
     border: none;
-    border-radius: var(--button-border-radius);
+    border-radius: 4px;
     cursor: pointer;
     text-transform: uppercase;
     font-weight: 600;
@@ -57,7 +57,7 @@
 }
 
 .vehicle-editor-page button:hover {
-    background-color: var(--button-hover-bg);
+    background-color: #1a8bb8;
 }
 
 .vehicle-editor-page .go-back {

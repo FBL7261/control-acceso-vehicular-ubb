@@ -55,10 +55,10 @@ const UserVehicles = () => {
                   onClick={() => handleImageClick(`http://localhost:3000/upload/${vehicle.foto}`)}
                 />
               )}
-              <p><strong>Matrícula</strong> {vehicle.matricula}</p>
-              <p><strong>Modelo</strong> {vehicle.modelo}</p>
-              <p><strong>Marca</strong> {vehicle.marca}</p>
-              <p><strong>Color</strong> {vehicle.color}</p>
+              <p><strong>Matrícula:</strong> {vehicle.matricula}</p>
+              <p><strong>Modelo:</strong> {vehicle.modelo}</p>
+              <p><strong>Marca:</strong> {vehicle.marca}</p>
+              <p><strong>Color:</strong> {vehicle.color}</p>
             </div>
           ))}
         </div>
