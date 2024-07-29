@@ -13,6 +13,7 @@ export const login = async ({ email, password }) => {
       const decodedToken = jwtDecode(data.data.accessToken);
       localStorage.setItem('user', JSON.stringify(decodedToken));
       sessionStorage.setItem('token', data.data.accessToken);
+      sessionStorage.setItem('userId', decodedToken.userId);
 
       axios.defaults.headers.common['Authorization'] = `Bearer ${data.data.accessToken}`;
     }

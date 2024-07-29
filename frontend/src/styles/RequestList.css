@@ -1,11 +1,11 @@
-/* RequestList.css */
 .request-list {
-  margin: 20px;
-  padding: 20px;
+  margin: 10px;
+  padding: 15px;
   background-color: #f9f9f9;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   position: relative;
+  overflow-y: auto;
 }
 
 .request-list h2 {

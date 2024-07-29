@@ -45,6 +45,9 @@ const CreateRequest = () => {
         <span className="ml-1 font-bold text-lg">Volver</span>
       </a>
       <h2>Crear Solicitud</h2>
+      <h4>Por favor, rellene esta solicitud utilizando sus datos de usuario</h4>
+      <h4>utilizados en su registro.</h4>
+      <h2>________________________________________</h2>
       <form onSubmit={handleSubmit}>
         <div>
           <label>Nombre:</label>

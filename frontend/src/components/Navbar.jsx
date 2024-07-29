@@ -1,6 +1,7 @@
 import React from 'react';
 import { NavLink, useLocation, useNavigate } from 'react-router-dom';
 import { logout, getCurrentUser } from '../services/auth.service.js';
+import '../styles/Navbar.css';
 
 const Navbar = () => {
     const location = useLocation();
@@ -51,7 +52,7 @@ const Navbar = () => {
                 </li>
                 
                 <li className={location.pathname === "/" ? "active" : ""}>
-                    <NavLink to="/" onClick={logoutSubmit}>Cerrar</NavLink>
+                    <NavLink to="/" onClick={logoutSubmit}>Cerrar Sesión</NavLink>
                 </li>
             </ul>
         </nav>
