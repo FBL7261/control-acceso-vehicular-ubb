@@ -43,7 +43,7 @@ const RegEntryList = () => {
         showErrorAlert('No se encontraron registros.');
       }
     } catch (error) {
-      showErrorAlert('Error al buscar registros');
+      showErrorAlert('No se han encontrado registros.');
       console.error('Error fetching entries:', error); // Debugging error
     }
   };
